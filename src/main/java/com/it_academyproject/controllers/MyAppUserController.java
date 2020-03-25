@@ -57,7 +57,7 @@ public class MyAppUserController {
 	
 	//Edit Student by Id document
 	@JsonView(View.SummaryWithOthers.class)
-	@PutMapping("api/students")
+	@PutMapping("api/students/id")
 	public MyAppUser PutStudentByDni(@RequestBody MyAppUser student){
 		return myAppUserService.editGetByDni( student);
 	}
