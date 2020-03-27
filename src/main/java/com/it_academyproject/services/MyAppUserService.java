@@ -1,14 +1,13 @@
 package com.it_academyproject.services;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.it_academyproject.domains.MyAppUser;
+import com.it_academyproject.repositories.MyAppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.it_academyproject.domains.MyAppUser;
-import com.it_academyproject.repositories.MyAppUserRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MyAppUserService {
@@ -52,18 +51,23 @@ public class MyAppUserService {
 	}
 	
 	// Put - Edit by dni
-		public MyAppUser editGetByDni(MyAppUser student) {
-			
-			if(myAppUserRepository.existsById(student.getId())) {
-			MyAppUser user = myAppUserRepository.findOneById(student.getId());
-			user.setFirstName(student.getFirstName());
-			user.setLastName(student.getLastName());
-			System.out.println(user.getRole().getId());
-			myAppUserRepository.save(user);
-			
-			 return user;
-			 }else {return null;}
-		}
+	public MyAppUser editGetByDni(MyAppUser student) {
+
+		if(myAppUserRepository.existsById(student.getId())) {
+		MyAppUser user = myAppUserRepository.findOneById(student.getId());
+		user.setFirstName(student.getFirstName());
+		user.setLastName(student.getLastName());
+		System.out.println(user.getRole().getId());
+		myAppUserRepository.save(user);
+
+		 return user;
+		 }else {return null;}
+	}
+
+	// Find number of users given a gender (M for male, F for female)
+	public int usersByGender(char gender) {
+		return myAppUserRepository.findByGender(gender).size();
+	}
 
 /*
 	// find the user by the email passed to the repository

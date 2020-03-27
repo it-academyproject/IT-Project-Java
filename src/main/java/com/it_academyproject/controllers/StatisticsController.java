@@ -37,14 +37,17 @@ public class StatisticsController
             return new ResponseEntity<String>( sendData.toString() , HttpStatus.BAD_REQUEST);
         }
     }
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+
 	@GetMapping( "/api/statistics/per-gender" )
     public ResponseEntity<String> perGender( )
     {
         try
         {
-            String sendData = statisticsService.perGender();
-            return new ResponseEntity( sendData , HttpStatus.FOUND);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+            return ResponseEntity.ok()
+                    .headers(httpHeaders)
+                    .body(statisticsService.perGender().toString());
         }
         catch (Exception e)
         {
@@ -57,6 +60,7 @@ public class StatisticsController
             return new ResponseEntity( sendData.toString() , HttpStatus.BAD_REQUEST);
         }
     }
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	@GetMapping( "/api/statistics/per-absence" )
     public ResponseEntity<String> perAbsence()
@@ -97,6 +101,5 @@ public class StatisticsController
             return new ResponseEntity( sendData.toString() , HttpStatus.BAD_REQUEST);
         }
     }
-
 }
 

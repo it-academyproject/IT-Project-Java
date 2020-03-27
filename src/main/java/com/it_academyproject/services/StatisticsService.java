@@ -30,6 +30,8 @@ public class StatisticsService
     ItineraryRepository itineraryRepository;
     @Autowired
     MyAppUserRepository myAppUserRepository;
+    @Autowired
+    MyAppUserService userService;
 
 
     // TODO: Verify, it seems that it returns courses per itinerary, not students
@@ -52,32 +54,14 @@ public class StatisticsService
         return courseRepository.findByItinerary(itinerary).size();
     }
 
-    public String perGender() throws Exception {
-        List<Character> typeOfGender = new ArrayList<Character>();
-        	typeOfGender.add('M');
-        	typeOfGender.add('F');
-    	List<String> listNumberOfUsers = new ArrayList<>();
-        for(int i=0;i<typeOfGender.size();i++) {
-        	Character gender = typeOfGender.get(i);
-        	Integer numberPerUsers = myAppUserRepository.findByGender(gender).size();
-        	listNumberOfUsers.add(numberPerUsers.toString());
-        }
-        ArrayList<ArrayList<String>> peopleByGender = new ArrayList<ArrayList<String>>();
-        for(int i=0;i<typeOfGender.size();i++) {
-        	peopleByGender.add(peopleByGenderMethod(typeOfGender.get(i),(listNumberOfUsers.get(i) + " estudiantes")));
-        }
-        for (int i=0;i<peopleByGender.size();i++) {
-        	if(peopleByGender.get(i).get(i).equalsIgnoreCase("M")) {
-        		peopleByGender.get(i).set(0, "MASCULINO:");
-        	}else {
-        		peopleByGender.get(i).set(0, "FEMENINO:");
-        	}
-        }
-        Gson Json = new Gson();        
-        String sendData = Json.toJson(peopleByGender);
-        return sendData;
+    // Returns JsonObject with number of students per gender
+    public JsonObject perGender() {
+        JsonObject response = new JsonObject();
+        response.addProperty("male", userService.usersByGender('M'));
+        response.addProperty("female", userService.usersByGender('F'));
+        return response;
     }
-    
+
     public String perAbsence() throws Exception {
     	List<Absence> absence = new ArrayList<>();
     	absenceRepository.findAll().forEach(absence::add);
