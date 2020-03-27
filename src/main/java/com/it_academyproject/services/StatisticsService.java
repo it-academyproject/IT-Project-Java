@@ -1,26 +1,22 @@
 package com.it_academyproject.services;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.it_academyproject.domains.Absence;
 import com.it_academyproject.domains.Course;
 import com.it_academyproject.domains.Itinerary;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.exceptions.UserNotFoundException;
-
 import com.it_academyproject.repositories.AbsenceRepository;
-import com.it_academyproject.repositories.ItineraryRepository;
 import com.it_academyproject.repositories.CourseRepository;
+import com.it_academyproject.repositories.ItineraryRepository;
 import com.it_academyproject.repositories.MyAppUserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class StatisticsService
@@ -36,27 +32,26 @@ public class StatisticsService
     MyAppUserRepository myAppUserRepository;
 
 
-    
-    public String perItinerary() throws Exception{
-        List<Itinerary> numberOfItinerary = new ArrayList<>();
-        itineraryRepository.findAll().forEach(numberOfItinerary::add);
-        List<String> listPerItinerary = new ArrayList<>();
-        for(int i=0;i<numberOfItinerary.size();i++) {
-        	Itinerary itinerary = numberOfItinerary.get(i);       	
-        	Integer numberPerItinerary = courseRepository.findByItinerary(itinerary).size();
-        	listPerItinerary.add(numberPerItinerary.toString());        	
-        }        
-        ArrayList<ArrayList<String>> peopleByItinerary = new ArrayList<ArrayList<String>>();
-        for (int i=0;i<numberOfItinerary.size();i++) {
-        	String itineraryName = "Itinerario: " + numberOfItinerary.get(i).getName();
-        	String itineraryStudent = "Cursando: " + listPerItinerary.get(i) + " estudiantes";
-        	peopleByItinerary.add(peopleByItineraryMethod(itineraryName,itineraryStudent));
+    // TODO: Verify, it seems that it returns courses per itinerary, not students
+    public JsonElement perItinerary() throws Exception{
+
+        List<Itinerary> itineraries = itineraryRepository.findAll();
+        JsonArray body = new JsonArray();
+
+        for (Itinerary itinerary :
+                itineraries) {
+            JsonObject element = new JsonObject();
+            element.addProperty("itinerary", itinerary.getName());
+            element.addProperty("students", getNumStudents(itinerary));
+            body.add(element);
         }
-        Gson Json= new Gson();
-        String sendData = Json.toJson(peopleByItinerary);
-    	return sendData;
+        return body;
     }
-    
+
+    private int getNumStudents(Itinerary itinerary) {
+        return courseRepository.findByItinerary(itinerary).size();
+    }
+
     public String perGender() throws Exception {
         List<Character> typeOfGender = new ArrayList<Character>();
         	typeOfGender.add('M');

@@ -3,7 +3,9 @@ package com.it_academyproject.controllers;
 import com.it_academyproject.services.StatisticsService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,13 +16,15 @@ public class StatisticsController
     @Autowired
     StatisticsService statisticsService;
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping( "/api/statistics/per-itinerary" )
-    public ResponseEntity perItinerary(){
+    public ResponseEntity<String> perItinerary(){
     	try
         {
-            String sendData = statisticsService.perItinerary();
-        	return new ResponseEntity( sendData , HttpStatus.FOUND);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+            return ResponseEntity.ok()
+                    .headers(httpHeaders)
+                    .body(statisticsService.perItinerary().toString());
         }
         catch (Exception e)
         {
@@ -30,7 +34,7 @@ public class StatisticsController
             message.put("type" , "error");
             message.put("message" , exceptionMessage);
             sendData.put("Message" , message);
-            return new ResponseEntity( sendData.toString() , HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>( sendData.toString() , HttpStatus.BAD_REQUEST);
         }
     }
     @SuppressWarnings({ "unchecked", "rawtypes" })
