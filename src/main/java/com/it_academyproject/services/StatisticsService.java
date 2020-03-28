@@ -1,9 +1,6 @@
 package com.it_academyproject.services;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.it_academyproject.domains.Absence;
 import com.it_academyproject.domains.Course;
 import com.it_academyproject.domains.Itinerary;
@@ -32,62 +29,20 @@ public class StatisticsService
     ItineraryRepository itineraryRepository;
     @Autowired
     MyAppUserRepository myAppUserRepository;
-    @Autowired
-    MyAppUserService userService;
-
 
     // TODO: Verify, it seems that it returns courses per itinerary, not students
-    public JsonElement perItinerary() throws Exception{
+    public Map<String, Integer> perItinerary() {
 
-        List<Itinerary> itineraries = itineraryRepository.findAll();
-        JsonArray body = new JsonArray();
-
-        for (Itinerary itinerary :
-                itineraries) {
-            JsonObject element = new JsonObject();
-            element.addProperty("itinerary", itinerary.getName());
-            element.addProperty("students", getNumStudents(itinerary));
-            body.add(element);
-        }
-        return body;
-    }
-
-    public Map<String, Integer> perItineraryNew() {
-
-        List<Itinerary> itineraries = itineraryRepository.findAll();
         Map<String, Integer> result = new HashMap<>();
 
-        JsonArray body = new JsonArray();
-
-        for (Itinerary itinerary :
-                itineraries) {
+        for (Itinerary itinerary : itineraryRepository.findAll())
             result.put(itinerary.getName(), getNumStudents(itinerary));
-            JsonObject element = new JsonObject();
-            element.addProperty("itinerary", itinerary.getName());
-            element.addProperty("students", getNumStudents(itinerary));
-            body.add(element);
-        }
-        System.out.println("Result: " + result.toString());
+
         return result;
     }
 
     private int getNumStudents(Itinerary itinerary) {
         return courseRepository.findByItinerary(itinerary).size();
-    }
-
-    // Returns JsonObject with number of students per gender
-    public JsonObject perGender() {
-        JsonObject response = new JsonObject();
-        response.addProperty("male", userService.usersByGender('M'));
-        response.addProperty("female", userService.usersByGender('F'));
-        return response;
-    }
-
-    public JsonObject perGenderNew() {
-        JsonObject response = new JsonObject();
-        response.addProperty("male", userService.usersByGender('M'));
-        response.addProperty("female", userService.usersByGender('F'));
-        return response;
     }
 
     // Returns a map of <StudentId, #absences> of the students with MAX_ABSENCES or more
@@ -98,8 +53,7 @@ public class StatisticsService
 
         String studentId;
         // Fill the map with the absences per student
-        for (Absence absence :
-                absences) {
+        for (Absence absence : absences) {
             studentId = absence.getUserStudent().getId();
             if (absencesPerStudent.putIfAbsent(studentId, 1)!=null)
                 absencesPerStudent.replace(studentId, absencesPerStudent.get(studentId)+1);
@@ -115,28 +69,6 @@ public class StatisticsService
         }
 
         return absencesPerStudent;
-    }
-    
-    public String perAbsenceOld() throws Exception {
-    	List<Absence> absence = new ArrayList<>();
-    	absenceRepository.findAll().forEach(absence::add);
-    	HashMap<String,String>numberOfAbsence = new HashMap<>();
-    	for(int i = 0; i < absence.size(); i++) {  
-            Integer counter = 0; 
-    		for(int j = i + 1; j < absence.size(); j++) {  
-                 if(absence.get(i).getUserStudent().getId().equals(absence.get(j).getUserStudent().getId())) {  
-                    counter++;  
-                 }
-             }
-    		if(counter>=8) {    			
-    			numberOfAbsence.put(("Nombre: " + absence.get(i).getUserStudent().getFirstName() + " " + absence.get(i).getUserStudent().getLastName()), counter.toString() + 
-    					" faltas");
-    		}   		
-    	}
-    	
-    	Gson Json = new Gson();
-    	String sendData = Json.toJson(numberOfAbsence);
-        return sendData;
     }
     
     public String finishInXdays() throws Exception {
@@ -163,6 +95,7 @@ public class StatisticsService
     	String sendData = Json.toJson(endListNameAndDaysLeft);
         return sendData;
     }
+
     public List<MyAppUser> getAllActiveStudents ( ) {
         List<Course> courseList = courseRepository.findByEndDate( null );
         List<MyAppUser> activeStudents = new ArrayList<>();

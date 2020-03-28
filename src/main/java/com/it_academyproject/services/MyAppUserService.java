@@ -46,7 +46,7 @@ public class MyAppUserService {
 		}else {
 			System.out.println("Student not found 404");
 		}
-		System.out.println(student.getFirstName());
+		// System.out.println(student.getFirstName());
 		return student;
 	}
 	

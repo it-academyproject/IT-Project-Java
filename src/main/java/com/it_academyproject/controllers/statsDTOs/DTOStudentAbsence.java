@@ -1,12 +1,12 @@
 package com.it_academyproject.controllers.statsDTOs;
 
-public class DTOAbsences {
+public class DTOStudentAbsence {
     
     private final String firstName;
     private final String lastName;
     private final int absences;
 
-    public DTOAbsences(String firstName, String lastName, int absences) {
+    public DTOStudentAbsence(String firstName, String lastName, int absences) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.absences = absences;
