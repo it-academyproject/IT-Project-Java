@@ -40,7 +40,7 @@ public class MyAppUserService {
 	public MyAppUser getById(String id) {
 		MyAppUser student = null;
 		Optional<MyAppUser> studentOptional = myAppUserRepository.findById(id);
-		System.out.println(id);
+		//System.out.println(id);
 		if(studentOptional.isPresent()) {
 			student = studentOptional.get();
 		}else {
@@ -67,6 +67,20 @@ public class MyAppUserService {
 	// Find number of users given a gender (M for male, F for female)
 	public int usersByGender(char gender) {
 		return myAppUserRepository.findByGender(gender).size();
+	}
+
+	// Return full name given an id . Format "surname, name"
+	public String getFullnameById(String studentId) {
+		MyAppUser student = getById(studentId);
+		return student.getLastName() + ", " + student.getFirstName();
+	}
+
+	public String getFirstNameById(String studentId) {
+		return getById(studentId).getFirstName();
+	}
+
+	public String getLastNameById(String studentId) {
+		return getById(studentId).getLastName();
 	}
 
 /*

@@ -22,6 +22,8 @@ import java.util.*;
 public class StatisticsService
 {
 
+    // Absences to compare to when searching students per absences
+    private static final Integer MAX_ABSENCES = 8;
     @Autowired
     AbsenceRepository absenceRepository;
     @Autowired
@@ -50,6 +52,25 @@ public class StatisticsService
         return body;
     }
 
+    public Map<String, Integer> perItineraryNew() {
+
+        List<Itinerary> itineraries = itineraryRepository.findAll();
+        Map<String, Integer> result = new HashMap<>();
+
+        JsonArray body = new JsonArray();
+
+        for (Itinerary itinerary :
+                itineraries) {
+            result.put(itinerary.getName(), getNumStudents(itinerary));
+            JsonObject element = new JsonObject();
+            element.addProperty("itinerary", itinerary.getName());
+            element.addProperty("students", getNumStudents(itinerary));
+            body.add(element);
+        }
+        System.out.println("Result: " + result.toString());
+        return result;
+    }
+
     private int getNumStudents(Itinerary itinerary) {
         return courseRepository.findByItinerary(itinerary).size();
     }
@@ -62,7 +83,41 @@ public class StatisticsService
         return response;
     }
 
-    public String perAbsence() throws Exception {
+    public JsonObject perGenderNew() {
+        JsonObject response = new JsonObject();
+        response.addProperty("male", userService.usersByGender('M'));
+        response.addProperty("female", userService.usersByGender('F'));
+        return response;
+    }
+
+    // Returns a map of <StudentId, #absences> of the students with MAX_ABSENCES or more
+    public Map<String, Integer> perAbsence() {
+        
+        List<Absence> absences = absenceRepository.findAll();
+        Map<String, Integer> absencesPerStudent = new HashMap<>();
+
+        String studentId;
+        // Fill the map with the absences per student
+        for (Absence absence :
+                absences) {
+            studentId = absence.getUserStudent().getId();
+            if (absencesPerStudent.putIfAbsent(studentId, 1)!=null)
+                absencesPerStudent.replace(studentId, absencesPerStudent.get(studentId)+1);
+        }
+
+        // Iterate the map and remove students with less than MAX_ABSENCES absences
+        // Not possible to remove an entry from a map that is being iterated, copy needed
+        Map<String, Integer> copyMap = new HashMap(absencesPerStudent);
+        for (Map.Entry<String, Integer> entry: copyMap.entrySet()){
+            if (entry.getValue()<MAX_ABSENCES) {
+                absencesPerStudent.remove(entry.getKey());
+            }
+        }
+
+        return absencesPerStudent;
+    }
+    
+    public String perAbsenceOld() throws Exception {
     	List<Absence> absence = new ArrayList<>();
     	absenceRepository.findAll().forEach(absence::add);
     	HashMap<String,String>numberOfAbsence = new HashMap<>();
