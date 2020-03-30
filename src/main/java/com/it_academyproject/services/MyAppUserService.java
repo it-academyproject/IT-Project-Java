@@ -1,14 +1,13 @@
 package com.it_academyproject.services;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.it_academyproject.domains.MyAppUser;
+import com.it_academyproject.repositories.MyAppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.it_academyproject.domains.MyAppUser;
-import com.it_academyproject.repositories.MyAppUserRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MyAppUserService {
@@ -41,29 +40,48 @@ public class MyAppUserService {
 	public MyAppUser getById(String id) {
 		MyAppUser student = null;
 		Optional<MyAppUser> studentOptional = myAppUserRepository.findById(id);
-		System.out.println(id);
+		//System.out.println(id);
 		if(studentOptional.isPresent()) {
 			student = studentOptional.get();
 		}else {
 			System.out.println("Student not found 404");
 		}
-		System.out.println(student.getFirstName());
+		// System.out.println(student.getFirstName());
 		return student;
 	}
 	
 	// Put - Edit by dni
-		public MyAppUser editGetByDni(MyAppUser student) {
-			
-			if(myAppUserRepository.existsById(student.getId())) {
-			MyAppUser user = myAppUserRepository.findOneById(student.getId());
-			user.setFirstName(student.getFirstName());
-			user.setLastName(student.getLastName());
-			System.out.println(user.getRole().getId());
-			myAppUserRepository.save(user);
-			
-			 return user;
-			 }else {return null;}
-		}
+	public MyAppUser editGetByDni(MyAppUser student) {
+
+		if(myAppUserRepository.existsById(student.getId())) {
+		MyAppUser user = myAppUserRepository.findOneById(student.getId());
+		user.setFirstName(student.getFirstName());
+		user.setLastName(student.getLastName());
+		System.out.println(user.getRole().getId());
+		myAppUserRepository.save(user);
+
+		 return user;
+		 }else {return null;}
+	}
+
+	// Find number of users given a gender (M for male, F for female)
+	public int usersByGender(char gender) {
+		return myAppUserRepository.findByGender(gender).size();
+	}
+
+	// Return full name given an id . Format "surname, name"
+	public String getFullnameById(String studentId) {
+		MyAppUser student = getById(studentId);
+		return student.getLastName() + ", " + student.getFirstName();
+	}
+
+	public String getFirstNameById(String studentId) {
+		return getById(studentId).getFirstName();
+	}
+
+	public String getLastNameById(String studentId) {
+		return getById(studentId).getLastName();
+	}
 
 /*
 	// find the user by the email passed to the repository

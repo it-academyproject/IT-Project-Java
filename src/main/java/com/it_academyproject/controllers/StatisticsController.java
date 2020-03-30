@@ -1,5 +1,9 @@
 package com.it_academyproject.controllers;
 
+import com.it_academyproject.controllers.statsDTOs.DTOStudentAbsence;
+import com.it_academyproject.controllers.statsDTOs.DTOStudentsPerGender;
+import com.it_academyproject.controllers.statsDTOs.DTOStudentsPerItinerary;
+import com.it_academyproject.services.MyAppUserService;
 import com.it_academyproject.services.StatisticsService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,71 +12,45 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 @RestController
 public class StatisticsController
 {
     @Autowired
     StatisticsService statisticsService;
+    @Autowired
+    MyAppUserService myAppUserService;
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping( "/api/statistics/per-itinerary" )
-    public ResponseEntity perItinerary(){
-    	try
-        {
-            String sendData = statisticsService.perItinerary();
-        	return new ResponseEntity( sendData , HttpStatus.FOUND);
+    public List<DTOStudentsPerItinerary> perItinerary(){
+
+        Map<String, Integer> studentsPerItinerary = statisticsService.perItinerary();
+        List<DTOStudentsPerItinerary> result = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry: studentsPerItinerary.entrySet()) {
+            result.add(new DTOStudentsPerItinerary(entry.getKey(), entry.getValue()));
         }
-        catch (Exception e)
-        {
-            String exceptionMessage = e.getMessage();
-            JSONObject sendData = new JSONObject();
-            JSONObject message = new JSONObject();
-            message.put("type" , "error");
-            message.put("message" , exceptionMessage);
-            sendData.put("Message" , message);
-            return new ResponseEntity( sendData.toString() , HttpStatus.BAD_REQUEST);
-        }
+        return result;
     }
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+
 	@GetMapping( "/api/statistics/per-gender" )
-    public ResponseEntity<String> perGender( )
+    public DTOStudentsPerGender perGender( )
     {
-        try
-        {
-            String sendData = statisticsService.perGender();
-            return new ResponseEntity( sendData , HttpStatus.FOUND);
-        }
-        catch (Exception e)
-        {
-            String exceptionMessage = e.getMessage();
-            JSONObject sendData = new JSONObject();
-            JSONObject message = new JSONObject();
-            message.put("type" , "error");
-            message.put("message" , exceptionMessage);
-            sendData.put("Message" , message);
-            return new ResponseEntity( sendData.toString() , HttpStatus.BAD_REQUEST);
-        }
+        return new DTOStudentsPerGender(myAppUserService.usersByGender('M'), myAppUserService.usersByGender('F'));
     }
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+
 	@GetMapping( "/api/statistics/per-absence" )
-    public ResponseEntity<String> perAbsence()
+    public List<DTOStudentAbsence> perAbsence()
     {
-        try
-        {
-            String sendData = statisticsService.perAbsence();
-            return new ResponseEntity( sendData.toString() , HttpStatus.FOUND);
+        List<DTOStudentAbsence> absences = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry: statisticsService.perAbsence().entrySet()) {
+            absences.add(new DTOStudentAbsence(myAppUserService.getFirstNameById(entry.getKey()), myAppUserService.getLastNameById(entry.getKey()), entry.getValue()));
         }
-        catch (Exception e)
-        {
-            String exceptionMessage = e.getMessage();
-            JSONObject sendData = new JSONObject();
-            JSONObject message = new JSONObject();
-            message.put("type" , "error");
-            message.put("message" , exceptionMessage);
-            sendData.put("Message" , message);
-            return new ResponseEntity( sendData.toString() , HttpStatus.BAD_REQUEST);
-        }
+        return absences;
     }
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping( "/api/statistics/finish-in-x-days" )
     public ResponseEntity<String> finishInXdays()
@@ -93,6 +71,7 @@ public class StatisticsController
             return new ResponseEntity( sendData.toString() , HttpStatus.BAD_REQUEST);
         }
     }
-
 }
+
+
 
