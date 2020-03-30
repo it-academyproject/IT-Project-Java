@@ -51,7 +51,8 @@ public class MyAppUser {
 	@JsonView(View.SummaryWithOthers.class)
 	private String portrait;
 
-	@JsonView(View.SummaryWithOthers.class)
+	//@JsonView(View.SummaryWithOthers.class)
+	@JsonView(View.Summary.class)
 	@ManyToOne
 	private Seat seat;
 
@@ -216,6 +217,10 @@ public class MyAppUser {
 	}
 
 	public Seat getSeat() {
+		//System.out.println("Alumno: " + lastName + ", " + firstName);
+		// Next line provokes CORS response
+		//System.out.println("Sofá: " + seat.toString());
+		//System.out.println("Sofá: " + seat.toString());
 		return seat;
 	}
 
