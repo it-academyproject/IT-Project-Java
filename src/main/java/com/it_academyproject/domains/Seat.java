@@ -67,15 +67,4 @@ public class Seat
     public void setClassRoom(int classRoom) {
         this.classRoom = classRoom;
     }
-
-    // TODO Delete when OK
-    @Override
-    public String toString() {
-        return "Seat{" +
-                "id=" + id +
-                ", rowNumber=" + rowNumber +
-                ", colNumber=" + colNumber +
-                ", classRoom=" + classRoom +
-                '}';
-    }
 }

@@ -1,5 +1,8 @@
 package com.it_academyproject.domains;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.it_academyproject.tools.View;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +15,7 @@ public class Itinerary {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@JsonView(View.Summary.class)
 	private int id;
 	private String name;
 	

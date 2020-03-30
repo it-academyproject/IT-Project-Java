@@ -1,5 +1,6 @@
 package com.it_academyproject.services;
 
+import com.it_academyproject.domains.Course;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.repositories.MyAppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,21 +15,30 @@ public class MyAppUserService {
 	
 	@Autowired
 	MyAppUserRepository myAppUserRepository;
+
+	@Autowired
+	CourseService courseService;
 	
 	//getAll
 	public List<MyAppUser> getAllStudents(){
-		int studentRoleId=1;
-		return myAppUserRepository.findByRoleId(studentRoleId);
+		return updateStudentCourses(myAppUserRepository.findByRoleId(1));
+	}
+
+	private List<MyAppUser> updateStudentCourses(List<MyAppUser> students) {
+		for (MyAppUser student : students) {
+			student.setCourses(courseService.findByUserStudent(student));
+		}
+		return students;
 	}
 
 	//get by name
-	public ArrayList<MyAppUser> getByName(String firstName){
-		return myAppUserRepository.findByFirstName(firstName);
+	public List<MyAppUser> getByName(String firstName){
+		return updateStudentCourses(myAppUserRepository.findByFirstName(firstName));
 	}
 
 	//get by surName
-	public ArrayList<MyAppUser> getBySurname(String lastName) {
-		return myAppUserRepository.findByLastName(lastName);
+	public List<MyAppUser> getBySurname(String lastName) {
+		return updateStudentCourses(myAppUserRepository.findByLastName(lastName));
 	}
 
 	//get by dni
@@ -47,9 +57,14 @@ public class MyAppUserService {
 			System.out.println("Student not found 404");
 		}
 		// System.out.println(student.getFirstName());
+		return updateStudentCourses(student);
+	}
+
+	private MyAppUser updateStudentCourses(MyAppUser student) {
+		student.setCourses(courseService.findByUserStudent(student));
 		return student;
 	}
-	
+
 	// Put - Edit by dni
 	public MyAppUser editGetByDni(MyAppUser student) {
 
