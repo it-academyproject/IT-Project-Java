@@ -54,7 +54,7 @@ public class UserExerciseService
 				{
 					userExerciceList.get(j).setUserStudent ( null );
 				}
-				userUserExerciceMap.put(myAppUser.getId() , userExerciceList );
+				userUserExerciceMap.put(myAppUser.getfullName() , userExerciceList );
 			}
 			JSONObject sendData = new JSONObject( userUserExerciceMap );
 			return sendData;
