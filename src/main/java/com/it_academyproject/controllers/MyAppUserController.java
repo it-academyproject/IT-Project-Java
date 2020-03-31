@@ -20,7 +20,6 @@ public class MyAppUserController {
 	MyAppUserService myAppUserService;
 	
 	//Call for students
-	//@JsonView(View.Summary.class)
 	@JsonView(View.Summary.class)
 	@GetMapping("/api/students")
 	public List<MyAppUser> getAllStudents(){

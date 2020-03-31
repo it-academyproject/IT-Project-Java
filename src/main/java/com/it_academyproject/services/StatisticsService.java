@@ -30,7 +30,6 @@ public class StatisticsService
     @Autowired
     MyAppUserRepository myAppUserRepository;
 
-    // TODO: Verify, it seems that it returns courses per itinerary, not students
     public Map<String, Integer> perItinerary() {
 
         Map<String, Integer> result = new HashMap<>();
