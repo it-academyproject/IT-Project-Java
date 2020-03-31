@@ -65,6 +65,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             String test = request.getReader().lines().collect(Collectors.joining(System.lineSeparator())).toString();
 
             JSONObject  loginDataJson = new JSONObject ( test );
+
+            // TODO: Check sending empty password (loginDataJson.getString(key).isEmpty())
             if ( (loginDataJson.has("email")) &&
                     (loginDataJson.has("password")) &&
                     (! loginDataJson.getString("email").equals("") ) &&
@@ -76,6 +78,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
                 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                 MyAppUser myAppUser = myAppUserRepository.findByEmail(loginData.getEmail());
+
+                if (myAppUser == null) return badUserOrPassword();
 
                 if ( passwordEncoder.matches(loginData.getPassword() , myAppUser.getPassword() ))
                 {
@@ -112,6 +116,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
         catch (WrongEmailPassword e)
         {
+            System.out.println("Wrong password");
             response.setStatus(401);
             try {
                 response.getWriter().write(e.getLocalizedMessage());
@@ -123,6 +128,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
         catch (UserNotEnabled e )
         {
+            System.out.println("Wrong user");
             response.setStatus(401);
             try {
                 response.getWriter().write(e.getLocalizedMessage());
@@ -136,6 +142,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
         catch (EmptyFieldException e)
         {
+            System.out.println("Empty field exception");
             response.setStatus(401);
             try {
                 response.getWriter().write(e.getLocalizedMessage());
@@ -151,6 +158,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
         return null;
 
+    }
+
+    private Authentication badUserOrPassword() {
+        // TODO
+        System.out.println("Bad user or password. Or both!!!");
+        return null;
     }
 
     @Override
