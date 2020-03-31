@@ -54,17 +54,18 @@ public class MyAppUser {
 	@JsonView(View.SummaryWithOthers.class)
 	@ManyToOne
 	private Seat seat;
-
-
-
-	private String password;
-	private boolean enabled;
-	private Date lastLogin;
-
 	
+//	@JsonView(View.SummaryWithOthers.class)    
+//	@ManyToOne
+//	private Absence userAbsence;
+
 	@ManyToOne (fetch = FetchType.EAGER)
 	@JoinColumn (name="rol_id")
 	private Role role;
+	
+	private String password;
+	private boolean enabled;
+	private Date lastLogin;
 	
 	@OneToMany (targetEntity = Absence.class, cascade = CascadeType.ALL)
 	private List <Absence> absences = new ArrayList <Absence>();
@@ -141,6 +142,10 @@ public class MyAppUser {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	
+	public String getfullName() {
+		return firstName + " " + lastName;
 	}
 
 	public String getIdDocument() {
@@ -222,6 +227,24 @@ public class MyAppUser {
 	public void setSeat(Seat seat) {
 		this.seat = seat;
 	}
+
+	/**
+	 * @return the absences
+	 */
+	public List<Absence> getAbsences() {
+		return absences;
+	}
+
+	/**
+	 * @param absences the absences to set
+	 */
+	public void setAbsences(List<Absence> absences) {
+		this.absences = absences;
+	}
+
+
+	
+	
 
 	/*	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", idDocument=" + idDocument

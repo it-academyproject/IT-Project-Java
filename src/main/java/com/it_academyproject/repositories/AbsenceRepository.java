@@ -11,7 +11,21 @@ import java.util.List;
 @Repository
 public interface AbsenceRepository extends JpaRepository<Absence, Integer>
 {
-    //student id y date missing
+
+    //by student id y date missing
     List<Absence> findByUserStudentAndDateMissing (MyAppUser userStudent , Date dateMissing );
-   
+    
+    //Find List by student id 
+    List<Absence> findListByUserStudent(MyAppUser userStudent);
+    
+    //Find Absence by user
+    Absence findByUserStudent(MyAppUser userStudent);
+    
+    //Find Absence by user id
+	List<Absence> findOneById(String id);
+    
+    //by absence id
+//    Absence findByAbsenceId (int id);
+    
+
 }
