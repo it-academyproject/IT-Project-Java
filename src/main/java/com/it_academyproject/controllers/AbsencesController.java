@@ -32,12 +32,12 @@ public class AbsencesController {
 		// if student with id X exists...
 		if (myAppUserRepository.existsById(student.getId())) { 
 			//list created from absences repo of student with ID X
-	        List<Absence> absencesList = myAbsenceRepository.findOneById(student.getId());
+//	        List<Absence> absencesList = myAbsenceRepository.findOneById(student.getId());
 
 				absence.setDateMissing(absence.getDateMissing()); //HOW CAN I CATCH FROM JSON BODY???
 				absence.setComment(absence.getComment()); ////HOW CAN I CATCH FROM JSON BODY???				
 				
-		        absencesList.add(absence);
+//		        absencesList.add(absence);
 		        
 		     // save new absence edited in repo
 		        myAbsenceRepository.save(absence); 
