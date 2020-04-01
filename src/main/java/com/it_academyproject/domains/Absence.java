@@ -7,6 +7,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonView;
+import com.it_academyproject.tools.View;
+
 import java.util.Date;
 
 @Entity
@@ -14,10 +18,17 @@ public class Absence {
 	
 	@GeneratedValue(strategy=GenerationType.IDENTITY)	
 	@Id
+	@JsonView(View.Summary.class)
 	private int id;
-	private Date dateMissing;
+	
+	@JsonView(View.Summary.class)
+	private Date dateMissing; //format to dd-mm-yyyy, finally it would be great to do the search with date instead of absence ID
+	
+	@JsonView(View.Summary.class)
 	private String comment; 
+	
 	@ManyToOne (fetch = FetchType.EAGER)
+	@JsonView(View.Summary.class)
 	@JoinColumn (name="student_id")
 	private MyAppUser userStudent;
 	
