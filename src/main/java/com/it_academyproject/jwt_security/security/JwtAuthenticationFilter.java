@@ -11,6 +11,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -59,6 +61,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
     {
         LoginData loginData = new LoginData();
+
+        response.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+
         try
         {
             String test = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
@@ -83,7 +88,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 {
                     List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
                     Authentication authenticationToken = new UsernamePasswordAuthenticationToken(loginData.getEmail(), loginData.getPassword(), grantedAuthorityList );
-
 
                     try
                     {
@@ -160,6 +164,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain filterChain, Authentication authentication) {
+
         UserDetails userDetails = ((UserDetails) authentication.getPrincipal());
 
         Object roles = userDetails.getAuthorities()
@@ -181,6 +186,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         System.out.println("The expiration date of the token is: " + (new Date(System.currentTimeMillis() + (8640000)).toString()));
 
         response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
+
         try {
             JSONObject json = new JSONObject();
             json.put("success", true);
