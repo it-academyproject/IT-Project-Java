@@ -238,3 +238,6 @@ exportToHTML/index.html
 # Maven
 log/
 target/
+
+# Database import data
+itacademyprojectDBData_24032020.sql
