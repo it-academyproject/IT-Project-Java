@@ -1,9 +1,9 @@
 package com.it_academyproject.repositories;
 
-import com.it_academyproject.domains.StatusExercice;
+import com.it_academyproject.domains.StatusExercise;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StatusExerciceRepository extends JpaRepository<StatusExercice, Integer>
+public interface StatusExerciceRepository extends JpaRepository<StatusExercise, Integer>
 {
-        StatusExercice findOneById( Integer id );
+        StatusExercise findOneById(Integer id );
 }

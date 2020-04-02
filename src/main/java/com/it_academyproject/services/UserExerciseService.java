@@ -10,8 +10,6 @@ import com.it_academyproject.repositories.MyAppUserRepository;
 import com.it_academyproject.repositories.UserExerciceRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,7 +17,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class UserExerciseService
@@ -139,7 +136,7 @@ public class UserExerciseService
 			if (list.get(i).getId() == userExercice.getId()) {
 				Date date = new Date();	
 				list.get(i).setDate_status(date);
-				list.get(i).setStatusExercice(userExercice.getStatusExercice());
+				list.get(i).setStatusExercise(userExercice.getStatusExercise());
 				userExerciceRepository.save(list.get(i));
 				return true;
 			}

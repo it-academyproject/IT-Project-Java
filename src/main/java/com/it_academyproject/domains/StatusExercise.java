@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class StatusExercice {
+public class StatusExercise {
 	
 	//--------------------------Properties--------------------------------------------------------------
 	
@@ -18,10 +18,10 @@ public class StatusExercice {
 	
 	//--------------------------Constructors--------------------------------------------------------------
 
-	public StatusExercice() {
+	public StatusExercise() {
 	}
 	
-	public StatusExercice(String name) {
+	public StatusExercise(String name) {
 		this.name = name;
 	}
 	

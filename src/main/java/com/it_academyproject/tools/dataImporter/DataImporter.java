@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.Paths;
 import java.util.*;
 @Service
 public class DataImporter
@@ -77,10 +76,10 @@ public class DataImporter
 
         for (int i = 1; i <= exStatusList.size(); i++)
         {
-            StatusExercice statusExercice = new StatusExercice();
-            statusExercice.setId( i );
-            statusExercice.setName( exStatusList.get( i ) );
-            statusExerciceRepository.save( statusExercice );
+            StatusExercise statusExercise = new StatusExercise();
+            statusExercise.setId( i );
+            statusExercise.setName( exStatusList.get( i ) );
+            statusExerciceRepository.save(statusExercise);
         }
         //Adding teachers to MyAppUsers
         List<MyAppUser> users = new ArrayList<>();
@@ -487,7 +486,7 @@ public class DataImporter
 
 
                                     userExercice.setExercice( exercice );
-                                    userExercice.setStatusExercice( statusExerciceRepository.findOneById( 5 ) );
+                                    userExercice.setStatusExercise( statusExerciceRepository.findOneById( 5 ) );
                                     userExercice.setUserStudent( myAppUser );
                                     userExercice.setUserTeacher( teacherUser );
                                     if ( userExercice.getDate_status() != null )

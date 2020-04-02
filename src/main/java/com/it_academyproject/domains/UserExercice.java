@@ -27,8 +27,8 @@ public class UserExercice {
 	private Date date_status;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="statusExercice_id")
-	private StatusExercice statusExercice;
+	@JoinColumn(name="statusExercise_id")
+	private StatusExercise statusExercise;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="exercice_id")
@@ -75,12 +75,12 @@ public class UserExercice {
 		this.date_status = date_status;
 	}
 
-	public StatusExercice getStatusExercice() {
-		return statusExercice;
+	public StatusExercise getStatusExercise() {
+		return statusExercise;
 	}
 
-	public void setStatusExercice(StatusExercice statusExercice) {
-		this.statusExercice = statusExercice;
+	public void setStatusExercise(StatusExercise statusExercise) {
+		this.statusExercise = statusExercise;
 	}
 
 	public Exercice getExercice() {
