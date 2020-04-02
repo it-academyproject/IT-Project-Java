@@ -51,7 +51,8 @@ public class MyAppUser {
 	@JsonView(View.SummaryWithOthers.class)
 	private String portrait;
 
-	@JsonView(View.SummaryWithOthers.class)
+	//@JsonView(View.SummaryWithOthers.class)
+	@JsonView(View.Summary.class)
 	@ManyToOne
 	private Seat seat;
 	
@@ -70,6 +71,7 @@ public class MyAppUser {
 	@OneToMany (targetEntity = Absence.class, cascade = CascadeType.ALL)
 	private List <Absence> absences = new ArrayList <Absence>();
 	@OneToMany (targetEntity = Course.class, cascade = CascadeType.ALL)
+	@JsonView(View.Summary.class)
 	private List <Course> courses = new ArrayList <Course>();
 	@OneToMany (targetEntity = UserExercice.class, cascade = CascadeType.ALL)
 	private List <UserExercice> userExercices = new ArrayList <UserExercice>();
@@ -95,7 +97,7 @@ public class MyAppUser {
 		this.role = role;
 	}
 	
-	 public MyAppUser(String email, String password) throws EmptyFieldException
+ 	public MyAppUser(String email, String password) throws EmptyFieldException
 	    {
 	        if ((email != "")&&(password!=""))
 	        {
@@ -251,8 +253,8 @@ public class MyAppUser {
 				+ ", email=" + email + ", gender=" + gender + ", portrait=" + portrait + ", password=" + password
 				+ ", enabled=" + enabled + "]";
 	}	*/
-	
-	
-	
 
+	public void setCourses(List<Course> courses) {
+		this.courses = courses;
+	}
 }
