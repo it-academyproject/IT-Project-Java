@@ -73,7 +73,7 @@ public class UserExerciseController
 
 	@JsonView(View.Summary.class)
 	@GetMapping ("/api/userExercise/Student_id")
-	public ResponseEntity<String>  getExercicesbyStudentId (@RequestBody MyAppUser student){
+	public ResponseEntity<String> getExercisesByStudentId(@RequestBody MyAppUser student){
 
 		try
 		{
@@ -95,7 +95,7 @@ public class UserExerciseController
 
 
 	/*
-	 * Modelo de llamada PUT: { "id": 1, "statusExercice":{"id":4} }
+	 * Modelo de llamada PUT: { "id": 1, "statusExercise":{"id":4} }
 	 * La fecha se actualiza automáticamente desde el back end, 
 	 * no hace falta incorporarla en el JSON
 	 */
@@ -108,8 +108,5 @@ public class UserExerciseController
 		return userExerciseService.setUserExerciseStatusData(userExercise);
 		
 	}
-	
-
-
 }
 

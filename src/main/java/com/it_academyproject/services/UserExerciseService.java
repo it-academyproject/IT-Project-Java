@@ -40,7 +40,7 @@ public class UserExerciseService
 			//get only active students
 			List<Course> courseList = courseRepository.findByItineraryAndEndDate(itinerary , null);
 			List<MyAppUser> myAppUserList = new ArrayList<>();
-			Map<String , List<UserExercise>> userUserExerciceMap = new HashMap<>();
+			Map<String , List<UserExercise>> userUserExerciseMap = new HashMap<>();
 			for (int i = 0; i < courseList.size() ; i++)
 			{
 				MyAppUser myAppUser = courseList.get( i ).getUserStudent();
@@ -51,9 +51,9 @@ public class UserExerciseService
 				{
 					userExerciseList.get(j).setUserStudent ( null );
 				}
-				userUserExerciceMap.put(myAppUser.getId() , userExerciseList);
+				userUserExerciseMap.put(myAppUser.getId() , userExerciseList);
 			}
-			JSONObject sendData = new JSONObject( userUserExerciceMap );
+			JSONObject sendData = new JSONObject( userUserExerciseMap );
 			return sendData;
 		}
 		catch (Exception e)
@@ -100,7 +100,7 @@ public class UserExerciseService
 			//get only active students
 			List<Course> courseList = courseRepository.findByUserStudent(student);
 			List<MyAppUser> myAppUserList = new ArrayList<>();
-			Map<String , List<UserExercise>> userUserExerciceMap = new HashMap<>();
+			Map<String , List<UserExercise>> userUserExerciseMap = new HashMap<>();
 			for (int i = 0; i < courseList.size() ; i++)
 			{
 				MyAppUser myAppUser = courseList.get( i ).getUserStudent();
@@ -111,9 +111,9 @@ public class UserExerciseService
 				{
 					userExerciseList.get(j).setUserStudent ( null );
 				}
-				userUserExerciceMap.put(myAppUser.getId() , userExerciseList);
+				userUserExerciseMap.put(myAppUser.getId() , userExerciseList);
 			}
-			JSONObject sendData = new JSONObject( userUserExerciceMap );
+			JSONObject sendData = new JSONObject( userUserExerciseMap );
 			return sendData;
 		}
 		catch (Exception e)
