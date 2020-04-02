@@ -2,6 +2,8 @@ package com.it_academyproject.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,17 +47,16 @@ public class AbsencesController {
 	// Edit and create Absences
 	@JsonView(View.SummaryWithOthers.class)
 	@PutMapping("api/students/absences")
-	public Absence putAbsence(@RequestBody Absence absence) {
+	public Absence putAbsence(@RequestBody @Valid Absence absence) {
 
 		// if AbsenceRepo is not empty...
 		if (!myAbsenceRepository.findAll().isEmpty()) { 
 //			NEED TO FOCUS IN "COMMENT" AND "DATE" AND THAT'S ALL, NOW IS TURNING TO NULL ALL STUDENTS PARAMS :S
 			
-//			absence = myAbsenceRepository.findOneById(absence.getId());
-//			absence.setDateMissing(absence.getDateMissing());
-//			absence.setComment(absence.getComment());
-//			
-//			myAbsenceRepository.save(absence);
+			absence.setDateMissing(absence.getDateMissing());
+			absence.setComment(absence.getComment());
+		
+			myAbsenceRepository.save(absence);
 			
 			return absence;
 
