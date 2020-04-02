@@ -72,8 +72,8 @@ public class MyAppUser {
 	@OneToMany (targetEntity = Course.class, cascade = CascadeType.ALL)
 	@JsonView(View.Summary.class)
 	private List <Course> courses = new ArrayList <Course>();
-	@OneToMany (targetEntity = UserExercice.class, cascade = CascadeType.ALL)
-	private List <UserExercice> userExercices = new ArrayList <UserExercice>();
+	@OneToMany (targetEntity = UserExercise.class, cascade = CascadeType.ALL)
+	private List <UserExercise> userExercises = new ArrayList <UserExercise>();
 	@OneToMany (targetEntity = Emails.class, cascade = CascadeType.ALL)
 	private List <Emails> emails = new ArrayList <Emails>();
 	

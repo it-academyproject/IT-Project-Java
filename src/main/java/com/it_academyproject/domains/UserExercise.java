@@ -17,7 +17,7 @@ import javax.persistence.ManyToOne;
 
 
 @Entity
-public class UserExercice {
+public class UserExercise {
 	
 	//--------------------------Properties--------------------------------------------------------------
 	@Id
@@ -46,10 +46,10 @@ public class UserExercice {
 	//--------------------------Constructors--------------------------------------------------------------
 	
 
-	public UserExercice() {
+	public UserExercise() {
 	}
 	
-	public UserExercice(String comments, Date date_status) {
+	public UserExercise(String comments, Date date_status) {
 		this.comments = comments;
 		this.date_status = new Date();
 	}

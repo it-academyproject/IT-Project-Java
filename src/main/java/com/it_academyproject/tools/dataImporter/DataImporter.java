@@ -32,7 +32,7 @@ public class DataImporter
     @Autowired
     StatusExerciceRepository statusExerciceRepository;
     @Autowired
-    UserExerciceRepository userExerciceRepository;
+    UserExerciseRepository userExerciseRepository;
     @Autowired
     SeatRepository seatRepository;
 
@@ -462,35 +462,35 @@ public class DataImporter
                             else
                             {
                                 //check if is the user_exercice
-                                UserExercice userExercice = userExerciceRepository.findOneByUserStudentAndExercise( myAppUser , exercise);
-                                if ( userExercice == null )
+                                UserExercise userExercise = userExerciseRepository.findOneByUserStudentAndExercise( myAppUser , exercise);
+                                if ( userExercise == null )
                                 {
-                                    userExercice = new UserExercice();
-                                    userExercice.setComments("Imported Automatically");
-                                    userExercice.setUserTeacher( teacherUser );
+                                    userExercise = new UserExercise();
+                                    userExercise.setComments("Imported Automatically");
+                                    userExercise.setUserTeacher( teacherUser );
                                     Date javaDate = null;
                                     try
                                     {
                                         javaDate = DateUtil.getJavaDate( Double.parseDouble( currentCell ));
-                                        userExercice.setDate_status( javaDate );
+                                        userExercise.setDate_status( javaDate );
                                     }
                                     catch (NumberFormatException e)
                                     {
                                         //e.printStackTrace();
                                         if ( currentCell.length( ) == 5 )
                                         {
-                                            userExercice.setDate_status( stringToDate( currentCell + "/2019"));
+                                            userExercise.setDate_status( stringToDate( currentCell + "/2019"));
                                         }
                                     }
                                     //System.out.print(new SimpleDateFormat("dd/MM/yyyy").format(javaDate) + " - ");
 
 
-                                    userExercice.setExercise(exercise);
-                                    userExercice.setStatusExercise( statusExerciceRepository.findOneById( 5 ) );
-                                    userExercice.setUserStudent( myAppUser );
-                                    userExercice.setUserTeacher( teacherUser );
-                                    if ( userExercice.getDate_status() != null )
-                                        userExerciceRepository.save ( userExercice );
+                                    userExercise.setExercise(exercise);
+                                    userExercise.setStatusExercise( statusExerciceRepository.findOneById( 5 ) );
+                                    userExercise.setUserStudent( myAppUser );
+                                    userExercise.setUserTeacher( teacherUser );
+                                    if ( userExercise.getDate_status() != null )
+                                        userExerciseRepository.save (userExercise);
                                         List<Course> thisUsersCourseList = courseRepository.findByUserStudent(myAppUser);
                                         if ( itineraryNumber != 1 )
                                         {
