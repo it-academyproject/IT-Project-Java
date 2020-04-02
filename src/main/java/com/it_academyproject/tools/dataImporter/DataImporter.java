@@ -1,7 +1,7 @@
 package com.it_academyproject.tools.dataImporter;
 
 import com.it_academyproject.domains.*;
-
+import com.it_academyproject.exceptions.ResourceNotFoundException;
 import com.it_academyproject.repositories.*;
 
 import com.it_academyproject.tools.excel.Excel;
@@ -344,7 +344,8 @@ public class DataImporter
     {
         List <String> NotFoundUser = new ArrayList<>();
         Itinerary itinerary = itineraryRepository.findOneById ( 1 );
-        MyAppUser teacherUser = myAppUserRepository.findOneById( teacherId );
+        MyAppUser teacherUser = myAppUserRepository.findOneById( teacherId )
+        		.orElseThrow(() -> new ResourceNotFoundException("not found"));
         try
         {
             //System.out.println(Paths.get("").toAbsolutePath().toString());

@@ -2,6 +2,7 @@ package com.it_academyproject.jwt_security.security;
 
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.exceptions.EmptyFieldException;
+import com.it_academyproject.exceptions.ResourceNotFoundException;
 import com.it_academyproject.exceptions.UserNotEnabled;
 import com.it_academyproject.exceptions.WrongEmailPassword;
 import com.it_academyproject.jwt_security.constants.SecurityConstants;
@@ -9,6 +10,7 @@ import com.it_academyproject.repositories.MyAppUserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,7 +48,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public MyAppUser editGetByDni(MyAppUser student) {
 		
 		if(myAppUserRepository.existsById(student.getId())) {
-		MyAppUser user = myAppUserRepository.findOneById(student.getId());
+		MyAppUser user = myAppUserRepository.findOneById(student.getId())
+				.orElseThrow(() -> new ResourceNotFoundException("not found"));
 		java.util.Date date = new java.util.Date();
     	java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
 		user.setLastLogin(timestamp);
@@ -61,10 +64,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         LoginData loginData = new LoginData();
         try
         {
-            String test = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+            String test = request.getReader().lines().collect(Collectors.joining(System.lineSeparator())).toString();
 
             JSONObject  loginDataJson = new JSONObject ( test );
-
             if ( (loginDataJson.has("email")) &&
                     (loginDataJson.has("password")) &&
                     (! loginDataJson.getString("email").equals("") ) &&
@@ -77,13 +79,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                 MyAppUser myAppUser = myAppUserRepository.findByEmail(loginData.getEmail());
 
-                if (myAppUser == null) throw new UserNotEnabled(loginData.getEmail());
-
                 if ( passwordEncoder.matches(loginData.getPassword() , myAppUser.getPassword() ))
                 {
                     List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
                     Authentication authenticationToken = new UsernamePasswordAuthenticationToken(loginData.getEmail(), loginData.getPassword(), grantedAuthorityList );
-
 
                     try
                     {
@@ -115,22 +114,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
         catch (WrongEmailPassword e)
         {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setStatus(401);
             try {
-                JSONObject json = new JSONObject();
-                json.put("success", false);
-                json.write(response.getWriter());
+                response.getWriter().write(e.getLocalizedMessage());
+                response.getWriter().flush();
+                response.getWriter().close();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
         catch (UserNotEnabled e )
         {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setStatus(401);
             try {
-                JSONObject json = new JSONObject();
-                json.put("success", false);
-                json.write(response.getWriter());
+                response.getWriter().write(e.getLocalizedMessage());
+                response.getWriter().flush();
+                response.getWriter().close();
             }
             catch (IOException ex)
             {
@@ -139,19 +138,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
         catch (EmptyFieldException e)
         {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setStatus(401);
             try {
-                JSONObject json = new JSONObject();
-                json.put("success", false);
-                json.write(response.getWriter());
-
+                response.getWriter().write(e.getLocalizedMessage());
+                response.getWriter().flush();
+                response.getWriter().close();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
         catch (IOException e)
         {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setStatus(401);
         }
         return null;
 
@@ -175,20 +173,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setIssuer(SecurityConstants.TOKEN_ISSUER)
                 .setAudience(SecurityConstants.TOKEN_AUDIENCE)
                 .setSubject(userDetails.getUsername())
+                /*.setExpiration(new Date(System.currentTimeMillis() + 864000000))*/
                 .setExpiration(new Date(System.currentTimeMillis() + (8640000)))
                 .claim("rol", roles)
                 .compact();
         System.out.println("The expiration date of the token is: " + (new Date(System.currentTimeMillis() + (8640000)).toString()));
 
         response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
-        try {
-            JSONObject json = new JSONObject();
-            json.put("success", true);
-            json.put("token", token);
-            json.write(response.getWriter());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
 

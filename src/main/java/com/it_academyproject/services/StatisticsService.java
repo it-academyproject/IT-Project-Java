@@ -5,22 +5,28 @@ import com.it_academyproject.domains.Absence;
 import com.it_academyproject.domains.Course;
 import com.it_academyproject.domains.Itinerary;
 import com.it_academyproject.domains.MyAppUser;
+import com.it_academyproject.exceptions.ResourceNotFoundException;
 import com.it_academyproject.exceptions.UserNotFoundException;
+
 import com.it_academyproject.repositories.AbsenceRepository;
-import com.it_academyproject.repositories.CourseRepository;
 import com.it_academyproject.repositories.ItineraryRepository;
+import com.it_academyproject.repositories.CourseRepository;
 import com.it_academyproject.repositories.MyAppUserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class StatisticsService
 {
 
-    // Absences to compare to when searching students per absences
-    private static final Integer MAX_ABSENCES = 8;
     @Autowired
     AbsenceRepository absenceRepository;
     @Autowired
@@ -30,44 +36,74 @@ public class StatisticsService
     @Autowired
     MyAppUserRepository myAppUserRepository;
 
-    public Map<String, Integer> perItinerary() {
 
-        Map<String, Integer> result = new HashMap<>();
-
-        for (Itinerary itinerary : itineraryRepository.findAll())
-            result.put(itinerary.getName(), getNumStudents(itinerary));
-
-        return result;
-    }
-
-    private int getNumStudents(Itinerary itinerary) {
-        return courseRepository.findByItinerary(itinerary).size();
-    }
-
-    // Returns a map of <StudentId, #absences> of the students with MAX_ABSENCES or more
-    public Map<String, Integer> perAbsence() {
-        
-        List<Absence> absences = absenceRepository.findAll();
-        Map<String, Integer> absencesPerStudent = new HashMap<>();
-
-        String studentId;
-        // Fill the map with the absences per student
-        for (Absence absence : absences) {
-            studentId = absence.getUserStudent().getId();
-            if (absencesPerStudent.putIfAbsent(studentId, 1)!=null)
-                absencesPerStudent.replace(studentId, absencesPerStudent.get(studentId)+1);
+    
+    public String perItinerary() throws Exception{
+        List<Itinerary> numberOfItinerary = new ArrayList<>();
+        itineraryRepository.findAll().forEach(numberOfItinerary::add);
+        List<String> listPerItinerary = new ArrayList<>();
+        for(int i=0;i<numberOfItinerary.size();i++) {
+        	Itinerary itinerary = numberOfItinerary.get(i);       	
+        	Integer numberPerItinerary = courseRepository.findByItinerary(itinerary).size();
+        	listPerItinerary.add(numberPerItinerary.toString());        	
+        }        
+        ArrayList<ArrayList<String>> peopleByItinerary = new ArrayList<ArrayList<String>>();
+        for (int i=0;i<numberOfItinerary.size();i++) {
+        	String itineraryName = "Itinerario: " + numberOfItinerary.get(i).getName();
+        	String itineraryStudent = "Cursando: " + listPerItinerary.get(i) + " estudiantes";
+        	peopleByItinerary.add(peopleByItineraryMethod(itineraryName,itineraryStudent));
         }
-
-        // Iterate the map and remove students with less than MAX_ABSENCES absences
-        // Not possible to remove an entry from a map that is being iterated, copy needed
-        Map<String, Integer> copyMap = new HashMap(absencesPerStudent);
-        for (Map.Entry<String, Integer> entry: copyMap.entrySet()){
-            if (entry.getValue()<MAX_ABSENCES) {
-                absencesPerStudent.remove(entry.getKey());
-            }
+        Gson Json= new Gson();
+        String sendData = Json.toJson(peopleByItinerary);
+    	return sendData;
+    }
+    
+    public String perGender() throws Exception {
+        List<Character> typeOfGender = new ArrayList<Character>();
+        	typeOfGender.add('M');
+        	typeOfGender.add('F');
+    	List<String> listNumberOfUsers = new ArrayList<>();
+        for(int i=0;i<typeOfGender.size();i++) {
+        	Character gender = typeOfGender.get(i);
+        	Integer numberPerUsers = myAppUserRepository.findByGender(gender).size();
+        	listNumberOfUsers.add(numberPerUsers.toString());
         }
-
-        return absencesPerStudent;
+        ArrayList<ArrayList<String>> peopleByGender = new ArrayList<ArrayList<String>>();
+        for(int i=0;i<typeOfGender.size();i++) {
+        	peopleByGender.add(peopleByGenderMethod(typeOfGender.get(i),(listNumberOfUsers.get(i) + " estudiantes")));
+        }
+        for (int i=0;i<peopleByGender.size();i++) {
+        	if(peopleByGender.get(i).get(i).equalsIgnoreCase("M")) {
+        		peopleByGender.get(i).set(0, "MASCULINO:");
+        	}else {
+        		peopleByGender.get(i).set(0, "FEMENINO:");
+        	}
+        }
+        Gson Json = new Gson();        
+        String sendData = Json.toJson(peopleByGender);
+        return sendData;
+    }
+    
+    public String perAbsence() throws Exception {
+    	List<Absence> absence = new ArrayList<>();
+    	absenceRepository.findAll().forEach(absence::add);
+    	HashMap<String,String>numberOfAbsence = new HashMap<>();
+    	for(int i = 0; i < absence.size(); i++) {  
+            Integer counter = 0; 
+    		for(int j = i + 1; j < absence.size(); j++) {  
+                 if(absence.get(i).getUserStudent().getId().equals(absence.get(j).getUserStudent().getId())) {  
+                    counter++;  
+                 }
+             }
+    		if(counter>=8) {    			
+    			numberOfAbsence.put(("Nombre: " + absence.get(i).getUserStudent().getFirstName() + " " + absence.get(i).getUserStudent().getLastName()), counter.toString() + 
+    					" faltas");
+    		}   		
+    	}
+    	
+    	Gson Json = new Gson();
+    	String sendData = Json.toJson(numberOfAbsence);
+        return sendData;
     }
     
     public String finishInXdays() throws Exception {
@@ -94,7 +130,6 @@ public class StatisticsService
     	String sendData = Json.toJson(endListNameAndDaysLeft);
         return sendData;
     }
-
     public List<MyAppUser> getAllActiveStudents ( ) {
         List<Course> courseList = courseRepository.findByEndDate( null );
         List<MyAppUser> activeStudents = new ArrayList<>();
@@ -104,7 +139,8 @@ public class StatisticsService
         {
             course = courseList.get(i);
             MyAppUser student = course.getUserStudent();
-            myAppUser = myAppUserRepository.findOneById( student.getId() );
+            myAppUser = myAppUserRepository.findOneById( student.getId() )
+            		.orElseThrow(() -> new ResourceNotFoundException("not found"));
             if ( myAppUser != null )
             {
                 activeStudents.add( myAppUser );

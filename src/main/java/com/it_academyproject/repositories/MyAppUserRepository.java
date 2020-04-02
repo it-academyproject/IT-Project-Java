@@ -3,6 +3,7 @@ package com.it_academyproject.repositories;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -22,7 +23,7 @@ public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
 	public ArrayList<MyAppUser> findByRoleId(int roleId);
 	
 
-	MyAppUser findOneById(String id );
+	Optional <MyAppUser> findOneById(String id );
 
 	MyAppUser findByEmail(String email);
 
@@ -36,4 +37,5 @@ public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
 	@Query(value="SELECT u from MyAppUser u WHERE u.firstName like '%:name%'")
 	List<MyAppUser> findUserByNameLike(@Param("name") String name);
 	
+	//List<MyAppUser> findByIterations_IterationName(String iterationName);
 }
