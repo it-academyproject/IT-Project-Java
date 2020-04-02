@@ -32,7 +32,7 @@ public class UserExercice {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="exercice_id")
-	private Exercice exercice;
+	private Exercise exercise;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="student_id")
@@ -83,12 +83,12 @@ public class UserExercice {
 		this.statusExercise = statusExercise;
 	}
 
-	public Exercice getExercice() {
-		return exercice;
+	public Exercise getExercise() {
+		return exercise;
 	}
 
-	public void setExercice(Exercice exercice) {
-		this.exercice = exercice;
+	public void setExercise(Exercise exercise) {
+		this.exercise = exercise;
 	}
 
 	public MyAppUser getUserStudent() {

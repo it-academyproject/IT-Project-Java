@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Exercice {
+public class Exercise {
 	
 	//--------------------------Properties--------------------------------------------------------------
 	
@@ -25,10 +25,10 @@ public class Exercice {
 	
 	//--------------------------Constructors--------------------------------------------------------------
 
-	public Exercice() {
+	public Exercise() {
 	}
 	
-	public Exercice(String name) {
+	public Exercise(String name) {
 		this.name = name;
 	}
 

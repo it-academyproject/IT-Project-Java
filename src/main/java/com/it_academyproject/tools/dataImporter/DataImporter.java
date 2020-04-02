@@ -351,7 +351,7 @@ public class DataImporter
             Excel excel = new Excel();
             excel.openFile(fileLocation);
             Map<Integer, List<String>> excelContent = excel.readJExcelContent(sheetNumber);
-            Map<Integer , Exercice> exerciceMap = new HashMap<>();
+            Map<Integer , Exercise> exerciceMap = new HashMap<>();
             //System.out.println( excelContent );
 
             // Get a set of the entries
@@ -383,17 +383,17 @@ public class DataImporter
                         {
                             //Nothing
                             //check if is on the DB
-                            List<Exercice> exercicesList = exerciceRepository.findAllByNameAndItinerary( currentCell , itineraryRepository.findOneById( itineraryNumber ) );
+                            List<Exercise> exercicesList = exerciceRepository.findAllByNameAndItinerary( currentCell , itineraryRepository.findOneById( itineraryNumber ) );
                             if ( (exercicesList == null ) || ( exercicesList.size() == 0) )
                             {
                                 //exists do nothing
 
-                                Exercice exercice = new Exercice();
-                                exercice.setItinerary( itineraryRepository.findOneById( itineraryNumber ) );
-                                exercice.setName( currentCell );
-                                exerciceMap.put( j , exercice );
-                                exercice  = exerciceRepository.save( exercice );
-                                keyList.put( j , exercice.getId());
+                                Exercise exercise = new Exercise();
+                                exercise.setItinerary( itineraryRepository.findOneById( itineraryNumber ) );
+                                exercise.setName( currentCell );
+                                exerciceMap.put( j , exercise);
+                                exercise = exerciceRepository.save(exercise);
+                                keyList.put( j , exercise.getId());
 
                             }
                             else if ( exercicesList.size() > 0 )
@@ -454,15 +454,15 @@ public class DataImporter
                         {
                             Integer exerciceKey = keyList.get(j);
                             //check if there is an excercise associated with this
-                            Exercice exercice = exerciceRepository.findOneById( exerciceKey );
-                            if ( exercice  == null  )
+                            Exercise exercise = exerciceRepository.findOneById( exerciceKey );
+                            if ( exercise == null  )
                             {
                                 throw (new Exception ("The exercise is not created. "));
                             }
                             else
                             {
                                 //check if is the user_exercice
-                                UserExercice userExercice = userExerciceRepository.findOneByUserStudentAndExercice( myAppUser , exercice );
+                                UserExercice userExercice = userExerciceRepository.findOneByUserStudentAndExercise( myAppUser , exercise);
                                 if ( userExercice == null )
                                 {
                                     userExercice = new UserExercice();
@@ -485,7 +485,7 @@ public class DataImporter
                                     //System.out.print(new SimpleDateFormat("dd/MM/yyyy").format(javaDate) + " - ");
 
 
-                                    userExercice.setExercice( exercice );
+                                    userExercice.setExercise(exercise);
                                     userExercice.setStatusExercise( statusExerciceRepository.findOneById( 5 ) );
                                     userExercice.setUserStudent( myAppUser );
                                     userExercice.setUserTeacher( teacherUser );
@@ -532,7 +532,7 @@ public class DataImporter
             Excel excel = new Excel();
             excel.openFile(fileLocation);
             Map<Integer, List<String>> excelContent = excel.readJExcelContent(0);
-            Map<Integer, Exercice> exerciceMap = new HashMap<>();
+            Map<Integer, Exercise> exerciceMap = new HashMap<>();
             //System.out.println( excelContent );
 
             // Get a set of the entries
