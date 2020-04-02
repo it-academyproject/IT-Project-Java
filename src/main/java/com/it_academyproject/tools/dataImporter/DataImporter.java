@@ -28,9 +28,9 @@ public class DataImporter
     @Autowired
     ItineraryRepository itineraryRepository;
     @Autowired
-    ExerciceRepository exerciceRepository;
+    ExerciseRepository exerciseRepository;
     @Autowired
-    StatusExerciceRepository statusExerciceRepository;
+    StatusExerciseRepository statusExerciseRepository;
     @Autowired
     UserExerciseRepository userExerciseRepository;
     @Autowired
@@ -79,7 +79,7 @@ public class DataImporter
             StatusExercise statusExercise = new StatusExercise();
             statusExercise.setId( i );
             statusExercise.setName( exStatusList.get( i ) );
-            statusExerciceRepository.save(statusExercise);
+            statusExerciseRepository.save(statusExercise);
         }
         //Adding teachers to MyAppUsers
         List<MyAppUser> users = new ArrayList<>();
@@ -383,8 +383,8 @@ public class DataImporter
                         {
                             //Nothing
                             //check if is on the DB
-                            List<Exercise> exercicesList = exerciceRepository.findAllByNameAndItinerary( currentCell , itineraryRepository.findOneById( itineraryNumber ) );
-                            if ( (exercicesList == null ) || ( exercicesList.size() == 0) )
+                            List<Exercise> exercisesList = exerciseRepository.findAllByNameAndItinerary( currentCell , itineraryRepository.findOneById( itineraryNumber ) );
+                            if ( (exercisesList == null ) || ( exercisesList.size() == 0) )
                             {
                                 //exists do nothing
 
@@ -392,13 +392,13 @@ public class DataImporter
                                 exercise.setItinerary( itineraryRepository.findOneById( itineraryNumber ) );
                                 exercise.setName( currentCell );
                                 exerciceMap.put( j , exercise);
-                                exercise = exerciceRepository.save(exercise);
+                                exercise = exerciseRepository.save(exercise);
                                 keyList.put( j , exercise.getId());
 
                             }
-                            else if ( exercicesList.size() > 0 )
+                            else if ( exercisesList.size() > 0 )
                             {
-                                keyList.put( j , exercicesList.get(0).getId());
+                                keyList.put( j , exercisesList.get(0).getId());
                             }
 
 
@@ -454,7 +454,7 @@ public class DataImporter
                         {
                             Integer exerciceKey = keyList.get(j);
                             //check if there is an excercise associated with this
-                            Exercise exercise = exerciceRepository.findOneById( exerciceKey );
+                            Exercise exercise = exerciseRepository.findOneById( exerciceKey );
                             if ( exercise == null  )
                             {
                                 throw (new Exception ("The exercise is not created. "));
@@ -486,7 +486,7 @@ public class DataImporter
 
 
                                     userExercise.setExercise(exercise);
-                                    userExercise.setStatusExercise( statusExerciceRepository.findOneById( 5 ) );
+                                    userExercise.setStatusExercise( statusExerciseRepository.findOneById( 5 ) );
                                     userExercise.setUserStudent( myAppUser );
                                     userExercise.setUserTeacher( teacherUser );
                                     if ( userExercise.getDate_status() != null )

@@ -10,9 +10,9 @@ import java.util.List;
 
 
 @Repository
-public interface ExerciceRepository extends JpaRepository<Exercise, Integer>
+public interface ExerciseRepository extends JpaRepository<Exercise, Integer>
 {
     List<Exercise> findAllByNameAndItinerary (String name , Itinerary itinerary);
-    Exercise findOneById (Integer exerciceId );
+    Exercise findOneById (Integer exerciseId );
 }
 
