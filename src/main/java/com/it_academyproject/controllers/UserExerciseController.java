@@ -102,7 +102,7 @@ public class UserExerciseController
 	//SET @CrossOrigin BEFORE DEPLOYING TO PRODUCTION!
 	@CrossOrigin
 	@JsonView(View.Summary.class)
-	@PutMapping("/api/userExercise/exercice_id")
+	@PutMapping("/api/userExercise/exercise_id")
 	public boolean setUserExerciseStatusData(@RequestBody UserExercise userExercise) {
 
 		return userExerciseService.setUserExerciseStatusData(userExercise);
