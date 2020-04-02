@@ -41,11 +41,6 @@ public class MyAppUserService {
 		return updateStudentCourses(myAppUserRepository.findByLastName(lastName));
 	}
 
-	//get by dni
-	public MyAppUser getByDni(String idDocument) {
-		return myAppUserRepository.findByIdDocument(idDocument);
-	}
-
 	//get by Id
 	public MyAppUser getById(String id) {
 		MyAppUser student = null;
@@ -65,18 +60,23 @@ public class MyAppUserService {
 		return student;
 	}
 
-	// Put - Edit by dni
-	public MyAppUser editGetByDni(MyAppUser student) {
+	// Edit student
+	public MyAppUser editStudent(MyAppUser student) {
 
 		if(myAppUserRepository.existsById(student.getId())) {
-		MyAppUser user = myAppUserRepository.findOneById(student.getId());
-		user.setFirstName(student.getFirstName());
-		user.setLastName(student.getLastName());
-		System.out.println(user.getRole().getId());
-		myAppUserRepository.save(user);
 
-		 return user;
-		 }else {return null;}
+			MyAppUser user = myAppUserRepository.findOneById(student.getId());
+			if (student.getFirstName()!=null && !student.getFirstName().isEmpty())
+				user.setFirstName(student.getFirstName());
+			if (student.getLastName()!=null && !student.getLastName().isEmpty())
+				user.setLastName(student.getLastName());
+			myAppUserRepository.save(user);
+
+			return user;
+
+		} else {
+			return null;
+		}
 	}
 
 	// Find number of users given a gender (M for male, F for female)
