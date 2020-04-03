@@ -49,10 +49,11 @@ public class UserExerciseService
 				MyAppUser myAppUser = courseList.get( i ).getUserStudent();
 				myAppUserList.add( myAppUser);
 				List<UserExercice> userExerciceList = userExerciceRepository.findByUserStudent(myAppUser);
-				//remove the Student field that is not necessary
+				//remove the Student and Teacher fields that is not necessary
 				for (int j = 0; j < userExerciceList.size(); j++)
 				{
 					userExerciceList.get(j).setUserStudent ( null );
+					userExerciceList.get(j).setUserTeacher(null);
 				}
 				userUserExerciceMap.put(myAppUser.getfullName() , userExerciceList );
 			}

@@ -489,7 +489,7 @@ public class DataImporter
                                     userExercice.setExercice( exercice );
                                     userExercice.setStatusExercice( statusExerciceRepository.findOneById( 5 ) );
                                     userExercice.setUserStudent( myAppUser );
-                                    userExercice.setUserTeacher( teacherUser );
+                                    userExercice.setUserTeacher( teacherUser );                          
                                     if ( userExercice.getDate_status() != null )
                                         userExerciceRepository.save ( userExercice );
                                         List<Course> thisUsersCourseList = courseRepository.findByUserStudent(myAppUser);
