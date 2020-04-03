@@ -17,8 +17,8 @@ public class Role {
 	@Id
 	private int id;
 	private String name;
-	@OneToMany (targetEntity = MyAppUser.class, cascade = CascadeType.ALL)
-	private List <MyAppUser> users;
+	//@OneToMany (targetEntity = MyAppUser.class, cascade = CascadeType.ALL)
+	//private List <MyAppUser> users;
 	
 	public Role() {
 	}
