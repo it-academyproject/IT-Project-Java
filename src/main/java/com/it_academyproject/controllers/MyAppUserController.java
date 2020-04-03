@@ -1,63 +1,55 @@
 package com.it_academyproject.controllers;
 
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonView;
+import com.it_academyproject.domains.Student;
+import com.it_academyproject.services.StudentService;
+import com.it_academyproject.tools.View;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.it_academyproject.services.MyAppUserService;
-import com.it_academyproject.tools.View;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.it_academyproject.domains.MyAppUser;
+import java.util.List;
 
 @RestController
 public class MyAppUserController {
 	
 	@Autowired
-	MyAppUserService myAppUserService;
-	
+	StudentService studentService;
+
 	//Call for students
 	@JsonView(View.Summary.class)
 	@GetMapping("/api/students")
-	public List<MyAppUser> getAllStudents(){
-		return myAppUserService.getAllStudents();
+	public List<Student> getAllStudents(){
+		return studentService.getAllStudents();
 	}
 	
 	//Call students by name
 	@JsonView(View.Summary.class)
-	@GetMapping("api/students/name")
-	public List<MyAppUser> getStudentsByName(@RequestBody MyAppUser student){
-		return myAppUserService.getByName(student.getFirstName());
+	@GetMapping("/api/students/name")
+	public List<Student> getStudentsByName(@RequestBody Student student){
+		return studentService.getByName(student.getFirstName());
 	}
 	
 	//Call students by surname
 	@JsonView(View.SummaryWithOthers.class)
-	@GetMapping("api/students/surname")
-	public List<MyAppUser> getStudentsBySurname(@RequestBody MyAppUser student){
-		return myAppUserService.getBySurname(student.getLastName());
+	@GetMapping("/api/students/surname")
+	public List<Student> getStudentsBySurname(@RequestBody Student student){
+		return studentService.getBySurname(student.getLastName());
 	}
 	
-	//Call students by dni
-	@JsonView(View.SummaryWithOthers.class)
-	@GetMapping("api/students/dni")
-	public MyAppUser getStudentByDni(@RequestBody MyAppUser student){
-		return myAppUserService.getByDni(student.getIdDocument());
-	}
-		
 	//Call student by Id
 	@JsonView(View.SummaryWithOthers.class)
-	@GetMapping("api/students/id")
-	public MyAppUser getStudentById(@RequestBody MyAppUser student){
-		return myAppUserService.getById(student.getId());
+	@GetMapping("/api/students/id")
+	public Student getStudentById(@RequestBody Student student){
+		return studentService.getById(student.getId());
 	}
 	
 	//Edit Student by Id document
 	@JsonView(View.SummaryWithOthers.class)
-	@PutMapping("api/students/id")
-	public MyAppUser PutStudentByDni(@RequestBody MyAppUser student){
-		return myAppUserService.editGetByDni( student);
+	@PutMapping("/api/students/id")
+	public Student updateStudent(@RequestBody Student student){
+		return studentService.update(student);
 	}
 }

@@ -1,6 +1,7 @@
 package com.it_academyproject.services;
 
 import com.it_academyproject.domains.MyAppUser;
+import com.it_academyproject.domains.Teacher;
 import com.it_academyproject.repositories.MyAppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,64 +9,54 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.it_academyproject.domains.MyAppUser.Role.TEACHER;
+
 @Service
 public class TeacherService {
 
 	@Autowired
-	MyAppUserRepository myAppUserRepository;
+	MyAppUserRepository userRepository;
 
 	@Autowired
 	CourseService courseService;
 
 	//getAll
-	public List<MyAppUser> getAllStudents(){
-		return updateStudentCourses(myAppUserRepository.findByRole(MyAppUser.Role.STUDENT));
-	}
-
-	private List<MyAppUser> updateStudentCourses(List<MyAppUser> students) {
-		for (MyAppUser student : students) {
-			student.setCourses(courseService.findByUserStudent(student));
-		}
-		return students;
+	public List<Teacher> getAllTeachers(){
+		return (List<Teacher>) userRepository.findByRole(TEACHER);
 	}
 
 	//get by name
-	public List<MyAppUser> getByName(String firstName){
-		return updateStudentCourses(myAppUserRepository.findByFirstName(firstName));
+	public List<Teacher> getByName(String firstName){
+		return (List<Teacher>) userRepository.findByFirstNameAndRole(firstName, TEACHER);
 	}
 
 	//get by surName
-	public List<MyAppUser> getBySurname(String lastName) {
-		return updateStudentCourses(myAppUserRepository.findByLastName(lastName));
+	public List<Teacher> getBySurname(String lastName) {
+		return (List<Teacher>) userRepository.findByLastNameAndRole(lastName, TEACHER);
 	}
 
 	//get by Id
 	public MyAppUser getById(String id) {
-		MyAppUser student = null;
-		Optional<MyAppUser> studentOptional = myAppUserRepository.findById(id);
+		MyAppUser teacher = null;
+		Optional<MyAppUser> teacherOptional = userRepository.findById(id);
 		//System.out.println(id);
-		if(studentOptional.isPresent()) {
-			student = studentOptional.get();
+		if(teacherOptional.isPresent()) {
+			teacher = teacherOptional.get();
 		}else {
 			System.out.println("Student not found 404");
 		}
-		// System.out.println(student.getFirstName());
-		return updateStudentCourses(student);
-	}
-
-	private MyAppUser updateStudentCourses(MyAppUser student) {
-		student.setCourses(courseService.findByUserStudent(student));
-		return student;
+		// System.out.println(teacher.getFirstName());
+		return userRepository.getOne(id);
 	}
 
 	// Update user by id
-	public MyAppUser updateById(MyAppUser student) {
+	public Teacher updateById(Teacher teacher) {
 
-		if(myAppUserRepository.existsById(student.getId())) {
-			MyAppUser user = myAppUserRepository.findOneById(student.getId());
-			user.setFirstName(student.getFirstName());
-			user.setLastName(student.getLastName());
-			myAppUserRepository.save(user);
+		if(userRepository.existsByIdAndRole(teacher.getId(), TEACHER)) {
+			Teacher user = (Teacher) userRepository.findOneByIdAndRole(teacher.getId(), TEACHER);
+			user.setFirstName(teacher.getFirstName());
+			user.setLastName(teacher.getLastName());
+			userRepository.save(user);
 
 			return user;
 		}else {return null;}
@@ -73,13 +64,13 @@ public class TeacherService {
 
 	// Find number of users given a gender (M for male, F for female)
 	public int usersByGender(char gender) {
-		return myAppUserRepository.findByGender(gender).size();
+		return userRepository.findByGender(gender).size();
 	}
 
 	// Return full name given an id . Format "surname, name"
-	public String getFullNameById(String studentId) {
-		MyAppUser student = getById(studentId);
-		return student.getLastName() + ", " + student.getFirstName();
+	public String getFullNameById(String teacherId) {
+		MyAppUser teacher = getById(teacherId);
+		return teacher.getLastName() + ", " + teacher.getFirstName();
 	}
 
 	public String getFirstNameById(String studentId) {
@@ -88,6 +79,10 @@ public class TeacherService {
 
 	public String getLastNameById(String studentId) {
 		return getById(studentId).getLastName();
+	}
+
+	public Teacher addTeacher(Teacher teacher) {
+		return null;
 	}
 
 /*

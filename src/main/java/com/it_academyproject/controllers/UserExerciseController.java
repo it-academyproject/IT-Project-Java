@@ -3,23 +3,15 @@ package com.it_academyproject.controllers;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.it_academyproject.domains.MyAppUser;
+import com.it_academyproject.domains.Student;
 import com.it_academyproject.domains.UserExercise;
-import com.it_academyproject.repositories.UserExerciseRepository;
 import com.it_academyproject.services.UserExerciseService;
 import com.it_academyproject.tools.View;
-
-
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserExerciseController
@@ -27,8 +19,8 @@ public class UserExerciseController
 	@Autowired
 	UserExerciseService userExerciseService;
 
-	@Autowired
-	UserExerciseRepository userExerciseRepository;
+	/*@Autowired
+	UserExerciseRepository userExerciseRepository;*/
 
 	@GetMapping ("/api/user-exercises/{itineraryId}")
 	public ResponseEntity<String>  getExerciseStudentByItinerary (@PathVariable String itineraryId )
@@ -75,7 +67,7 @@ public class UserExerciseController
 
 	@JsonView(View.Summary.class)
 	@GetMapping ("/api/user-exercises/student-id")
-	public ResponseEntity<String> getExercisesByStudentId(@RequestBody MyAppUser student){
+	public ResponseEntity<String> getExercisesByStudentId(@RequestBody Student student){
 
 		try
 		{
@@ -102,13 +94,10 @@ public class UserExerciseController
 	 * no hace falta incorporarla en el JSON
 	 */
 	//SET @CrossOrigin BEFORE DEPLOYING TO PRODUCTION!
-	@CrossOrigin
 	@JsonView(View.Summary.class)
 	@PutMapping("/api/user-exercises/exercise-id")
 	public boolean setUserExerciseStatusData(@RequestBody UserExercise userExercise) {
-
 		return userExerciseService.setUserExerciseStatusData(userExercise);
-		
 	}
 }
 

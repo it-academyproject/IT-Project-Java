@@ -1,82 +1,76 @@
 package com.it_academyproject.services;
 
-import com.it_academyproject.domains.Course;
 import com.it_academyproject.domains.MyAppUser;
+import com.it_academyproject.domains.Student;
+import com.it_academyproject.domains.Teacher;
 import com.it_academyproject.repositories.MyAppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class MyAppUserService {
-	
+
 	@Autowired
 	MyAppUserRepository myAppUserRepository;
 
 	@Autowired
 	CourseService courseService;
-	
-	//getAll
-	public List<MyAppUser> getAllStudents(){
-		return updateStudentCourses(myAppUserRepository.findByRoleId(1));
-	}
 
-	private List<MyAppUser> updateStudentCourses(List<MyAppUser> students) {
-		for (MyAppUser student : students) {
+	//getAll
+	/*public List<MyAppUser> getAllStudents(){
+		return updateStudentCourses(myAppUserRepository.findByRole(MyAppUser.Role.STUDENT));
+	}*/
+
+	private List<Student> updateStudentCourses(List<Student> students) {
+		for (Student student : students) {
 			student.setCourses(courseService.findByUserStudent(student));
 		}
 		return students;
 	}
 
 	//get by name
-	public List<MyAppUser> getByName(String firstName){
+	/*public List<MyAppUser> getByName(String firstName){
 		return updateStudentCourses(myAppUserRepository.findByFirstName(firstName));
 	}
 
 	//get by surName
 	public List<MyAppUser> getBySurname(String lastName) {
 		return updateStudentCourses(myAppUserRepository.findByLastName(lastName));
-	}
-
-	//get by dni
-	public MyAppUser getByDni(String idDocument) {
-		return myAppUserRepository.findByIdDocument(idDocument);
-	}
+	}*/
 
 	//get by Id
 	public MyAppUser getById(String id) {
-		MyAppUser student = null;
+		MyAppUser myAppUser = null;
 		Optional<MyAppUser> studentOptional = myAppUserRepository.findById(id);
 		//System.out.println(id);
 		if(studentOptional.isPresent()) {
-			student = studentOptional.get();
+			myAppUser = studentOptional.get();
 		}else {
-			System.out.println("Student not found 404");
+			System.out.println("User not found 404");
 		}
-		// System.out.println(student.getFirstName());
-		return updateStudentCourses(student);
+		// System.out.println(myAppUser.getFirstName());
+		return updateStudentCourses((Student) myAppUser);
 	}
 
-	private MyAppUser updateStudentCourses(MyAppUser student) {
+	private MyAppUser updateStudentCourses(Student student) {
 		student.setCourses(courseService.findByUserStudent(student));
 		return student;
 	}
 
-	// Put - Edit by dni
-	public MyAppUser editGetByDni(MyAppUser student) {
+	// Update user by id
+	public MyAppUser updateById(Student student) {
 
 		if(myAppUserRepository.existsById(student.getId())) {
-		MyAppUser user = myAppUserRepository.findOneById(student.getId());
-		user.setFirstName(student.getFirstName());
-		user.setLastName(student.getLastName());
-		System.out.println(user.getRole().getId());
-		myAppUserRepository.save(user);
+			MyAppUser user = myAppUserRepository.findOneById(student.getId());
+			user.setFirstName(student.getFirstName());
+			user.setLastName(student.getLastName());
+			myAppUserRepository.save(user);
 
-		 return user;
-		 }else {return null;}
+			return user;
+		}else {return null;}
 	}
 
 	// Find number of users given a gender (M for male, F for female)
@@ -85,7 +79,7 @@ public class MyAppUserService {
 	}
 
 	// Return full name given an id . Format "surname, name"
-	public String getFullnameById(String studentId) {
+	public String getFullNameById(String studentId) {
 		MyAppUser student = getById(studentId);
 		return student.getLastName() + ", " + student.getFirstName();
 	}
@@ -96,6 +90,12 @@ public class MyAppUserService {
 
 	public String getLastNameById(String studentId) {
 		return getById(studentId).getLastName();
+	}
+
+	public Teacher addTeacher(Teacher teacher) { return myAppUserRepository.save(teacher);}
+
+	public List<Student> getStudents() {
+		return (List<Student>) myAppUserRepository.findByRole(MyAppUser.Role.STUDENT);
 	}
 
 /*

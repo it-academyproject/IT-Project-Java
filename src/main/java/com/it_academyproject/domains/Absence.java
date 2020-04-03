@@ -18,7 +18,7 @@ public class Absence {
 	private Date dateMissing;
 	@ManyToOne (fetch = FetchType.EAGER)
 	@JoinColumn (name="student_id")
-	private MyAppUser userStudent;
+	private Student userStudent;
 	
 	public Absence() {
 		
@@ -45,11 +45,11 @@ public class Absence {
 		this.dateMissing = dateMissing;
 	}
 
-	public MyAppUser getUserStudent() {
+	public Student getUserStudent() {
 		return userStudent;
 	}
 
-	public void setUserStudent(MyAppUser userStudent) {
+	public void setUserStudent(Student userStudent) {
 		this.userStudent = userStudent;
 	}
 

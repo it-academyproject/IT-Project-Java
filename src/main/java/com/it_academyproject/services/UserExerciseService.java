@@ -1,9 +1,6 @@
 package com.it_academyproject.services;
 
-import com.it_academyproject.domains.Course;
-import com.it_academyproject.domains.Itinerary;
-import com.it_academyproject.domains.MyAppUser;
-import com.it_academyproject.domains.UserExercise;
+import com.it_academyproject.domains.*;
 import com.it_academyproject.repositories.CourseRepository;
 import com.it_academyproject.repositories.ItineraryRepository;
 import com.it_academyproject.repositories.MyAppUserRepository;
@@ -39,19 +36,19 @@ public class UserExerciseService
 			Itinerary itinerary = itineraryRepository.findOneById( itineraryId );
 			//get only active students
 			List<Course> courseList = courseRepository.findByItineraryAndEndDate(itinerary , null);
-			List<MyAppUser> myAppUserList = new ArrayList<>();
+			List<Student> students = new ArrayList<>();
 			Map<String , List<UserExercise>> userUserExerciseMap = new HashMap<>();
 			for (int i = 0; i < courseList.size() ; i++)
 			{
-				MyAppUser myAppUser = courseList.get( i ).getUserStudent();
-				myAppUserList.add( myAppUser);
-				List<UserExercise> userExerciseList = userExerciseRepository.findByUserStudent(myAppUser);
+				Student student = courseList.get( i ).getUserStudent();
+				students.add( student);
+				List<UserExercise> userExerciseList = userExerciseRepository.findByUserStudent(student);
 				//remove the Student field that is not necessary
 				for (int j = 0; j < userExerciseList.size(); j++)
 				{
 					userExerciseList.get(j).setUserStudent ( null );
 				}
-				userUserExerciseMap.put(myAppUser.getId() , userExerciseList);
+				userUserExerciseMap.put(student.getId() , userExerciseList);
 			}
 			JSONObject sendData = new JSONObject( userUserExerciseMap );
 			return sendData;
@@ -93,18 +90,18 @@ public class UserExerciseService
 
 
 
-	public JSONObject getExerciseStudentByStudent(MyAppUser student) {
+	public JSONObject getExerciseStudentByStudent(Student student) {
 		try
 		{
 
 			//get only active students
 			List<Course> courseList = courseRepository.findByUserStudent(student);
-			List<MyAppUser> myAppUserList = new ArrayList<>();
+			List<Student> studentList = new ArrayList<>();
 			Map<String , List<UserExercise>> userUserExerciseMap = new HashMap<>();
 			for (int i = 0; i < courseList.size() ; i++)
 			{
-				MyAppUser myAppUser = courseList.get( i ).getUserStudent();
-				myAppUserList.add( myAppUser);
+				Student myAppUser = courseList.get( i ).getUserStudent();
+				studentList.add( myAppUser);
 				List<UserExercise> userExerciseList = userExerciseRepository.findByUserStudent(myAppUser);
 				//remove the Student field that is not necessary
 				for (int j = 0; j < userExerciseList.size(); j++)

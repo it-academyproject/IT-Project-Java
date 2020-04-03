@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-@Service
+//@Service
 public class DataImporter
 {
     @Autowired
@@ -23,8 +23,11 @@ public class DataImporter
     CourseRepository courseRepository;
     @Autowired
     AbsenceRepository absenceRepository;
-    @Autowired
-    RoleRepository roleRepository;
+
+    /********************** COMMENTED AFTER B-30 REFACTORING ********************
+        @Autowired
+        OldRoleRepository oldRoleRepository;
+    */
     @Autowired
     ItineraryRepository itineraryRepository;
     @Autowired
@@ -36,7 +39,7 @@ public class DataImporter
     @Autowired
     SeatRepository seatRepository;
 
-
+    /********************** COMMENTED AFTER B-30 REFACTORING ********************
     public Map <Integer , String> manualCreation ()
     {
         //role
@@ -48,10 +51,10 @@ public class DataImporter
 
         for (int i = 1; i <= rolesList.size(); i++)
         {
-            Role role = new Role();
+            OldRole role = new OldRole();
             role.setId( i );
             role.setName( rolesList.get( i ) );
-            roleRepository.save( role );
+            oldRoleRepository.save( role );
         }
         //Itinerary
         Map<Integer , String >itineraryList = new HashMap<>();
@@ -84,29 +87,30 @@ public class DataImporter
         //Adding teachers to MyAppUsers
         List<MyAppUser> users = new ArrayList<>();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        Role teachersRol = roleRepository.findOneById(2);
-        Role adminRol = roleRepository.findOneById(3);
+        OldRole teachersRol = oldRoleRepository.findOneById(2);
+        OldRole adminRol = oldRoleRepository.findOneById(3);
 
-        users.add( new MyAppUser( "Testing", "IT - Department", "12345678X", "it@academy.com", 'M',
+        users.add( new MyAppUser( "Testing", "IT - Department", "it@academy.com", 'M',
                 "", passwordEncoder.encode("123456"), true, teachersRol) );
 
-        users.add( new MyAppUser( "Ismael", "Kale", "", "", 'M',
+        users.add( new MyAppUser( "Ismael", "Kale", "", 'M',
                 "", passwordEncoder.encode(""), true, teachersRol) );
 
-        users.add( new MyAppUser( "Jake", "Patrulla", "", "", 'M',
+        users.add( new MyAppUser( "Jake", "Patrulla", "", 'M',
                 "", passwordEncoder.encode(""), true, teachersRol) );
 
-        users.add( new MyAppUser( "José", "José", "", "", 'M',
+        users.add( new MyAppUser( "José", "José", "", 'M',
                 "", passwordEncoder.encode(""), true, teachersRol) );
 
-        users.add( new MyAppUser( "Rubén", "Rubén", "", "", 'M',
+        users.add( new MyAppUser( "Rubén", "Rubén", "", 'M',
                 "", passwordEncoder.encode(""), true, teachersRol) );
 
-        users.add( new MyAppUser( "Martí", "", "Rodríguez Mestre", "", 'M',
+        users.add( new MyAppUser( "Martí", "", "", 'M',
                 "", passwordEncoder.encode(""), true, adminRol) );
 
-        users.add( new MyAppUser( "Marc", "Vera", "", "", 'M',
+        users.add( new MyAppUser( "Marc", "Vera", "", 'M',
                 "", passwordEncoder.encode(""), true, adminRol) );
+
 
         Map <Integer , String> teacherVSitinerary = new HashMap<>();
         MyAppUser myAppUser;
@@ -132,10 +136,10 @@ public class DataImporter
                 users.set(i , myAppUserRepository.save( users.get( i ) ) );
             }
             //return the the teacher and the itinerary for the exercises
-            /*itineraryList.put( 1 , "COMMON-BLOCK");
+            itineraryList.put( 1 , "COMMON-BLOCK");
             itineraryList.put( 2 , "FRONT-END");
             itineraryList.put( 3 , "BACK-END - JAVA");
-            itineraryList.put( 4 , "BACK-END - .NET");*/
+            itineraryList.put( 4 , "BACK-END - .NET");
             //System.out.println( users.get(i).getFirstName() );
             if ( users.get(i).getFirstName().equals("Ismael"))
             {
@@ -153,13 +157,14 @@ public class DataImporter
 
 
         return teacherVSitinerary;
-    }
+    }*/
 
+    /********************** COMMENTED AFTER B-30 REFACTORING ********************
     public boolean importAlumnesActius ()
     {
-        /* DummyContentUtil dummyContentUtil = new DummyContentUtil( myAppUserRepository );
-        dummyContentUtil.generateDummyUsers();*/
-        Role role = roleRepository.findOneById ( 1 );
+         DummyContentUtil dummyContentUtil = new DummyContentUtil( myAppUserRepository );
+        dummyContentUtil.generateDummyUsers();
+        OldRole role = oldRoleRepository.findOneById ( 1 );
         Itinerary itinerary = itineraryRepository.findOneById ( 1 );
         try {
             //System.out.println(Paths.get("").toAbsolutePath().toString());
@@ -200,18 +205,14 @@ public class DataImporter
                                 myAppUser.setFirstName( name );
                                 myAppUser.setLastName (lastName);
                             }
-                            else if ( j == 1) //Núm. Document
-                            {
-                                myAppUser.setIdDocument (currentCell);
-                            }
                             else if ( j == 2) //Núm. Document
                             {
-                                /*
+
                                 PREVIOUSLY USED TO ESTIMATE THE BIRTHDAY, REMOVED FOR AGE.
                                 Calendar cal = Calendar.getInstance();
                                 cal.set(2019-Integer.parseInt(currentCell), 1, 1);
 
-                                 */
+
                                 try
                                 {
                                     myAppUser.setAge ( Integer.parseInt(currentCell) );
@@ -337,13 +338,13 @@ public class DataImporter
             e.printStackTrace();
         }
         return true;
-    }
+    }*/
 
     public JSONObject importEjerciciosporalumno ( int sheetNumber , int itineraryNumber , String teacherId )
     {
         List <String> NotFoundUser = new ArrayList<>();
         Itinerary itinerary = itineraryRepository.findOneById ( 1 );
-        MyAppUser teacherUser = myAppUserRepository.findOneById( teacherId );
+        Teacher teacherUser = (Teacher) myAppUserRepository.findOneById( teacherId );
         try
         {
             //System.out.println(Paths.get("").toAbsolutePath().toString());
@@ -362,7 +363,7 @@ public class DataImporter
             {
                 Course course = new Course();
                 currentRow = excelContent.get(i);
-                MyAppUser myAppUser = null;
+                MyAppUser student = null;
                 for (int j = 0; j < currentRow.size() ; j++)
                 {
 
@@ -430,7 +431,7 @@ public class DataImporter
                                             if ( myAppUserList1.get(k).getLastName().indexOf( lastName ) > 0 )
                                             {
                                                 //keeper contains last name
-                                                myAppUser = myAppUserList1.get(k);
+                                                student = myAppUserList1.get(k);
                                             }
                                         }
                                     }
@@ -444,7 +445,7 @@ public class DataImporter
                                 else if (( myAppUserList != null ) && ( myAppUserList.size() == 1 ))
                                 {
                                     //ok only finding one
-                                    myAppUser = myAppUserList.get(0);
+                                    student = myAppUserList.get(0);
                                     //
                                 }
 
@@ -462,7 +463,7 @@ public class DataImporter
                             else
                             {
                                 //check if is the user_exercise
-                                UserExercise userExercise = userExerciseRepository.findOneByUserStudentAndExercise( myAppUser , exercise);
+                                UserExercise userExercise = userExerciseRepository.findOneByUserStudentAndExercise( (Student) student , exercise);
                                 if ( userExercise == null )
                                 {
                                     userExercise = new UserExercise();
@@ -487,24 +488,24 @@ public class DataImporter
 
                                     userExercise.setExercise(exercise);
                                     userExercise.setStatusExercise( statusExerciseRepository.findOneById( 5 ) );
-                                    userExercise.setUserStudent( myAppUser );
+                                    userExercise.setUserStudent( (Student) student );
                                     userExercise.setUserTeacher( teacherUser );
                                     if ( userExercise.getDate_status() != null )
                                         userExerciseRepository.save (userExercise);
-                                        List<Course> thisUsersCourseList = courseRepository.findByUserStudent(myAppUser);
-                                        if ( itineraryNumber != 1 )
+                                    List<Course> thisUsersCourseList = courseRepository.findByUserStudent((Student) student);
+                                    if ( itineraryNumber != 1 )
+                                    {
+                                        if (( thisUsersCourseList != null ) && ( thisUsersCourseList.size() > 0))
                                         {
-                                            if (( thisUsersCourseList != null ) && ( thisUsersCourseList.size() > 0))
+                                            if ( thisUsersCourseList.get(0).getItinerary() != null )
                                             {
-                                                if ( thisUsersCourseList.get(0).getItinerary() != null )
-                                                {
-                                                    Course thisCourse = thisUsersCourseList.get(0);
-                                                    thisCourse.setItinerary( itineraryRepository.findOneById( itineraryNumber ) );
-                                                    thisCourse.setUserTeacher( teacherUser );
-                                                    courseRepository.save( thisCourse );
-                                                }
+                                                Course thisCourse = thisUsersCourseList.get(0);
+                                                thisCourse.setItinerary( itineraryRepository.findOneById( itineraryNumber ) );
+                                                thisCourse.setTeacher( teacherUser );
+                                                courseRepository.save( thisCourse );
                                             }
                                         }
+                                    }
 
                                 }
                             }
@@ -521,10 +522,12 @@ public class DataImporter
         sendData.put( "NotInStudents" , NotFoundUser );
         return sendData;
     }
+
+    /********************** COMMENTED AFTER B-30 REFACTORING ********************
     public boolean importTaules ()
     {
         List <String> NotFoundUser = new ArrayList<>();
-        Role role = roleRepository.findOneById ( 1 );
+        OldRole role = oldRoleRepository.findOneById ( 1 );
         Itinerary itinerary = itineraryRepository.findOneById ( 1 );
         try {
             //System.out.println(Paths.get("").toAbsolutePath().toString());
@@ -617,7 +620,8 @@ public class DataImporter
         }
 
         return true;
-    }
+    }*/
+
     private Date stringToDate (String stringDate )
     {
         String OriginalString = stringDate.toString();

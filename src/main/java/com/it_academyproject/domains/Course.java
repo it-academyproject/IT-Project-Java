@@ -28,11 +28,11 @@ public class Course {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="student_id")
-	private MyAppUser userStudent;
+	private Student userStudent;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="teacher_id")
-	private MyAppUser userTeacher;
+	private Teacher teacher;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="itinerary_id")
@@ -84,18 +84,18 @@ public class Course {
 		return "Course [id=" + id + ", beginDate=" + beginDate + ", endDate=" + endDate + "]";
 	}
 
-	public MyAppUser getUserStudent() {
+	public Student getUserStudent() {
 		return userStudent;
 	}
 
-	public void setUserStudent(MyAppUser userStudent) { this.userStudent = userStudent; }
+	public void setUserStudent(Student userStudent) { this.userStudent = userStudent; }
 
-	public MyAppUser getUserTeacher() {
-		return userTeacher;
+	public Teacher getTeacher() {
+		return teacher;
 	}
 
-	public void setUserTeacher(MyAppUser userTeacher) {
-		this.userTeacher = userTeacher;
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
 	}
 
 	public Itinerary getItinerary() {

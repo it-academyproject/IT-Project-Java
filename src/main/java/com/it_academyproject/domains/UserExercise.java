@@ -37,11 +37,11 @@ public class UserExercise {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="student_id")
 	@JsonView({View.SummaryWithOthers.class , View.noShow.class})
-	private MyAppUser userStudent;
+	private Student userStudent;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="teacher_id")
-	private MyAppUser userTeacher;
+	private Teacher userTeacher;
 
 	//--------------------------Constructors--------------------------------------------------------------
 	
@@ -91,19 +91,19 @@ public class UserExercise {
 		this.exercise = exercise;
 	}
 
-	public MyAppUser getUserStudent() {
+	public Student getUserStudent() {
 		return userStudent;
 	}
 
-	public void setUserStudent(MyAppUser userStudent) {
+	public void setUserStudent(Student  userStudent) {
 		this.userStudent = userStudent;
 	}
 
-	public MyAppUser getUserTeacher() {
+	public Teacher getUserTeacher() {
 		return userTeacher;
 	}
 
-	public void setUserTeacher(MyAppUser userTeacher) {
+	public void setUserTeacher(Teacher userTeacher) {
 		this.userTeacher = userTeacher;
 	}
 

@@ -10,8 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-@Entity
-public class Role {
+// @Entity
+public class OldRole {
 	
 	@GeneratedValue(strategy=GenerationType.IDENTITY)	
 	@Id
@@ -20,10 +20,10 @@ public class Role {
 	//@OneToMany (targetEntity = MyAppUser.class, cascade = CascadeType.ALL)
 	//private List <MyAppUser> users;
 	
-	public Role() {
+	public OldRole() {
 	}
 	
-	public Role(int id, String name) {
+	public OldRole(int id, String name) {
 		
 		this.id = id;
 		this.name = name;

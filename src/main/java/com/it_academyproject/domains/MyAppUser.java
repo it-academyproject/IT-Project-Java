@@ -6,14 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.exceptions.EmptyFieldException;
@@ -22,10 +15,18 @@ import com.it_academyproject.tools.View;
 
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "subclass", discriminatorType = DiscriminatorType.STRING)
 @Table(name="users")
-public class MyAppUser {
-	
-	//@GeneratedValue(strategy=GenerationType.IDENTITY)	
+public abstract class MyAppUser {
+
+	// Order according to former implementation
+	// This order helps SQL data import (IT role=0, Student=1...)
+	public enum Role {
+		IT, STUDENT, TEACHER, ADMIN
+	}
+
+	//@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
 	@JsonView(View.Summary.class)
 	private String id;
@@ -35,10 +36,7 @@ public class MyAppUser {
 	
 	@JsonView(View.Summary.class)
 	private String lastName;
-	
-	//@JsonView(View.Summary.class)
-	private String idDocument;
-	
+
 	@JsonView(View.SummaryWithOthers.class)
 	private String email;
 	
@@ -51,24 +49,14 @@ public class MyAppUser {
 	@JsonView(View.SummaryWithOthers.class)
 	private String portrait;
 
-	//@JsonView(View.SummaryWithOthers.class)
-	@JsonView(View.Summary.class)
-	@ManyToOne
-	private Seat seat;
-
-
-
 	private String password;
 	private boolean enabled;
 	private Date lastLogin;
 
-	
-	@ManyToOne (fetch = FetchType.EAGER)
-	@JoinColumn (name="role_id")
+/*	@ManyToOne (fetch = FetchType.EAGER)
+	@JoinColumn (name="role_id")*/
 	private Role role;
 	
-	@OneToMany (targetEntity = Absence.class, cascade = CascadeType.ALL)
-	private List <Absence> absences = new ArrayList <Absence>();
 	@OneToMany (targetEntity = Course.class, cascade = CascadeType.ALL)
 	@JsonView(View.Summary.class)
 	private List <Course> courses = new ArrayList <Course>();
@@ -78,16 +66,14 @@ public class MyAppUser {
 	private List <Emails> emails = new ArrayList <Emails>();
 	
 	public MyAppUser() {
-		
 	}
 	
-	public MyAppUser(String firstName, String lastName, String idDocument, String email, char gender,
-			String portrait, String password, boolean enabled, Role role) {
+	public MyAppUser(String firstName, String lastName, String email, char gender,
+					 String portrait, String password, boolean enabled, Role role) {
 
 		
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.idDocument = idDocument;
 		this.email = email;
 		this.gender = gender;
 		this.portrait = portrait;
@@ -143,14 +129,6 @@ public class MyAppUser {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	public String getIdDocument() {
-		return idDocument;
-	}
-
-	public void setIdDocument(String idDocument) {
-		this.idDocument = idDocument;
 	}
 
 	public String getEmail() {
@@ -217,17 +195,8 @@ public class MyAppUser {
 		this.lastLogin = lastLogin;
 	}
 
-	public Seat getSeat() {
-		return seat;
-	}
-
-	public void setSeat(Seat seat) {
-		this.seat = seat;
-	}
-
 	/*	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", idDocument=" + idDocument
-				+ ", email=" + email + ", gender=" + gender + ", portrait=" + portrait + ", password=" + password
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", gender=" + gender + ", portrait=" + portrait + ", password=" + password
 				+ ", enabled=" + enabled + "]";
 	}	*/
 

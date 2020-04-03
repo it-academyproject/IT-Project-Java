@@ -1,10 +1,7 @@
 package com.it_academyproject.services;
 
 import com.google.gson.Gson;
-import com.it_academyproject.domains.Absence;
-import com.it_academyproject.domains.Course;
-import com.it_academyproject.domains.Itinerary;
-import com.it_academyproject.domains.MyAppUser;
+import com.it_academyproject.domains.*;
 import com.it_academyproject.exceptions.UserNotFoundException;
 import com.it_academyproject.repositories.AbsenceRepository;
 import com.it_academyproject.repositories.CourseRepository;
@@ -29,6 +26,8 @@ public class StatisticsService
     ItineraryRepository itineraryRepository;
     @Autowired
     MyAppUserRepository myAppUserRepository;
+    @Autowired
+    StudentService studentService;
 
     public Map<String, Integer> perItinerary() {
 
@@ -95,19 +94,19 @@ public class StatisticsService
         return sendData;
     }
 
-    public List<MyAppUser> getAllActiveStudents ( ) {
+    public List<Student> getAllActiveStudents ( ) {
         List<Course> courseList = courseRepository.findByEndDate( null );
-        List<MyAppUser> activeStudents = new ArrayList<>();
+        List<Student> activeStudents = new ArrayList<>();
         Course course;
-        MyAppUser myAppUser;
+        Student student1;
         for (int i = 0; i < courseList.size() ; i++)
         {
             course = courseList.get(i);
-            MyAppUser student = course.getUserStudent();
-            myAppUser = myAppUserRepository.findOneById( student.getId() );
-            if ( myAppUser != null )
+            Student student = course.getUserStudent();
+            student1 = studentService.findOneById( student.getId() );
+            if ( student1 != null )
             {
-                activeStudents.add( myAppUser );
+                activeStudents.add( student1 );
             }
             else
             {

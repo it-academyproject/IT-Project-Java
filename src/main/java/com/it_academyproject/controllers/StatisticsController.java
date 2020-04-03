@@ -3,8 +3,8 @@ package com.it_academyproject.controllers;
 import com.it_academyproject.controllers.statsDTOs.DTOStudentAbsence;
 import com.it_academyproject.controllers.statsDTOs.DTOStudentsPerGender;
 import com.it_academyproject.controllers.statsDTOs.DTOStudentsPerItinerary;
-import com.it_academyproject.services.MyAppUserService;
 import com.it_academyproject.services.StatisticsService;
+import com.it_academyproject.services.StudentService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class StatisticsController
     @Autowired
     StatisticsService statisticsService;
     @Autowired
-    MyAppUserService myAppUserService;
+    StudentService studentService;
 
 	@GetMapping( "/api/statistics/per-itinerary" )
     public List<DTOStudentsPerItinerary> perItinerary(){
@@ -38,7 +38,7 @@ public class StatisticsController
 	@GetMapping( "/api/statistics/per-gender" )
     public DTOStudentsPerGender perGender( )
     {
-        return new DTOStudentsPerGender(myAppUserService.usersByGender('M'), myAppUserService.usersByGender('F'));
+        return new DTOStudentsPerGender(studentService.studentsByGender('M'), studentService.studentsByGender('F'));
     }
 
 	@GetMapping( "/api/statistics/per-absence" )
@@ -46,7 +46,7 @@ public class StatisticsController
     {
         List<DTOStudentAbsence> absences = new ArrayList<>();
         for (Map.Entry<String, Integer> entry: statisticsService.perAbsence().entrySet()) {
-            absences.add(new DTOStudentAbsence(myAppUserService.getFirstNameById(entry.getKey()), myAppUserService.getLastNameById(entry.getKey()), entry.getValue()));
+            absences.add(new DTOStudentAbsence(studentService.getFirstNameById(entry.getKey()), studentService.getLastNameById(entry.getKey()), entry.getValue()));
         }
         return absences;
     }
