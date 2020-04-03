@@ -64,7 +64,7 @@ public class MyAppUser {
 
 	
 	@ManyToOne (fetch = FetchType.EAGER)
-	@JoinColumn (name="rol_id")
+	@JoinColumn (name="role_id")
 	private Role role;
 	
 	@OneToMany (targetEntity = Absence.class, cascade = CascadeType.ALL)
