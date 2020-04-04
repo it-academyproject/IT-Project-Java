@@ -73,11 +73,6 @@ public class MyAppUserService {
 		}else {return null;}
 	}
 
-	// Find number of users given a gender (M for male, F for female)
-	public int usersByGender(char gender) {
-		return myAppUserRepository.findByGender(gender).size();
-	}
-
 	// Return full name given an id . Format "surname, name"
 	public String getFullNameById(String studentId) {
 		MyAppUser student = getById(studentId);

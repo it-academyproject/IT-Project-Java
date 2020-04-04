@@ -57,8 +57,6 @@ public class Absence {
 	public String toString() {
 		return "Absence [id=" + id + ", dateMissing=" + dateMissing + ", user=" + userStudent + "]";
 	}
-
-	
 }
 
 

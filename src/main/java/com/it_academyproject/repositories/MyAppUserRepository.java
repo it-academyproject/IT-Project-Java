@@ -16,14 +16,10 @@ import java.util.List;
 @Repository
 public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
 
-	public ArrayList<MyAppUser> findByFirstName(String firstName);
-	public ArrayList<MyAppUser> findByLastName(String lastName);
-	public List<MyAppUser> findByGender(char gender);
-	public List<? extends MyAppUser> findByFirstNameAndRole(String firstName, Role role);
-	public List<? extends MyAppUser> findByLastNameAndRole(String lastName, Role role);
-	public List<? extends MyAppUser> findByRole(Role role);
-
-
+	ArrayList<MyAppUser> findByFirstName(String firstName);
+	List<? extends MyAppUser> findByFirstNameAndRole(String firstName, Role role);
+	List<? extends MyAppUser> findByLastNameAndRole(String lastName, Role role);
+	List<? extends MyAppUser> findByRole(Role role);
 
 	MyAppUser findOneById(String id );
 	MyAppUser findOneByIdAndRole(String id, Role role);
@@ -32,15 +28,14 @@ public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
 
 	List<MyAppUser> findByFirstNameAndLastName (String name , String lastName );
 	List<? extends MyAppUser> findByGenderAndRole (char gender, Role role);
+	boolean existsByIdAndRole(String id, Role role);
 
 	@Query("UPDATE MyAppUser u SET u.lastLogin=:lastLogin WHERE u.email = ?#{ principal?.email }")
 	@Modifying
 	@Transactional
-	public void updateLastLogin (@Param("lastLogin") Date lastLogin);
+	void updateLastLogin (@Param("lastLogin") Date lastLogin);
 
 	@Query(value="SELECT u from MyAppUser u WHERE u.firstName like '%:name%'")
 	List<MyAppUser> findUserByNameLike(@Param("name") String name);
 
-
-	boolean existsByIdAndRole(String id, Role role);
 }

@@ -39,13 +39,6 @@ public class Course {
 	@JsonView(View.Summary.class)
 	private Itinerary itinerary;
 	
-	/*@ManyToOne (targetEntity = MyAppUser.class)
-	@JoinColumn (name="id", insertable=false, updatable=false)
-	private MyAppUser user;
-	@ManyToOne (targetEntity = Itinerary.class)
-	@JoinColumn (name="id", insertable=false, updatable=false)
-	private Itinerary itinerary;*/
-
 	public Course() {
 	}
 

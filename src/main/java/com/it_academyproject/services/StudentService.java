@@ -15,9 +15,6 @@ public class StudentService {
 	@Autowired
 	MyAppUserRepository userRepository;
 
-	@Autowired
-	CourseService courseService;
-
 	//getAll
 	public List<Student> getAllStudents(){
 		return (List<Student>) userRepository.findByRole(MyAppUser.Role.STUDENT);
@@ -36,24 +33,6 @@ public class StudentService {
 	//get by Id
 	public Student getById(String id) {
 		return (Student) userRepository.findOneByIdAndRole(id, MyAppUser.Role.STUDENT);
-	}
-
-	// Update user by id
-	public Student update(Student student) {
-
-		if(userRepository.existsByIdAndRole(student.getId(), MyAppUser.Role.STUDENT)) {
-			Student user = (Student) userRepository.findOneById(student.getId());
-			user.setFirstName(student.getFirstName());
-			user.setLastName(student.getLastName());
-			userRepository.save(user);
-
-			return user;
-		}else {return null;}
-	}
-
-	// Find number of users given a gender (M for male, F for female)
-	public int usersByGender(char gender) {
-		return userRepository.findByGender(gender).size();
 	}
 
 	public int studentsByGender(char gender) { return userRepository.findByGenderAndRole(gender, MyAppUser.Role.STUDENT).size();}
@@ -78,6 +57,24 @@ public class StudentService {
 
 	public Student addStudent(Student student) {
 		return userRepository.save(student);
+	}
+
+	public Student editStudent(Student student) {
+
+		if(userRepository.existsByIdAndRole(student.getId(), MyAppUser.Role.STUDENT)) {
+
+			Student repoStudent = (Student) userRepository.findOneById(student.getId());
+			if (student.getFirstName()!=null && !student.getFirstName().isEmpty())
+				repoStudent.setFirstName(student.getFirstName());
+			if (student.getLastName()!=null && !student.getLastName().isEmpty())
+				repoStudent.setLastName(student.getLastName());
+			userRepository.save(repoStudent);
+
+			return repoStudent;
+
+		} else {
+			return null;
+		}
 	}
 
 /*

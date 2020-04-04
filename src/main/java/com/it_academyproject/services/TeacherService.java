@@ -62,11 +62,6 @@ public class TeacherService {
 		}else {return null;}
 	}
 
-	// Find number of users given a gender (M for male, F for female)
-	public int usersByGender(char gender) {
-		return userRepository.findByGender(gender).size();
-	}
-
 	// Return full name given an id . Format "surname, name"
 	public String getFullNameById(String teacherId) {
 		MyAppUser teacher = getById(teacherId);

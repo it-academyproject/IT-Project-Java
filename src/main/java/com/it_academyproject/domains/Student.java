@@ -31,6 +31,7 @@ public class Student extends MyAppUser {
 
     public Student(String email, String password) throws EmptyFieldException {
         super(email, password);
+        this.setRole(Role.STUDENT);
     }
 
     public Seat getSeat() {

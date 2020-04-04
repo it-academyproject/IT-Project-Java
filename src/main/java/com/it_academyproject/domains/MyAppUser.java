@@ -53,8 +53,6 @@ public abstract class MyAppUser {
 	private boolean enabled;
 	private Date lastLogin;
 
-/*	@ManyToOne (fetch = FetchType.EAGER)
-	@JoinColumn (name="role_id")*/
 	private Role role;
 	
 	@OneToMany (targetEntity = Course.class, cascade = CascadeType.ALL)

@@ -50,6 +50,6 @@ public class MyAppUserController {
 	@JsonView(View.SummaryWithOthers.class)
 	@PutMapping("/api/students/id")
 	public Student updateStudent(@RequestBody Student student){
-		return studentService.update(student);
+		return studentService.editStudent(student);
 	}
 }

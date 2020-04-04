@@ -13,11 +13,13 @@ import java.util.Map;
 @RequestMapping("/api/public")
 public class DataImportController
 {
-    //@Autowired
-    //DataImporter dataImporter;
+
+    /********************** COMMENTED AFTER B-30 REFACTORING ********************
+    @Autowired
+    DataImporter dataImporter;
     private final String SLASH = "\\";
 
-/*    @GetMapping
+    @GetMapping
     public String getMessage()
     {
         JSONObject errorData = new JSONObject();
@@ -30,6 +32,7 @@ public class DataImportController
         dataImporter.importTaules();
 
         return errorData.toString();
-    }*/
+    }
+*/
 
 }

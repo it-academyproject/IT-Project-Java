@@ -19,9 +19,6 @@ public class UserExerciseController
 	@Autowired
 	UserExerciseService userExerciseService;
 
-	/*@Autowired
-	UserExerciseRepository userExerciseRepository;*/
-
 	@GetMapping ("/api/user-exercises/{itineraryId}")
 	public ResponseEntity<String>  getExerciseStudentByItinerary (@PathVariable String itineraryId )
 	{
@@ -47,7 +44,6 @@ public class UserExerciseController
 	{
 		try
 		{
-
 			//get a list of all the itineraries
 
 			JSONObject sendData = userExerciseService.getExerciseStudentByItinerary( );
@@ -93,7 +89,6 @@ public class UserExerciseController
 	 * La fecha se actualiza automáticamente desde el back end, 
 	 * no hace falta incorporarla en el JSON
 	 */
-	//SET @CrossOrigin BEFORE DEPLOYING TO PRODUCTION!
 	@JsonView(View.Summary.class)
 	@PutMapping("/api/user-exercises/exercise-id")
 	public boolean setUserExerciseStatusData(@RequestBody UserExercise userExercise) {

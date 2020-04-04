@@ -1,12 +1,12 @@
 package com.it_academyproject.services;
 
 import com.google.gson.Gson;
-import com.it_academyproject.domains.*;
-import com.it_academyproject.exceptions.UserNotFoundException;
+import com.it_academyproject.domains.Absence;
+import com.it_academyproject.domains.Course;
+import com.it_academyproject.domains.Itinerary;
 import com.it_academyproject.repositories.AbsenceRepository;
 import com.it_academyproject.repositories.CourseRepository;
 import com.it_academyproject.repositories.ItineraryRepository;
-import com.it_academyproject.repositories.MyAppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +24,6 @@ public class StatisticsService
     CourseRepository courseRepository;
     @Autowired
     ItineraryRepository itineraryRepository;
-    @Autowired
-    MyAppUserRepository myAppUserRepository;
-    @Autowired
-    StudentService studentService;
 
     public Map<String, Integer> perItinerary() {
 
@@ -94,6 +90,14 @@ public class StatisticsService
         return sendData;
     }
 
+    public static ArrayList<String> endDayMethod (String name, String daysLeft){
+        ArrayList<String> endDayList = new ArrayList<String>();
+        endDayList.add(name);
+        endDayList.add(daysLeft);
+        return endDayList;
+    }
+
+/*********************************************** NEVER USED METHODS *****************************
     public List<Student> getAllActiveStudents ( ) {
         List<Course> courseList = courseRepository.findByEndDate( null );
         List<Student> activeStudents = new ArrayList<>();
@@ -132,11 +136,5 @@ public class StatisticsService
     	absenceList.add(name);
     	absenceList.add(absence);
     	return absenceList;
-    }
-    public static ArrayList<String> endDayMethod (String name, String daysLeft){
-    	ArrayList<String> endDayList = new ArrayList<String>();
-    	endDayList.add(name);
-    	endDayList.add(daysLeft);
-    	return endDayList;
-    }
+    }*/
 }

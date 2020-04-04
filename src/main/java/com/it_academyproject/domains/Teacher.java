@@ -20,5 +20,6 @@ public class Teacher extends MyAppUser {
 
     public Teacher(String email, String password) throws EmptyFieldException {
         super(email, password);
+        this.setRole(Role.TEACHER);
     }
 }
