@@ -42,9 +42,27 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.myAppUserRepository = myAppUserRepository;
         setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
     }
+
+    // TODO Remove comments if working
+    /**************** B-38 - Remove DNI references
 	//B-27 Task: Update last time an user do login.
     public MyAppUser editGetByDni(MyAppUser student) {
 		
+		if(myAppUserRepository.existsById(student.getId())) {
+		MyAppUser user = myAppUserRepository.findOneById(student.getId());
+		java.util.Date date = new java.util.Date();
+    	java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
+		user.setLastLogin(timestamp);
+		myAppUserRepository.save(user);
+		 return user;
+		 }else {return null;}
+	}
+*/
+
+    // TODO Remove comment once checked B-38 works fine
+    // B-38 - Renamed to get rid of DNI references
+    public MyAppUser updateLastLogin(MyAppUser student) {
+
 		if(myAppUserRepository.existsById(student.getId())) {
 		MyAppUser user = myAppUserRepository.findOneById(student.getId());
 		java.util.Date date = new java.util.Date();
@@ -84,11 +102,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
                     Authentication authenticationToken = new UsernamePasswordAuthenticationToken(loginData.getEmail(), loginData.getPassword(), grantedAuthorityList );
 
-
                     try
                     {
-						//B27 Task: When authentication is succeed, date of last login is updated calling: 
-                    	editGetByDni(myAppUser);
+                        // TODO Remove comments if working. Changed method name by task B-38
+                        //B27 Task: When authentication is succeed, date of last login is updated calling:
+                        //editGetByDni(myAppUser);
+                    	updateLastLogin(myAppUser);
                         return authenticationManager.authenticate(authenticationToken);
                     }
                     catch ( AuthenticationException e )
