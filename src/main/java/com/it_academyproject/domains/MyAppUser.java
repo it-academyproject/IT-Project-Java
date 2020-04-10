@@ -40,10 +40,7 @@ public class MyAppUser {
 	
 	@JsonView(View.Summary.class)
 	private String lastName;
-	
-	//@JsonView(View.Summary.class)
-	private String idDocument;
-	
+
 	@JsonView(View.SummaryWithOthers.class)
 	private String email;
 	
@@ -56,11 +53,10 @@ public class MyAppUser {
 	@JsonView(View.SummaryWithOthers.class)
 	private String portrait;
 
-	@JsonView(View.SummaryWithOthers.class)
+
+	@JsonView(View.Summary.class)
 	@ManyToOne
 	private Seat seat;
-
-
 
 	private String password;
 	private boolean enabled;
@@ -98,13 +94,11 @@ public class MyAppUser {
 		
 	}
 	
-	public MyAppUser(String firstName, String lastName, String idDocument, String email, char gender,
-			String portrait, String password, boolean enabled, Role role) {
+	public MyAppUser(String firstName, String lastName, String email, char gender,
+					 String portrait, String password, boolean enabled, Role role) {
 
-		
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.idDocument = idDocument;
 		this.email = email;
 		this.gender = gender;
 		this.portrait = portrait;
@@ -160,14 +154,6 @@ public class MyAppUser {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	public String getIdDocument() {
-		return idDocument;
-	}
-
-	public void setIdDocument(String idDocument) {
-		this.idDocument = idDocument;
 	}
 
 	public String getEmail() {
@@ -240,6 +226,10 @@ public class MyAppUser {
 
 	public void setSeat(Seat seat) {
 		this.seat = seat;
+	}
+
+	public void setCourses(List<Course> courses) {
+		this.courses = courses;
 	}
 
 //	public Set<Iteration> getIterations() {

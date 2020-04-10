@@ -1,6 +1,9 @@
 package com.it_academyproject.domains;
 
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.it_academyproject.tools.View;
+
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -14,24 +17,26 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Course {
-	
-	@GeneratedValue(strategy=GenerationType.IDENTITY)	
+
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
+	@JsonView(View.Summary.class)
 	private int id;
 	private Date beginDate;
+	@JsonView(View.Summary.class)
 	private Date endDate;
-	
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="student_id")
 	private MyAppUser userStudent;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="teacher_id")
 	private MyAppUser userTeacher;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="itinerary_id")
+	@JsonView(View.Summary.class)
 	private Itinerary itinerary;
 	
 	/*@ManyToOne (targetEntity = MyAppUser.class)
@@ -40,7 +45,7 @@ public class Course {
 	@ManyToOne (targetEntity = Itinerary.class)
 	@JoinColumn (name="id", insertable=false, updatable=false)
 	private Itinerary itinerary;*/
-	
+
 	public Course() {
 	}
 
@@ -83,9 +88,7 @@ public class Course {
 		return userStudent;
 	}
 
-	public void setUserStudent(MyAppUser userStudent) {
-		this.userStudent = userStudent;
-	}
+	public void setUserStudent(MyAppUser userStudent) { this.userStudent = userStudent; }
 
 	public MyAppUser getUserTeacher() {
 		return userTeacher;

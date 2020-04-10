@@ -13,6 +13,8 @@ import io.jsonwebtoken.security.Keys;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -44,6 +46,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.myAppUserRepository = myAppUserRepository;
         setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
     }
+
+    // TODO Remove comments if working
+    /**************** B-38 - Remove DNI references
 	//B-27 Task: Update last time an user do login.
     public MyAppUser editGetByDni(MyAppUser student) {
 		
@@ -57,11 +62,30 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		 return user;
 		 }else {return null;}
 	}
+*/
+
+    // TODO Remove comment once checked B-38 works fine
+    // B-38 - Renamed to get rid of DNI references
+    public MyAppUser updateLastLogin(MyAppUser student) {
+
+		if(myAppUserRepository.existsById(student.getId())) {
+		MyAppUser user = myAppUserRepository.findOneById(student.getId())
+        .orElseThrow(() -> new ResourceNotFoundException("not found"));
+		java.util.Date date = new java.util.Date();
+    	java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
+		user.setLastLogin(timestamp);
+		myAppUserRepository.save(user);
+		 return user;
+		 }else {return null;}
+	}
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
     {
         LoginData loginData = new LoginData();
+
+        response.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+
         try
         {
             String test = request.getReader().lines().collect(Collectors.joining(System.lineSeparator())).toString();
@@ -86,8 +110,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
                     try
                     {
-						//B27 Task: When authentication is succeed, date of last login is updated calling: 
-                    	editGetByDni(myAppUser);
+                        // TODO Remove comments if working. Changed method name by task B-38
+                        //B27 Task: When authentication is succeed, date of last login is updated calling:
+                        //editGetByDni(myAppUser);
+                    	updateLastLogin(myAppUser);
                         return authenticationManager.authenticate(authenticationToken);
                     }
                     catch ( AuthenticationException e )
@@ -158,6 +184,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain filterChain, Authentication authentication) {
+
         UserDetails userDetails = ((UserDetails) authentication.getPrincipal());
 
         Object roles = userDetails.getAuthorities()
@@ -180,6 +207,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         System.out.println("The expiration date of the token is: " + (new Date(System.currentTimeMillis() + (8640000)).toString()));
 
         response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
+        try {
+            JSONObject json = new JSONObject();
+            json.put("success", true);
+            json.put("token", token);
+            json.write(response.getWriter());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

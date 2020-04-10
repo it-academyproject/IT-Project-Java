@@ -1,5 +1,8 @@
 package com.it_academyproject.domains;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.it_academyproject.tools.View;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -9,8 +12,11 @@ public class Seat
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
+    @JsonView(View.Summary.class)
     private int rowNumber;
+    @JsonView(View.Summary.class)
     private int colNumber;
+    @JsonView(View.Summary.class)
     private int classRoom;
 
     @OneToMany
@@ -19,10 +25,10 @@ public class Seat
     
     
     public Seat() {
-		
-	}
+        
+    }
 
-	public int getId() {
+    public int getId() {
         return id;
     }
 
@@ -61,4 +67,6 @@ public class Seat
     public void setClassRoom(int classRoom) {
         this.classRoom = classRoom;
     }
+
+
 }

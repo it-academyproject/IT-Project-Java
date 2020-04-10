@@ -53,13 +53,6 @@ public class MyAppUserController {
 		return myAppUserService.getBySurname(student.getLastName());
 	}
 	
-	//Call students by dni
-	@JsonView(View.SummaryWithOthers.class)
-	@GetMapping("api/students/dni")
-	public MyAppUser getStudentByDni(@RequestBody MyAppUser student){
-		return myAppUserService.getByDni(student.getIdDocument());
-	}
-		
 	//Call student by Id
 	@JsonView(View.SummaryWithOthers.class)
 	@GetMapping("api/students/id")
@@ -74,11 +67,13 @@ public class MyAppUserController {
 //		return myAppUserService.getByIteration(student.getIterations());
 //	}
 	
-	//Edit Student by Id document
+
+	// Edit Student by id
 	@JsonView(View.SummaryWithOthers.class)
-	//@PutMapping("api/students")
-	public MyAppUser PutStudentByDni(@RequestBody MyAppUser student){
-		return myAppUserService.editGetByDni( student);
+	@PutMapping("api/students/id")
+	public MyAppUser putStudentById(@RequestBody MyAppUser student){
+		return myAppUserService.editStudent( student);
+
 	}
 		
 //	@PutMapping("/api/students/{userId}")

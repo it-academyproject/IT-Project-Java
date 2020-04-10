@@ -105,7 +105,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
                 .addFilter(new JwtAuthorizationFilter(authenticationManager()))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
     }
     @Bean
     public DaoAuthenticationProvider authenticationProvider ()
@@ -139,7 +138,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(11);
     }
 
     @Bean

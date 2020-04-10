@@ -18,7 +18,6 @@ public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
 
 	public ArrayList<MyAppUser> findByFirstName(String firstName);
 	public ArrayList<MyAppUser> findByLastName(String lastName);
-	public MyAppUser findByIdDocument(String idDocument);	
 	public List<MyAppUser> findByGender(char gender);
 	public ArrayList<MyAppUser> findByRoleId(int roleId);
 	
