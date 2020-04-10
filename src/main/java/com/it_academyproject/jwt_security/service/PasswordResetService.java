@@ -49,7 +49,7 @@ public class PasswordResetService
                 }
 
             }
-            // generate a new token and save it to de ddbb with the user id
+
             String token = UUID.randomUUID().toString();
             PasswordResetToken passwordResetToken = new PasswordResetToken( token , myAppUser );
             passwordResetTokenRepository.save( passwordResetToken );
@@ -59,21 +59,21 @@ public class PasswordResetService
                 String email_to = email;
                 String email_from = "itacademy@virginiacampo.com";
                 String email_subject = "It-Academy Password Reset";
-                String email_content = "Hello User! you have requested to reset your password. Please follow the link to do it: " +
+                String email_content = "Hello User! you have requested the reser of your password. Please go to the following to do this: " +
                         "http://localhost:8080/password-reset.html?email=\"" + email + "\"&token="+token;
 
                 EmailObj emailObj = new EmailObj(email_to , email_from , email_subject , email_content );
                 EmailUtil emailUtil = new EmailUtil( emailObj );
                 boolean emailSentCorrectly = emailUtil.sendHTMLEmail();
-                //System.out.println(token);
+                System.out.println(token);
                 if ( emailSentCorrectly )
                 {
                     JSONObject sendData = new JSONObject();
                     JSONObject message = new JSONObject();
                     message.put("type" , "success");
-                    message.put("message" , "The email was successfully sent.");
+                    message.put("message" , "The email was sent successfully.");
                     sendData.put("message" , message);
-                    //System.out.println(sendData);
+                    System.out.println(sendData);
                     return sendData;
                 }
             }
@@ -90,7 +90,7 @@ public class PasswordResetService
         }
         else if ( myAppUser == null )
         {
-            throw (new UserNotFoundException("The email does not belong to user."));
+            throw (new UserNotFoundException("The email does not belong to anyone."));
         }
         else if ( ! myAppUser.isEnabled() )
         {
