@@ -10,7 +10,6 @@ import com.it_academyproject.repositories.MyAppUserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.http.HttpHeaders;
@@ -46,38 +45,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.myAppUserRepository = myAppUserRepository;
         setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
     }
-
-    // TODO Remove comments if working
-    /**************** B-38 - Remove DNI references
-	//B-27 Task: Update last time an user do login.
+    //B-27 Task: Update last time an user do login.
     public MyAppUser editGetByDni(MyAppUser student) {
-		
-		if(myAppUserRepository.existsById(student.getId())) {
-		MyAppUser user = myAppUserRepository.findOneById(student.getId())
-				.orElseThrow(() -> new ResourceNotFoundException("not found"));
-		java.util.Date date = new java.util.Date();
-    	java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
-		user.setLastLogin(timestamp);
-		myAppUserRepository.save(user);
-		 return user;
-		 }else {return null;}
-	}
-*/
-
-    // TODO Remove comment once checked B-38 works fine
-    // B-38 - Renamed to get rid of DNI references
-    public MyAppUser updateLastLogin(MyAppUser student) {
-
-		if(myAppUserRepository.existsById(student.getId())) {
-		MyAppUser user = myAppUserRepository.findOneById(student.getId())
+        
+        if(myAppUserRepository.existsById(student.getId())) {
+        MyAppUser user = myAppUserRepository.findOneById(student.getId())
         .orElseThrow(() -> new ResourceNotFoundException("not found"));
-		java.util.Date date = new java.util.Date();
-    	java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
-		user.setLastLogin(timestamp);
-		myAppUserRepository.save(user);
-		 return user;
-		 }else {return null;}
-	}
+        java.util.Date date = new java.util.Date();
+        java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
+        user.setLastLogin(timestamp);
+        myAppUserRepository.save(user);
+         return user;
+         }else {return null;}
+    }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
@@ -88,9 +68,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         try
         {
-            String test = request.getReader().lines().collect(Collectors.joining(System.lineSeparator())).toString();
+            String test = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 
             JSONObject  loginDataJson = new JSONObject ( test );
+
             if ( (loginDataJson.has("email")) &&
                     (loginDataJson.has("password")) &&
                     (! loginDataJson.getString("email").equals("") ) &&
@@ -103,6 +84,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                 MyAppUser myAppUser = myAppUserRepository.findByEmail(loginData.getEmail());
 
+                if (myAppUser == null) throw new UserNotEnabled(loginData.getEmail());
+
                 if ( passwordEncoder.matches(loginData.getPassword() , myAppUser.getPassword() ))
                 {
                     List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
@@ -110,10 +93,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
                     try
                     {
-                        // TODO Remove comments if working. Changed method name by task B-38
-                        //B27 Task: When authentication is succeed, date of last login is updated calling:
-                        //editGetByDni(myAppUser);
-                    	updateLastLogin(myAppUser);
+                        //B27 Task: When authentication is succeed, date of last login is updated calling: 
+                        editGetByDni(myAppUser);
                         return authenticationManager.authenticate(authenticationToken);
                     }
                     catch ( AuthenticationException e )
@@ -140,22 +121,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
         catch (WrongEmailPassword e)
         {
-            response.setStatus(401);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             try {
-                response.getWriter().write(e.getLocalizedMessage());
-                response.getWriter().flush();
-                response.getWriter().close();
+                JSONObject json = new JSONObject();
+                json.put("success", false);
+                json.write(response.getWriter());
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
         catch (UserNotEnabled e )
         {
-            response.setStatus(401);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             try {
-                response.getWriter().write(e.getLocalizedMessage());
-                response.getWriter().flush();
-                response.getWriter().close();
+                JSONObject json = new JSONObject();
+                json.put("success", false);
+                json.write(response.getWriter());
             }
             catch (IOException ex)
             {
@@ -164,18 +145,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
         catch (EmptyFieldException e)
         {
-            response.setStatus(401);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             try {
-                response.getWriter().write(e.getLocalizedMessage());
-                response.getWriter().flush();
-                response.getWriter().close();
+                JSONObject json = new JSONObject();
+                json.put("success", false);
+                json.write(response.getWriter());
+
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
         catch (IOException e)
         {
-            response.setStatus(401);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
         return null;
 
@@ -200,13 +182,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setIssuer(SecurityConstants.TOKEN_ISSUER)
                 .setAudience(SecurityConstants.TOKEN_AUDIENCE)
                 .setSubject(userDetails.getUsername())
-                /*.setExpiration(new Date(System.currentTimeMillis() + 864000000))*/
                 .setExpiration(new Date(System.currentTimeMillis() + (8640000)))
                 .claim("rol", roles)
                 .compact();
         System.out.println("The expiration date of the token is: " + (new Date(System.currentTimeMillis() + (8640000)).toString()));
 
         response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
+
         try {
             JSONObject json = new JSONObject();
             json.put("success", true);
@@ -217,4 +199,3 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
     }
 }
-

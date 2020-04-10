@@ -29,7 +29,6 @@ public class MyAppUserService {
 	
 	//getAll
 	public List<MyAppUser> getAllStudents(){
-		int studentRoleId=1;
 		return updateStudentCourses(myAppUserRepository.findByRoleId(1));
 	}
 	private List<MyAppUser> updateStudentCourses(List<MyAppUser> students) {

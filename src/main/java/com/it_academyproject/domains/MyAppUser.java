@@ -70,9 +70,12 @@ public class MyAppUser {
 	@OneToMany (targetEntity = Absence.class, cascade = CascadeType.ALL)
 	private List <Absence> absences = new ArrayList <Absence>();
 	@OneToMany (targetEntity = Course.class, cascade = CascadeType.ALL)
-	private List <Course> courses = new ArrayList <Course>();
+	@JsonView(View.Summary.class)
+	public List <Course> courses = new ArrayList <Course>();
 	@OneToMany (targetEntity = UserExercice.class, cascade = CascadeType.ALL)
 	private List <UserExercice> userExercices = new ArrayList <UserExercice>();
+	@OneToMany (targetEntity = Emails.class, cascade = CascadeType.ALL)
+	private List <Emails> emails = new ArrayList <Emails>();
 	
 //	@ManyToMany(fetch = FetchType.LAZY,
 //            cascade = {
