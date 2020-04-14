@@ -53,8 +53,21 @@ public class AbsencesController {
 
 			Absence absenceToEdit = myAbsenceRepository.findOneById(absence.getId());
 			
-			absenceToEdit.setDateMissing(absence.getDateMissing());
-			absenceToEdit.setComment(absence.getComment());
+			if(absence.getDateMissing().toString().equalsIgnoreCase("")) {
+				
+				absenceToEdit.setComment(absence.getComment());
+				
+			} else if (absence.getComment().equals("")) {
+				
+				absenceToEdit.setDateMissing(absence.getDateMissing());
+				
+			} else {
+				
+				absenceToEdit.setComment(absence.getComment());
+				absenceToEdit.setDateMissing(absence.getDateMissing());
+
+			}
+			
 			myAbsenceRepository.save(absenceToEdit);
 
 			return absenceToEdit;
