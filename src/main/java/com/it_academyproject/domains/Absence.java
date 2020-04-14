@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -22,10 +23,10 @@ public class Absence {
 	@Id
 	@JsonView(View.Summary.class)
 	private int id;
-	
+//    @NotNull
 	@JsonView(View.Summary.class)
 	private Date dateMissing; 
-	
+//    @NotNull
 	@JsonView(View.Summary.class)
 	private String comment; 
 	

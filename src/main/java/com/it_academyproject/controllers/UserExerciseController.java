@@ -55,14 +55,37 @@ public class UserExerciseController
 			return new ResponseEntity( sendData.toString() , HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+//	@GetMapping ("/api/userExercise")
+//	public ResponseEntity  getExerciseStudentByItinerary ( )
+//	{
+//		try
+//		{
+//			//get a list of all the itnerarys
+//
+//			JSONObject sendData = userExerciseService.getExerciseStudentByItinerary( );
+//			return new ResponseEntity( sendData.toString() , HttpStatus.FOUND);
+//		}
+//		catch (Exception e)
+//		{
+//			String exceptionMessage = e.getMessage();
+//			JSONObject sendData = new JSONObject();
+//			JSONObject message = new JSONObject();
+//			message.put("type" , "error");
+//			message.put("message" , exceptionMessage);
+//			sendData.put("Message" , message);
+//			return new ResponseEntity( sendData.toString() , HttpStatus.BAD_REQUEST);
+//		}
+//	}
+	
 	@GetMapping ("/api/userExercise")
-	public ResponseEntity  getExerciseStudentByItinerary ( )
+	public ResponseEntity  getExercises ( )
 	{
 		try
 		{
 			//get a list of all the itnerarys
 
-			JSONObject sendData = userExerciseService.getExerciseStudentByItinerary( );
+			JSONObject sendData = userExerciseService.getAllExercises( );
 			return new ResponseEntity( sendData.toString() , HttpStatus.FOUND);
 		}
 		catch (Exception e)
@@ -114,8 +137,5 @@ public class UserExerciseController
 		return userExerciseService.setUserExerciseStatusData(userExercice);
 		
 	}
-	
-
-
 }
 

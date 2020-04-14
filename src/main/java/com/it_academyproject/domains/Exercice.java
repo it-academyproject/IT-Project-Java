@@ -23,6 +23,8 @@ public class Exercice {
 	@JoinColumn(name="itinerary_id")
 	private Itinerary itinerary;
 	
+//	MyAppUser userStudent;
+	
 	//--------------------------Constructors--------------------------------------------------------------
 
 	public Exercice() {
@@ -57,6 +59,10 @@ public class Exercice {
 	public void setItinerary(Itinerary itinerary) {
 		this.itinerary = itinerary;
 	}
+
+//	public MyAppUser getUserStudent() {
+//		return null;
+//	}
 	
 
 }
