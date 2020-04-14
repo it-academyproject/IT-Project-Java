@@ -19,8 +19,10 @@ public class Seat
     @JsonView(View.Summary.class)
     private int classRoom;
 
+/*
     @OneToMany
     private List<Student> students;
+*/
 
     
     
@@ -52,6 +54,7 @@ public class Seat
         this.colNumber = colNumber;
     }
 
+/*
     public List<Student> getStudents() {
         return students;
     }
@@ -59,6 +62,7 @@ public class Seat
     public void setStudents(List<Student> students) {
         this.students = students;
     }
+*/
 
     public int getClassRoom() {
         return classRoom;

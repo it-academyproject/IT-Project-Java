@@ -39,7 +39,8 @@ public abstract class MyAppUser {
 	private char gender;
 
 	@JsonView(View.SummaryWithOthers.class)
-	private int age;
+	@Temporal(TemporalType.DATE)
+	private Date birthdate;
 	
 	@JsonView(View.SummaryWithOthers.class)
 	private String portrait;
@@ -151,12 +152,12 @@ public abstract class MyAppUser {
 		return gender;
 	}
 
-	public int getAge() {
-		return age;
+	public Date getBirthdate() {
+		return birthdate;
 	}
 
-	public void setAge(int age) {
-		this.age = age;
+	public void setBirthdate(Date birthdate) {
+		this.birthdate = birthdate;
 	}
 
 	public void setGender(char gender) {
@@ -222,8 +223,5 @@ public abstract class MyAppUser {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", gender=" + gender + ", portrait=" + portrait + ", password=" + password
 				+ ", enabled=" + enabled + "]";
 	}	*/
-	
-	
-	
 
 }
