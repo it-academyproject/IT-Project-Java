@@ -52,22 +52,22 @@ public class AbsencesController {
 		if (!myAbsenceRepository.findAll().isEmpty()) {
 
 			Absence absenceToEdit = myAbsenceRepository.findOneById(absence.getId());
-			
-			if(absence.getDateMissing().toString().equalsIgnoreCase("")) {
-				
+
+			if (absence.getDateMissing().toString().equalsIgnoreCase("")) {
+
 				absenceToEdit.setComment(absence.getComment());
-				
-			} else if (absence.getComment().equals("")) {
-				
+
+			} else if (absence.getComment().equalsIgnoreCase("")) {
+
 				absenceToEdit.setDateMissing(absence.getDateMissing());
-				
+
 			} else {
-				
+
 				absenceToEdit.setComment(absence.getComment());
 				absenceToEdit.setDateMissing(absence.getDateMissing());
 
 			}
-			
+
 			myAbsenceRepository.save(absenceToEdit);
 
 			return absenceToEdit;
