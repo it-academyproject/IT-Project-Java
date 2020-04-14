@@ -2,6 +2,7 @@ package com.it_academyproject.services;
 
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.Student;
+import com.it_academyproject.exceptions.UserNotFoundException;
 import com.it_academyproject.repositories.MyAppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,7 +53,8 @@ public class StudentService {
 	}
 
 	public Student findOneById(String id) {
-		return (Student) userRepository.findOneById(id);
+		return (Student) userRepository.findOneById(id)
+				.orElseThrow(() -> new UserNotFoundException("User not found"));
 	}
 
 	public Student addStudent(Student student) {
@@ -63,7 +65,8 @@ public class StudentService {
 
 		if(userRepository.existsByIdAndRole(student.getId(), MyAppUser.Role.STUDENT)) {
 
-			Student repoStudent = (Student) userRepository.findOneById(student.getId());
+			Student repoStudent = (Student) userRepository.findOneById(student.getId())
+					.orElseThrow(() -> new UserNotFoundException("User not found"));
 			if (student.getFirstName()!=null && !student.getFirstName().isEmpty())
 				repoStudent.setFirstName(student.getFirstName());
 			if (student.getLastName()!=null && !student.getLastName().isEmpty())

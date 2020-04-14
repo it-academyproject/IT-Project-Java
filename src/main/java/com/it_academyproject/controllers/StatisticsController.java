@@ -24,7 +24,7 @@ public class StatisticsController
     @Autowired
     StudentService studentService;
 
-	@GetMapping( "/api/statistics/per-itinerary" )
+    @GetMapping( "/api/statistics/per-itinerary" )
     public List<DTOStudentsPerItinerary> perItinerary(){
 
         Map<String, Integer> studentsPerItinerary = statisticsService.perItinerary();
@@ -35,13 +35,13 @@ public class StatisticsController
         return result;
     }
 
-	@GetMapping( "/api/statistics/per-gender" )
+    @GetMapping( "/api/statistics/per-gender" )
     public DTOStudentsPerGender perGender( )
     {
         return new DTOStudentsPerGender(studentService.studentsByGender('M'), studentService.studentsByGender('F'));
     }
 
-	@GetMapping( "/api/statistics/per-absence" )
+    @GetMapping( "/api/statistics/per-absence" )
     public List<DTOStudentAbsence> perAbsence()
     {
         List<DTOStudentAbsence> absences = new ArrayList<>();
@@ -52,7 +52,7 @@ public class StatisticsController
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-	@GetMapping( "/api/statistics/finish-in-x-days" )
+    @GetMapping( "/api/statistics/finish-in-x-days" )
     public ResponseEntity<String> finishInXdays()
     {
         try
@@ -72,6 +72,3 @@ public class StatisticsController
         }
     }
 }
-
-
-

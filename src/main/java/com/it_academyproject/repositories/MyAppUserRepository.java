@@ -12,6 +12,8 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 
 @Repository
 public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
@@ -21,8 +23,13 @@ public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
 	List<? extends MyAppUser> findByLastNameAndRole(String lastName, Role role);
 	List<? extends MyAppUser> findByRole(Role role);
 
-	MyAppUser findOneById(String id );
+	Optional <MyAppUser> findOneById(String id );
 	MyAppUser findOneByIdAndRole(String id, Role role);
+	public ArrayList<MyAppUser> findByLastName(String lastName);
+	public List<MyAppUser> findByGender(char gender);
+	//public ArrayList<MyAppUser> findByRoleId(int roleId);
+	
+
 
 	MyAppUser findByEmail(String email);
 
@@ -38,4 +45,5 @@ public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
 	@Query(value="SELECT u from MyAppUser u WHERE u.firstName like '%:name%'")
 	List<MyAppUser> findUserByNameLike(@Param("name") String name);
 
+	//List<MyAppUser> findByIterations_IterationName(String iterationName);
 }

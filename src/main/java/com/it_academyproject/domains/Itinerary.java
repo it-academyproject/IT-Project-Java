@@ -1,12 +1,21 @@
 package com.it_academyproject.domains;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.it_academyproject.tools.View;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.it_academyproject.tools.View;
 
 @Entity
 public class Itinerary {
@@ -15,18 +24,23 @@ public class Itinerary {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@JsonView(View.Summary.class)
 	private int id;
 	private String name;
 	
 	//--------------------------Constructors--------------------------------------------------------------
 	
 	public Itinerary() {
+		
 	}
 	
 	public Itinerary(String name) {
 		this.name = name;
 	}
+	
+	@OneToMany(mappedBy="itinerary")
+	@JsonIgnore
+	Set<ProjectItinerary> projectItineraries;
+	
 	
 	//--------------------------Setters/Getters--------------------------------------------------------------------
 

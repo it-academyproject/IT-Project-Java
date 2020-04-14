@@ -1,7 +1,7 @@
 package com.it_academyproject.tools.dataImporter;
 
 import com.it_academyproject.domains.*;
-
+import com.it_academyproject.exceptions.ResourceNotFoundException;
 import com.it_academyproject.repositories.*;
 
 import com.it_academyproject.tools.excel.Excel;
@@ -205,6 +205,15 @@ public class DataImporter
                                 myAppUser.setFirstName( name );
                                 myAppUser.setLastName (lastName);
                             }
+<<<<<<< HEAD
+=======
+                            // TODO: Remove "if" when verified correct B-38 branch working
+                            else if ( j == 1) //Núm. Document
+                            {
+                                System.out.println("Deprecated option: DNI removed from database.");
+                                //myAppUser.setIdDocument (currentCell);
+                            }
+>>>>>>> 8bd2c01475e8ff1607a5b303bd572b08a653ce2a
                             else if ( j == 2) //Núm. Document
                             {
 
@@ -344,7 +353,8 @@ public class DataImporter
     {
         List <String> NotFoundUser = new ArrayList<>();
         Itinerary itinerary = itineraryRepository.findOneById ( 1 );
-        Teacher teacherUser = (Teacher) myAppUserRepository.findOneById( teacherId );
+        Teacher teacherUser = (Teacher) myAppUserRepository.findOneById( teacherId )
+                .orElseThrow(() -> new ResourceNotFoundException("not found"));
         try
         {
             //System.out.println(Paths.get("").toAbsolutePath().toString());

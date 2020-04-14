@@ -1,18 +1,13 @@
 package com.it_academyproject.domains;
 
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
-import javax.persistence.*;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.exceptions.EmptyFieldException;
 import com.it_academyproject.tools.View;
 
-
+import javax.persistence.*;
+import java.util.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -63,13 +58,28 @@ public abstract class MyAppUser {
 	@OneToMany (targetEntity = Emails.class, cascade = CascadeType.ALL)
 	private List <Emails> emails = new ArrayList <Emails>();
 	
+//	@ManyToMany(fetch = FetchType.LAZY,
+//            cascade = {
+//                CascadeType.PERSIST,
+//                CascadeType.MERGE
+//            })
+//    @JoinTable(name = "user_iteration",
+//            joinColumns = { @JoinColumn(name = "my_app_user_id") },
+//            inverseJoinColumns = { @JoinColumn(name = "iteration_id") })
+//	@JsonIgnore
+//	private Set<Iteration> iterations = new HashSet<>();
+	
+	@OneToMany(mappedBy="myAppUser")
+	@JsonIgnore
+	Set<UserIteration> userIterations;
+	
+	
 	public MyAppUser() {
 	}
 	
 	public MyAppUser(String firstName, String lastName, String email, char gender,
 					 String portrait, String password, boolean enabled, Role role) {
 
-		
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -80,7 +90,7 @@ public abstract class MyAppUser {
 		this.role = role;
 	}
 	
- 	public MyAppUser(String email, String password) throws EmptyFieldException
+	 public MyAppUser(String email, String password) throws EmptyFieldException
 	    {
 	        if ((email != "")&&(password!=""))
 	        {
@@ -193,12 +203,27 @@ public abstract class MyAppUser {
 		this.lastLogin = lastLogin;
 	}
 
+	public void setCourses(List<Course> courses) {
+		this.courses = courses;
+	}
+
+//	public Set<Iteration> getIterations() {
+//		return iterations;
+//	}
+//
+//	public void setIterations(Iteration iteration) {
+//		this.iterations.add(iteration) ;
+//	}
+//	
+	
+	
+
 	/*	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", gender=" + gender + ", portrait=" + portrait + ", password=" + password
 				+ ", enabled=" + enabled + "]";
 	}	*/
+	
+	
+	
 
-	public void setCourses(List<Course> courses) {
-		this.courses = courses;
-	}
 }

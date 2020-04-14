@@ -3,6 +3,7 @@ package com.it_academyproject.jwt_security.security;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.Student;
 import com.it_academyproject.exceptions.EmptyFieldException;
+import com.it_academyproject.exceptions.ResourceNotFoundException;
 import com.it_academyproject.exceptions.UserNotEnabled;
 import com.it_academyproject.exceptions.WrongEmailPassword;
 import com.it_academyproject.jwt_security.constants.SecurityConstants;
@@ -12,6 +13,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -43,23 +46,44 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.myAppUserRepository = myAppUserRepository;
         setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
     }
+
 	//B-27 Task: Update last time an user do login.
     public MyAppUser updateLastLogin(MyAppUser myAppUser) {
 
-        if(myAppUserRepository.existsById(myAppUser.getId())) {
-            MyAppUser user = myAppUserRepository.findOneById(myAppUser.getId());
+        if (myAppUserRepository.existsById(myAppUser.getId())) {
+            MyAppUser user = myAppUserRepository.findOneById(myAppUser.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("not found"));
             java.util.Date date = new java.util.Date();
             java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
             user.setLastLogin(timestamp);
             myAppUserRepository.save(user);
             return user;
-        }else {return null;}
+        } else {
+            return null;
+        }
+    }
+
+    //B-27 Task: Update last time an user do login.
+    public MyAppUser editGetByDni(MyAppUser student) {
+        
+        if(myAppUserRepository.existsById(student.getId())) {
+        MyAppUser user = myAppUserRepository.findOneById(student.getId())
+        .orElseThrow(() -> new ResourceNotFoundException("not found"));
+        java.util.Date date = new java.util.Date();
+        java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
+        user.setLastLogin(timestamp);
+        myAppUserRepository.save(user);
+         return user;
+         }else {return null;}
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
     {
         LoginData loginData = new LoginData();
+
+        response.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+
         try
         {
             String test = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
@@ -85,10 +109,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
                     Authentication authenticationToken = new UsernamePasswordAuthenticationToken(loginData.getEmail(), loginData.getPassword(), grantedAuthorityList );
 
-
                     try
                     {
-						//B27 Task: When authentication is succeed, date of last login is updated calling: 
+						//B27 Task: When authentication is succeed, date of last login is updated calling:
                     	updateLastLogin(myAppUser);
                         return authenticationManager.authenticate(authenticationToken);
                     }
@@ -161,6 +184,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain filterChain, Authentication authentication) {
+
         UserDetails userDetails = ((UserDetails) authentication.getPrincipal());
 
         Object roles = userDetails.getAuthorities()
@@ -182,6 +206,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         System.out.println("The expiration date of the token is: " + (new Date(System.currentTimeMillis() + (8640000)).toString()));
 
         response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
+
         try {
             JSONObject json = new JSONObject();
             json.put("success", true);
@@ -192,4 +217,3 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
     }
 }
-
