@@ -7,6 +7,7 @@ import com.it_academyproject.exceptions.EmptyFieldException;
 import com.it_academyproject.tools.View;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Entity
@@ -152,9 +153,18 @@ public abstract class MyAppUser {
 		return gender;
 	}
 
+	public String getBirthdate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		return sdf.format(birthdate);
+	}
+
+
+/*
 	public Date getBirthdate() {
 		return birthdate;
 	}
+*/
+
 
 	public void setBirthdate(Date birthdate) {
 		this.birthdate = birthdate;

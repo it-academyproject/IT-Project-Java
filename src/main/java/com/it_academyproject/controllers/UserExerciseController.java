@@ -92,6 +92,7 @@ public class UserExerciseController
 	@JsonView(View.Summary.class)
 	@PutMapping("/api/user-exercises/exercise-id")
 	public boolean setUserExerciseStatusData(@RequestBody UserExercise userExercise) {
+		System.out.println("in put /api/user-exercises/exercise-id");
 		return userExerciseService.setUserExerciseStatusData(userExercise);
 	}
 }

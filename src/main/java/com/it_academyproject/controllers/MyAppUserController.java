@@ -1,7 +1,6 @@
 package com.it_academyproject.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.Student;
 import com.it_academyproject.repositories.IterationRepository;
 import com.it_academyproject.repositories.MyAppUserRepository;
@@ -71,6 +70,7 @@ public class MyAppUserController {
 	@JsonView(View.SummaryWithOthers.class)
 	@PutMapping("/api/students/id")
 	public Student updateStudent(@RequestBody Student student){
+		System.out.println("in put /api/students/id");
 		return studentService.editStudent(student);
 	}
 		
