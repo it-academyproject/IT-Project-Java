@@ -50,7 +50,7 @@ public class MyAppUserController {
 	public List<Student> getStudentsBySurname(@RequestBody Student student){
 		return studentService.getBySurname(student.getLastName());
 	}
-	
+
 	//Call student by Id
 	@JsonView(View.SummaryWithOthers.class)
 	@GetMapping("/api/students/id")
@@ -70,7 +70,6 @@ public class MyAppUserController {
 	@JsonView(View.SummaryWithOthers.class)
 	@PutMapping("/api/students/id")
 	public Student updateStudent(@RequestBody Student student){
-		System.out.println("in put /api/students/id");
 		return studentService.editStudent(student);
 	}
 		

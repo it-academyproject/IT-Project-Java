@@ -1,6 +1,7 @@
 package com.it_academyproject.domains;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.exceptions.EmptyFieldException;
@@ -26,23 +27,24 @@ public abstract class MyAppUser {
 	@Id
 	@JsonView(View.Summary.class)
 	private String id;
-	
+
 	@JsonView(View.Summary.class)
 	private String firstName;
-	
+
 	@JsonView(View.Summary.class)
 	private String lastName;
 
 	@JsonView(View.SummaryWithOthers.class)
 	private String email;
-	
+
 	@JsonView(View.SummaryWithOthers.class)
 	private char gender;
 
 	@JsonView(View.SummaryWithOthers.class)
 	@Temporal(TemporalType.DATE)
+	@JsonFormat(pattern="dd-MM-yyyy")
 	private Date birthdate;
-	
+
 	@JsonView(View.SummaryWithOthers.class)
 	private String portrait;
 
@@ -51,15 +53,15 @@ public abstract class MyAppUser {
 	private Date lastLogin;
 
 	private Role role;
-	
+
 	@OneToMany (targetEntity = Course.class, cascade = CascadeType.ALL)
 	@JsonView(View.Summary.class)
 	private List <Course> courses = new ArrayList <Course>();
-	@OneToMany (targetEntity = UserExercise.class, cascade = CascadeType.ALL)
-	private List <UserExercise> userExercises = new ArrayList <UserExercise>();
+//	@OneToMany (targetEntity = UserExercise.class, cascade = CascadeType.ALL)
+//	private List <UserExercise> userExercises = new ArrayList <UserExercise>();
 	@OneToMany (targetEntity = Emails.class, cascade = CascadeType.ALL)
 	private List <Emails> emails = new ArrayList <Emails>();
-	
+
 //	@ManyToMany(fetch = FetchType.LAZY,
 //            cascade = {
 //                CascadeType.PERSIST,
@@ -153,18 +155,12 @@ public abstract class MyAppUser {
 		return gender;
 	}
 
-	public String getBirthdate() {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-		return sdf.format(birthdate);
-	}
-
-
-/*
 	public Date getBirthdate() {
+		System.out.println("Estamos devolviendo la fechaaaa!!!!");
+		System.out.println(birthdate);
+		System.out.println("Fecha tal string: " + birthdate.toString());
 		return birthdate;
 	}
-*/
-
 
 	public void setBirthdate(Date birthdate) {
 		this.birthdate = birthdate;
@@ -218,7 +214,11 @@ public abstract class MyAppUser {
 		this.courses = courses;
 	}
 
-//	public Set<Iteration> getIterations() {
+	public List<Course> getCourses() {
+		return courses;
+	}
+
+	//	public Set<Iteration> getIterations() {
 //		return iterations;
 //	}
 //
@@ -235,3 +235,4 @@ public abstract class MyAppUser {
 	}	*/
 
 }
+// {"id":"030027e8-3bd2-431d-b57b-2f3b60aed01b"}

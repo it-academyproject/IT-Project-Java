@@ -107,7 +107,16 @@ public class UserExercise {
 		this.userTeacher = userTeacher;
 	}
 
-
-	
-
+	@Override
+	public String toString() {
+		return "UserExercise{" +
+				"Id=" + Id +
+				", comments='" + comments + '\'' +
+				", date_status=" + date_status +
+				", statusExercise=" + statusExercise +
+				", exercise=" + exercise +
+				", userStudent=" + userStudent +
+				", userTeacher=" + userTeacher +
+				'}';
+	}
 }

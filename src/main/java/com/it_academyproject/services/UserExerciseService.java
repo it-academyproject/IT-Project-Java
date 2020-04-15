@@ -128,6 +128,7 @@ public class UserExerciseService
 
 
 	public boolean setUserExerciseStatusData(UserExercise userExercise) {
+		System.out.println("UserExercise: " + userExercise.toString());
 		List <UserExercise> list = userExerciseRepository.findAll();
 		for (int i=0; i<list.size(); i++) {
 			if (list.get(i).getId() == userExercise.getId()) {
