@@ -3,6 +3,7 @@ package com.it_academyproject.controllers;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.it_academyproject.controllers.exerciseListDTOs.ExerciseListDTO;
 import com.it_academyproject.domains.Exercice;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.UserExercice;
@@ -24,7 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -36,7 +39,7 @@ public class UserExerciseController
 	@Autowired
 	UserExerciceRepository userExerciceRepository;
 
-	@GetMapping ("/api/userExercise/{itineraryId}")
+	@GetMapping ("/api/exercises/{itineraryId}")
 	public ResponseEntity<String>  getExerciseStudentByItinerary (@PathVariable String itineraryId )
 	{
 		try
@@ -55,30 +58,28 @@ public class UserExerciseController
 			return new ResponseEntity( sendData.toString() , HttpStatus.BAD_REQUEST);
 		}
 	}
-	@GetMapping ("/api/userExercise")
-	public ResponseEntity  getExerciseStudentByItinerary ( )
+	
+	
+	@GetMapping ("/api/exercises")
+	public Map<Integer,ExerciseListDTO> getAllExerciseswithStudents ( )
 	{
-		try
+		List<Exercice> foundExercises = userExerciseService.getAllExercises();
+		Map<Integer,ExerciseListDTO> allExerciseswithStudents = new HashMap<Integer,ExerciseListDTO>();
+		
+		for (Exercice exercise : foundExercises)
 		{
-			//get a list of all the itnerarys
+		
+			List<UserExercice> studentsforThatExercise= userExerciseService.getStudentsByExercise(exercise);
+			allExerciseswithStudents.put(exercise.getId(), new ExerciseListDTO(exercise.getName(),exercise.getItinerary(),studentsforThatExercise));
+		}
+		
 
-			JSONObject sendData = userExerciseService.getExerciseStudentByItinerary( );
-			return new ResponseEntity( sendData.toString() , HttpStatus.FOUND);
-		}
-		catch (Exception e)
-		{
-			String exceptionMessage = e.getMessage();
-			JSONObject sendData = new JSONObject();
-			JSONObject message = new JSONObject();
-			message.put("type" , "error");
-			message.put("message" , exceptionMessage);
-			sendData.put("Message" , message);
-			return new ResponseEntity( sendData.toString() , HttpStatus.BAD_REQUEST);
-		}
+	return allExerciseswithStudents;
 	}
+	
 
 	@JsonView(View.Summary.class)
-	@GetMapping ("/api/userExercise/Student_id")
+	@GetMapping ("/api/exercises/Student_id")
 	public ResponseEntity<String>  getExercicesbyStudentId (@RequestBody MyAppUser student){
 
 		try
@@ -108,7 +109,7 @@ public class UserExerciseController
 	//SET @CrossOrigin BEFORE DEPLOYING TO PRODUCTION!
 	@CrossOrigin
 	@JsonView(View.Summary.class)
-	@PutMapping("/api/userExercise/exercice_id")
+	@PutMapping("/api/exercises/exercice_id")
 	public boolean setUserExerciseStatusData(@RequestBody UserExercice userExercice) { 
 
 		return userExerciseService.setUserExerciseStatusData(userExercice);

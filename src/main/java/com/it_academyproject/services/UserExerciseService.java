@@ -1,10 +1,12 @@
 package com.it_academyproject.services;
 
 import com.it_academyproject.domains.Course;
+import com.it_academyproject.domains.Exercice;
 import com.it_academyproject.domains.Itinerary;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.UserExercice;
 import com.it_academyproject.repositories.CourseRepository;
+import com.it_academyproject.repositories.ExerciceRepository;
 import com.it_academyproject.repositories.ItineraryRepository;
 import com.it_academyproject.repositories.MyAppUserRepository;
 import com.it_academyproject.repositories.UserExerciceRepository;
@@ -32,18 +34,19 @@ public class UserExerciseService
 	CourseRepository courseRepository;
 	@Autowired
 	ItineraryRepository itineraryRepository;
+	@Autowired
+	ExerciceRepository exerciseRepository;
 
 	public JSONObject getExerciseStudentByItinerary (String itineraryIdString )
 	{
 		try
 		{
-			//convert the itineraryIdString to a int
 			int itineraryId = Integer.parseInt(itineraryIdString);
 			Itinerary itinerary = itineraryRepository.findOneById( itineraryId );
-			//get only active students
 			List<Course> courseList = courseRepository.findByItineraryAndEndDate(itinerary , null);
 			List<MyAppUser> myAppUserList = new ArrayList<>();
 			Map<String , List<UserExercice>> userUserExerciceMap = new HashMap<>();
+			
 			for (int i = 0; i < courseList.size() ; i++)
 			{
 				MyAppUser myAppUser = courseList.get( i ).getUserStudent();
@@ -56,6 +59,7 @@ public class UserExerciseService
 				}
 				userUserExerciceMap.put(myAppUser.getId() , userExerciceList );
 			}
+			
 			JSONObject sendData = new JSONObject( userUserExerciceMap );
 			return sendData;
 		}
@@ -72,16 +76,34 @@ public class UserExerciseService
 	}
 
 	
+	public List<Exercice> getAllExercises(){
+		
+		List<Exercice> allExercises = exerciseRepository.findAll();
+		
 
+		return allExercises;
+		
+	}
+	
+	
+	public List<UserExercice> getStudentsByExercise(Exercice exercise) {
+	
+		List<UserExercice> foundStudents = userExerciceRepository.findAllByExercice(exercise);
+		
+		return foundStudents;
+	}
+	
+	
 
 
 
 
 	public JSONObject getExerciseStudentByItinerary (  )
 	{
-		//get all the itineraries
+
 		List<Itinerary> itineraryList = itineraryRepository.findAll();
 		JSONObject sendData = new JSONObject();
+		
 		for (int i = 0; i < itineraryList.size(); i++)
 		{
 			String itineraryId = Integer.toString( itineraryList.get(i).getId() );
@@ -90,8 +112,11 @@ public class UserExerciseService
 
 
 		}
+		
 		return sendData;
 	}
+
+	
 
 
 
@@ -148,9 +173,6 @@ public class UserExerciseService
 		return false;
 		
 	}
-
-	
-
 
 }
 
