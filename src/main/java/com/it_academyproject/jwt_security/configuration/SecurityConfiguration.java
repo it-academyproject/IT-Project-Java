@@ -88,7 +88,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
     //B-17 task. Add to web.ignoring controllers used during development to avoid asking for a Token during dev
     	//Add endpoints when new controller is added in the API
     	web.ignoring()
-        .antMatchers("/api/test/**","/api/public/**" , "/api/get-reset-email/**" , "/api/save-new-password/**" , "/api/students/**" , "/api/statistics/**" , "/api/userExercise/**","/api/iterations/**", "/api/projects/**", "/api/itineraries/**", "/api/useriteration/**", "/api/projectitinerary/**");
+        .antMatchers("/api/test/**","/api/public/**" , "/api/get-reset-email/**" , "/api/save-new-password/**" , "/api/students/**" , "/api/statistics/**" , "/api/exercises/**","/api/iterations/**", "/api/projects/**", "/api/itineraries/**", "/api/useriteration/**", "/api/projectitinerary/**");
     }
 
 
