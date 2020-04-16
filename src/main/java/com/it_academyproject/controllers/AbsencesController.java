@@ -29,11 +29,12 @@ public class AbsencesController {
 	AbsencesService absencesService;
 	
 	//Create absence by student id
-    @PostMapping("/api/students/absences")
+    @PostMapping("/api/students/absences")//modificar URI
     public Absence createAbsence(@RequestBody Absence absence, MyAppUser userStudent) {
-    	return absencesService.createAbsence(absence, userStudent);
+    	return absencesService.createAbsence(absence, userStudent.getId());
     }
-
+    
+    
 	// Call total absences
 	@JsonView(View.Summary.class)
 	@GetMapping("/api/students/absences")
@@ -48,6 +49,12 @@ public class AbsencesController {
 		return absencesService.getAbsenceById(absence);
 	}
 
+	
+	
+	//MAKE GET ABSENCES BY STUDENT ID!!
+	
+	
+	
 	// Edit Absence by id
 	@JsonView(View.SummaryWithOthers.class)
 	@PutMapping("api/students/absences")

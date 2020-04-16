@@ -20,17 +20,20 @@ public class AbsencesService {
 	MyAppUserRepository myAppUserRepository;
 	
 	//post absence
-	public Absence createAbsence(Absence absence, MyAppUser userStudent) {
+	public Absence createAbsence(Absence absence, String userStudentId) {
 		
-		String studentId = absence.getUserStudent().getId();
 		Absence absenceCreated = new Absence();
-		userStudent = myAppUserRepository.findOneById(studentId);
+		
+		//search user by id to set it
+		MyAppUser userStudent = myAppUserRepository.findUserById(userStudentId);
 
+		//get values and set it
 		absenceCreated.setComment(absence.getComment());
 		absenceCreated.setDateMissing(absence.getDateMissing());
 		absenceCreated.setUserStudent(userStudent);
 		
-		System.out.println("Student Id: " + studentId);
+		//chivatos
+		System.out.println("Student Id: " + userStudentId);
 		System.out.println("Comment: " + absenceCreated.getComment());
 		System.out.println("DateMissing: " + absenceCreated.getDateMissing());
 		System.out.println("User: " + absenceCreated.getUserStudent());
@@ -38,26 +41,9 @@ public class AbsencesService {
 		myAbsenceRepository.save(absenceCreated);
 		return absenceCreated;
 	}
-
 	
-//	public Absence createAbsence(Absence absence, String id) {
-//	
-//		Absence absenceCreated = new Absence();
-//		MyAppUser userStudent = myAppUserRepository.findOneById(id);
-//		
-//		absenceCreated.setComment(absence.getComment());
-//		absenceCreated.setDateMissing(absence.getDateMissing());
-//		absenceCreated.setUserStudent(userStudent);
-//		
-//		System.out.println("Comment: " + absenceCreated.getComment());
-//		System.out.println("DateMissing: " + absenceCreated.getDateMissing());
-//		System.out.println("User: " + absenceCreated.getUserStudent());
-//		System.out.println("Id: " + id);
-
-//		myAbsenceRepository.save(absenceCreated);
-//		return absenceCreated;
-//	}
-
+	
+	
 	//get all absences
 	public List<Absence> getAllAbsences() {
 		return myAbsenceRepository.findAll();
@@ -79,6 +65,8 @@ public class AbsencesService {
 			String dateToEdit = absence.getDateMissing().toString();
 			String commentToEdit = absence.getComment();
 
+			//How to know if the JSON field exists or doesn't in the Postman body??
+			
 			if (commentToEdit.isEmpty() || commentToEdit.equals(null)) {
 				absenceToEdit.setComment(absenceToEdit.getComment());
 				System.out.println("sin cambios en comment");

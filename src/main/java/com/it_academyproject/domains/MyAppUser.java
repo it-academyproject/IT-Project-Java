@@ -57,14 +57,14 @@ public class MyAppUser {
 	@JsonView(View.Summary.class)
 	@ManyToOne
 	private Seat seat;
-<<<<<<< HEAD
-=======
-
-	private String password;
-	private boolean enabled;
-	private Date lastLogin;
-
->>>>>>> ce81c944983fb790a2c201452f59fe6bd208d1ea
+//<<<<<<< HEAD
+//=======
+//
+//	private String password;
+//	private boolean enabled;
+//	private Date lastLogin;
+//
+//>>>>>>> ce81c944983fb790a2c201452f59fe6bd208d1ea
 	
 //	@JsonView(View.SummaryWithOthers.class)    
 //	@ManyToOne
@@ -246,7 +246,7 @@ public class MyAppUser {
 		this.seat = seat;
 	}
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 	/**
 	 * @return the absences
 	 */
@@ -262,7 +262,7 @@ public class MyAppUser {
 	}
 
 
-=======
+//=======
 	public void setCourses(List<Course> courses) {
 		this.courses = courses;
 	}
@@ -275,7 +275,7 @@ public class MyAppUser {
 //		this.iterations.add(iteration) ;
 //	}
 //	
->>>>>>> ce81c944983fb790a2c201452f59fe6bd208d1ea
+//>>>>>>> ce81c944983fb790a2c201452f59fe6bd208d1ea
 	
 	
 
