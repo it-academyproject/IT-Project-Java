@@ -16,10 +16,6 @@ public class Student extends MyAppUser {
     @ManyToOne
     private Seat seat;
 
-    /*@OneToMany(targetEntity = Absence.class, cascade = CascadeType.ALL)
-    private List<Absence> absences = new ArrayList<Absence>();*/
-
-
     public Student() {
         super();
         this.setRole(Role.STUDENT);

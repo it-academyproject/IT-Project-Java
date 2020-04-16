@@ -8,7 +8,6 @@ import com.it_academyproject.exceptions.EmptyFieldException;
 import com.it_academyproject.tools.View;
 
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Entity
@@ -57,8 +56,6 @@ public abstract class MyAppUser {
 	@OneToMany (targetEntity = Course.class, cascade = CascadeType.ALL)
 	@JsonView(View.Summary.class)
 	private List <Course> courses = new ArrayList <Course>();
-//	@OneToMany (targetEntity = UserExercise.class, cascade = CascadeType.ALL)
-//	private List <UserExercise> userExercises = new ArrayList <UserExercise>();
 	@OneToMany (targetEntity = Emails.class, cascade = CascadeType.ALL)
 	private List <Emails> emails = new ArrayList <Emails>();
 
@@ -156,9 +153,6 @@ public abstract class MyAppUser {
 	}
 
 	public Date getBirthdate() {
-		System.out.println("Estamos devolviendo la fechaaaa!!!!");
-		System.out.println(birthdate);
-		System.out.println("Fecha tal string: " + birthdate.toString());
 		return birthdate;
 	}
 
@@ -216,6 +210,26 @@ public abstract class MyAppUser {
 
 	public List<Course> getCourses() {
 		return courses;
+	}
+
+	@Override
+	public String toString() {
+		return "MyAppUser{" +
+				"id='" + id + '\'' +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", email='" + email + '\'' +
+				", gender=" + gender +
+				", birthdate=" + birthdate +
+				", portrait='" + portrait + '\'' +
+				", password='" + password + '\'' +
+				", enabled=" + enabled +
+				", lastLogin=" + lastLogin +
+				", role=" + role +
+				", courses=" + courses +
+				", emails=" + emails +
+				", userIterations=" + userIterations +
+				'}';
 	}
 
 	//	public Set<Iteration> getIterations() {

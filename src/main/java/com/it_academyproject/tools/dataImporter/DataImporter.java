@@ -205,15 +205,6 @@ public class DataImporter
                                 myAppUser.setFirstName( name );
                                 myAppUser.setLastName (lastName);
                             }
-<<<<<<< HEAD
-=======
-                            // TODO: Remove "if" when verified correct B-38 branch working
-                            else if ( j == 1) //Núm. Document
-                            {
-                                System.out.println("Deprecated option: DNI removed from database.");
-                                //myAppUser.setIdDocument (currentCell);
-                            }
->>>>>>> 8bd2c01475e8ff1607a5b303bd572b08a653ce2a
                             else if ( j == 2) //Núm. Document
                             {
 

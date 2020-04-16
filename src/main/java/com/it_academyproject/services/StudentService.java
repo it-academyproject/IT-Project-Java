@@ -71,6 +71,10 @@ public class StudentService {
 				repoStudent.setFirstName(student.getFirstName());
 			if (student.getLastName()!=null && !student.getLastName().isEmpty())
 				repoStudent.setLastName(student.getLastName());
+			// Update enabled if needed
+			if (student.isEnabled()!=repoStudent.isEnabled())
+				repoStudent.setEnabled(student.isEnabled());
+
 			userRepository.save(repoStudent);
 
 			return repoStudent;
