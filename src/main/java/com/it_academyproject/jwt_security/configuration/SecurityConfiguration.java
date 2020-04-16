@@ -41,6 +41,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
 
     @Autowired
     private MyAppUserRepository myAppUserRepository;
+    
+    
 
     @Autowired
     private AuthenticationSuccessHandlerImpl successHandler;
@@ -86,7 +88,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
     //B-17 task. Add to web.ignoring controllers used during development to avoid asking for a Token during dev
     	//Add endpoints when new controller is added in the API
     	web.ignoring()
-        .antMatchers("/api/test/**","/api/public/**" , "/api/get-reset-email/**" , "/api/save-new-password/**" , "/api/students/**" , "/api/statistics/**" , "/api/userExercise/**");
+        .antMatchers("/api/test/**","/api/public/**" , "/api/get-reset-email/**" , "/api/save-new-password/**" , "/api/students/**" , "/api/statistics/**" , "/api/userExercise/**","/api/iterations/**", "/api/projects/**", "/api/itineraries/**", "/api/useriteration/**", "/api/projectitinerary/**");
     }
 
 
@@ -103,7 +105,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
                 .addFilter(new JwtAuthorizationFilter(authenticationManager()))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
     }
     @Bean
     public DaoAuthenticationProvider authenticationProvider ()
@@ -137,7 +138,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(11);
     }
 
     @Bean

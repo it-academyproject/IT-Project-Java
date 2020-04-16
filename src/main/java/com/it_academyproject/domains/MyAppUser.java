@@ -3,7 +3,9 @@ package com.it_academyproject.domains;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -11,10 +13,13 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.exceptions.EmptyFieldException;
 import com.it_academyproject.tools.View;
@@ -35,10 +40,7 @@ public class MyAppUser {
 	
 	@JsonView(View.Summary.class)
 	private String lastName;
-	
-	//@JsonView(View.Summary.class)
-	private String idDocument;
-	
+
 	@JsonView(View.SummaryWithOthers.class)
 	private String email;
 	
@@ -51,10 +53,18 @@ public class MyAppUser {
 	@JsonView(View.SummaryWithOthers.class)
 	private String portrait;
 
-	//@JsonView(View.SummaryWithOthers.class)
+
 	@JsonView(View.Summary.class)
 	@ManyToOne
 	private Seat seat;
+<<<<<<< HEAD
+=======
+
+	private String password;
+	private boolean enabled;
+	private Date lastLogin;
+
+>>>>>>> ce81c944983fb790a2c201452f59fe6bd208d1ea
 	
 //	@JsonView(View.SummaryWithOthers.class)    
 //	@ManyToOne
@@ -72,23 +82,37 @@ public class MyAppUser {
 	private List <Absence> absences = new ArrayList <Absence>();
 	@OneToMany (targetEntity = Course.class, cascade = CascadeType.ALL)
 	@JsonView(View.Summary.class)
-	private List <Course> courses = new ArrayList <Course>();
+	public List <Course> courses = new ArrayList <Course>();
 	@OneToMany (targetEntity = UserExercice.class, cascade = CascadeType.ALL)
 	private List <UserExercice> userExercices = new ArrayList <UserExercice>();
 	@OneToMany (targetEntity = Emails.class, cascade = CascadeType.ALL)
 	private List <Emails> emails = new ArrayList <Emails>();
 	
+//	@ManyToMany(fetch = FetchType.LAZY,
+//            cascade = {
+//                CascadeType.PERSIST,
+//                CascadeType.MERGE
+//            })
+//    @JoinTable(name = "user_iteration",
+//            joinColumns = { @JoinColumn(name = "my_app_user_id") },
+//            inverseJoinColumns = { @JoinColumn(name = "iteration_id") })
+//	@JsonIgnore
+//	private Set<Iteration> iterations = new HashSet<>();
+	
+	@OneToMany(mappedBy="myAppUser")
+	@JsonIgnore
+	Set<UserIteration> userIterations;
+	
+	
 	public MyAppUser() {
 		
 	}
 	
-	public MyAppUser(String firstName, String lastName, String idDocument, String email, char gender,
-			String portrait, String password, boolean enabled, Role role) {
+	public MyAppUser(String firstName, String lastName, String email, char gender,
+					 String portrait, String password, boolean enabled, Role role) {
 
-		
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.idDocument = idDocument;
 		this.email = email;
 		this.gender = gender;
 		this.portrait = portrait;
@@ -97,7 +121,7 @@ public class MyAppUser {
 		this.role = role;
 	}
 	
- 	public MyAppUser(String email, String password) throws EmptyFieldException
+	 public MyAppUser(String email, String password) throws EmptyFieldException
 	    {
 	        if ((email != "")&&(password!=""))
 	        {
@@ -148,14 +172,6 @@ public class MyAppUser {
 	
 	public String getfullName() {
 		return firstName + " " + lastName;
-	}
-
-	public String getIdDocument() {
-		return idDocument;
-	}
-
-	public void setIdDocument(String idDocument) {
-		this.idDocument = idDocument;
 	}
 
 	public String getEmail() {
@@ -230,6 +246,7 @@ public class MyAppUser {
 		this.seat = seat;
 	}
 
+<<<<<<< HEAD
 	/**
 	 * @return the absences
 	 */
@@ -245,6 +262,20 @@ public class MyAppUser {
 	}
 
 
+=======
+	public void setCourses(List<Course> courses) {
+		this.courses = courses;
+	}
+
+//	public Set<Iteration> getIterations() {
+//		return iterations;
+//	}
+//
+//	public void setIterations(Iteration iteration) {
+//		this.iterations.add(iteration) ;
+//	}
+//	
+>>>>>>> ce81c944983fb790a2c201452f59fe6bd208d1ea
 	
 	
 
@@ -253,8 +284,8 @@ public class MyAppUser {
 				+ ", email=" + email + ", gender=" + gender + ", portrait=" + portrait + ", password=" + password
 				+ ", enabled=" + enabled + "]";
 	}	*/
+	
+	
+	
 
-	public void setCourses(List<Course> courses) {
-		this.courses = courses;
-	}
 }

@@ -6,6 +6,7 @@ import com.it_academyproject.domains.Course;
 import com.it_academyproject.domains.Itinerary;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.exceptions.UserNotFoundException;
+import com.it_academyproject.exceptions.ResourceNotFoundException;
 import com.it_academyproject.repositories.AbsenceRepository;
 import com.it_academyproject.repositories.CourseRepository;
 import com.it_academyproject.repositories.ItineraryRepository;
@@ -29,6 +30,7 @@ public class StatisticsService
     ItineraryRepository itineraryRepository;
     @Autowired
     MyAppUserRepository myAppUserRepository;
+
 
     public Map<String, Integer> perItinerary() {
 
@@ -76,22 +78,22 @@ public class StatisticsService
         Date currentDate = Calendar.getInstance().getTime();
         List<Course> endListOfUsersEndingInLessThanXDays = new ArrayList<>();
         for(int i=0;i<finishInXDays.size();i++) {
-        	if (finishInXDays.get(i).getEndDate() != null) {
-        		Long days = (Long) ((finishInXDays.get(i).getEndDate().getTime()-currentDate.getTime())/86400000);
-        		if (days<=15) {
-        			endListOfUsersEndingInLessThanXDays.add(finishInXDays.get(i));
-        		}
-        	}
+            if (finishInXDays.get(i).getEndDate() != null) {
+                Long days = (Long) ((finishInXDays.get(i).getEndDate().getTime()-currentDate.getTime())/86400000);
+                if (days<=15) {
+                    endListOfUsersEndingInLessThanXDays.add(finishInXDays.get(i));
+                }
+            }
         }
         ArrayList<ArrayList<String>> endListNameAndDaysLeft = new ArrayList<ArrayList<String>>();
         for(int i=0;i<endListOfUsersEndingInLessThanXDays.size();i++) {
-        	Long day =(Long) ((endListOfUsersEndingInLessThanXDays.get(i).getEndDate().getTime()-currentDate.getTime())/86400000);
-        	endListNameAndDaysLeft.add(endDayMethod("Nombre: " + endListOfUsersEndingInLessThanXDays.get(i).getUserStudent().getFirstName() + " " + 
-					endListOfUsersEndingInLessThanXDays.get(i).getUserStudent().getLastName(),"Dias restantes: " + day.toString()));
+            Long day =(Long) ((endListOfUsersEndingInLessThanXDays.get(i).getEndDate().getTime()-currentDate.getTime())/86400000);
+            endListNameAndDaysLeft.add(endDayMethod("Nombre: " + endListOfUsersEndingInLessThanXDays.get(i).getUserStudent().getFirstName() + " " + 
+                    endListOfUsersEndingInLessThanXDays.get(i).getUserStudent().getLastName(),"Dias restantes: " + day.toString()));
         }
         
         Gson Json = new Gson();
-    	String sendData = Json.toJson(endListNameAndDaysLeft);
+        String sendData = Json.toJson(endListNameAndDaysLeft);
         return sendData;
     }
 
@@ -104,7 +106,8 @@ public class StatisticsService
         {
             course = courseList.get(i);
             MyAppUser student = course.getUserStudent();
-            myAppUser = myAppUserRepository.findOneById( student.getId() );
+            myAppUser = myAppUserRepository.findOneById( student.getId() )
+            .orElseThrow(() -> new ResourceNotFoundException("not found"));
             if ( myAppUser != null )
             {
                 activeStudents.add( myAppUser );
@@ -117,27 +120,27 @@ public class StatisticsService
         return (activeStudents);
     }
     public static ArrayList<String> peopleByItineraryMethod(String itinerary, String numberOfPeople) {
-    	ArrayList<String> itineraryObject = new ArrayList<>();
-    	itineraryObject.add(itinerary);
-    	itineraryObject.add(numberOfPeople);
-    	return itineraryObject;
+        ArrayList<String> itineraryObject = new ArrayList<>();
+        itineraryObject.add(itinerary);
+        itineraryObject.add(numberOfPeople);
+        return itineraryObject;
     }
     public static ArrayList<String> peopleByGenderMethod (Character typeOfGender, String numberOfUsers){
-    	ArrayList<String> peopleByGenderList = new ArrayList<String>();
-    	peopleByGenderList.add(typeOfGender.toString());
-    	peopleByGenderList.add(numberOfUsers);
-    	return peopleByGenderList;
+        ArrayList<String> peopleByGenderList = new ArrayList<String>();
+        peopleByGenderList.add(typeOfGender.toString());
+        peopleByGenderList.add(numberOfUsers);
+        return peopleByGenderList;
     }
     public static ArrayList<String> AbsenceMethod (String name, String absence){
-    	ArrayList<String> absenceList = new ArrayList<String>();
-    	absenceList.add(name);
-    	absenceList.add(absence);
-    	return absenceList;
+        ArrayList<String> absenceList = new ArrayList<String>();
+        absenceList.add(name);
+        absenceList.add(absence);
+        return absenceList;
     }
     public static ArrayList<String> endDayMethod (String name, String daysLeft){
-    	ArrayList<String> endDayList = new ArrayList<String>();
-    	endDayList.add(name);
-    	endDayList.add(daysLeft);
-    	return endDayList;
+        ArrayList<String> endDayList = new ArrayList<String>();
+        endDayList.add(name);
+        endDayList.add(daysLeft);
+        return endDayList;
     }
 }

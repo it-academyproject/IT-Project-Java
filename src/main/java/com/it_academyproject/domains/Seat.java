@@ -25,10 +25,10 @@ public class Seat
     
     
     public Seat() {
-		
-	}
+        
+    }
 
-	public int getId() {
+    public int getId() {
         return id;
     }
 
@@ -67,4 +67,6 @@ public class Seat
     public void setClassRoom(int classRoom) {
         this.classRoom = classRoom;
     }
+
+
 }
