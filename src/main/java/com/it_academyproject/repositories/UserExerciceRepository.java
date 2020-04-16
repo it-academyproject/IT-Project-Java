@@ -12,7 +12,7 @@ public interface UserExerciceRepository extends JpaRepository <UserExercice , In
 {
     UserExercice findOneByUserStudentAndExercice(MyAppUser user , Exercice exercice );
     
-    UserExercice findOneByUserStudent(MyAppUser user );
+    UserExercice findOneByUserStudent(String id);
     
 //    List<UserExercice> findOneByItineraryAndExercice(Itinerary itinerary , Exercice exercice);
     

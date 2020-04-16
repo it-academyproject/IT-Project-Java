@@ -9,6 +9,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.lang.Nullable;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -23,11 +27,14 @@ public class Absence {
 	@Id
 	@JsonView(View.Summary.class)
 	private int id;
-//    @NotNull
-	@JsonView(View.Summary.class)
+	@Nullable
+	@JsonView(View.SummaryWithOthers.class)
 	private Date dateMissing; 
-//    @NotNull
-	@JsonView(View.Summary.class)
+	
+//	@JsonInclude(value=Include.ALWAYS, content=Include.USE_DEFAULTS)
+	@Nullable
+	@JsonProperty(access = Access.READ_WRITE)
+	@JsonView(View.SummaryWithOthers.class)
 	private String comment; 
 	
 	@ManyToOne (fetch = FetchType.EAGER)

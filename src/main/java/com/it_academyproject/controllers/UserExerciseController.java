@@ -56,6 +56,8 @@ public class UserExerciseController
 		}
 	}
 	
+//	-----------------------------MODELO ANTERIOR JSON RARO------------------------------------------------------------------
+//	
 //	@GetMapping ("/api/userExercise")
 //	public ResponseEntity  getExerciseStudentByItinerary ( )
 //	{
@@ -77,6 +79,7 @@ public class UserExerciseController
 //			return new ResponseEntity( sendData.toString() , HttpStatus.BAD_REQUEST);
 //		}
 //	}
+//	-----------------------------------------------------------------------------------------------------------------------
 	
 	@GetMapping ("/api/userExercise")
 	public ResponseEntity  getExercises ( )

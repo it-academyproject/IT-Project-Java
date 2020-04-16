@@ -36,7 +36,7 @@ public class UserExerciseService {
 	@Autowired
 	ItineraryRepository itineraryRepository;
 
-	// ---------------------------------------------GET ALL EXERCISES PRUEBA PARTIENDO DEL DE ABAJO-------------------------------------------------------------------------------------
+	// -----------------------------B-36---GET ALL EXERCISES PRUEBA PARTIENDO DEL BLOQUE DE ABAJO QUE ESTÁ COMENTADO-------------------------------------------------------------------------------------
 
 	// List exercises LIKE THAT:
 
@@ -45,18 +45,26 @@ public class UserExerciseService {
 		// exercise name
 		// itinerary id
 		// student: (in every student...)
-
+			//{
 			// student name
 			// exercise status
 			// date status
 			// }
-
+	//}
 	public JSONObject getAllExercises() {
 
 		//get all exercises
 		List<Exercice> exerciseList = exerciseRepository.findAll();
+		//get all students
+//		List<MyAppUser> studentsList = myAppUserRepository.findAll();
 		//JSON that will return all exercises with their whole info stored
 		JSONObject exerciseJSON = new JSONObject();
+		//JSON that will return the values of each exercise
+		JSONObject exerciseValuesJSON = new JSONObject();
+		//JSON that will return the info of exercise 'x' of 'y' student
+		JSONObject userJSON = new JSONObject();
+		//JSON that will return the values of each user
+		JSONObject userValuesJSON = new JSONObject();
 
 		//search in each exercise
 		for (int i = 0; i < exerciseList.size(); i++) {
@@ -67,66 +75,33 @@ public class UserExerciseService {
 			String exerciseName = exercise.getName();
 			String exerciseItinerary = Integer.toString(exercise.getItinerary().getId());
 			
-			//JSON that will return the values of each exercise
-			JSONObject exerciseValuesJSON = new JSONObject();
-			
+			//search each student with that exercise(i) ----------------- NOT WORKING THROWS ERROR MESSAGE IN POSTMAN
+//			for (int j = 0; j < studentsList.size(); j++) {
+//				
+//				//get values of student(i)
+//				MyAppUser student = studentsList.get(j);
+//				String studentId = student.getId();
+//				
+//				//get all userexercises
+////				List<UserExercice> userExercisesList = userExerciceRepository.findByUserStudent(student);
+//				UserExercice userExercise = userExerciceRepository.getOne(exercise.getId()); //.findOneByUserStudent(studentId);
+//				String studentName = userExercise.getUserStudent().getfullName();
+//				String exerciseStatus = userExercise.getStatusExercice().toString();
+//				String dateStatus = userExercise.getDate_status().toString();
+//								
+//				userValuesJSON.put("ExerciseStatus", exerciseStatus);
+//				userValuesJSON.put("DateStatus", dateStatus);
+//				
+//				userJSON.put("StudentName_" + studentName, userValuesJSON);	
+//			}
+		
 			exerciseValuesJSON.put("Name", exerciseName);
 			exerciseValuesJSON.put("Itinerary", exerciseItinerary);
+//			exerciseValuesJSON.put("User_", userValuesJSON);
 			
-			exerciseJSON.put("Exercise_" + exerciseId, exerciseValuesJSON);		// Si lo de abajo está comentado, descomenta esto para recebir JSON
+			exerciseJSON.put("Exercise_" + exerciseId, exerciseValuesJSON); 
 
 			//EN CONSOLE ME DEVUELVE EL RESULTADO DE TODOS LOS EJERCICIOS ORDENADOS, PERO JSON LOS TIRA DESORDENADOS...
-			
-			
-			
-////////////Search every student related to exercise(i) through course and itinerary------------------------------PRUEBAS----------------------THIS HAVE TO BE FIXED
-//			int itineraryId = Integer.parseInt(exerciseItinerary);
-//			Itinerary itinerary = itineraryRepository.findOneById(itineraryId);
-//			List<Course> courseList = courseRepository.findByItinerary(itinerary);
-//			
-//			//JSON that will return the values of each student related to exercise(i)
-//			JSONObject studentValuesJSON = new JSONObject();
-//						
-//			//search through course(j)
-//			for (int j = 0; j < courseList.size(); j++) {
-//				
-//				//get student 
-//				MyAppUser myAppUser = courseList.get(j).getUserStudent();
-//				//get Student Name
-//				String studentName = myAppUser.getfullName();
-//				
-//				//get Student Exercise related to the original exercise(i)
-//				UserExercice userExercise = userExerciceRepository.findOneByUserStudentAndExercice(myAppUser, exercise);
-////				UserExercice userExercise = userExerciceRepository.findOneByUserStudent(myAppUser);
-//				System.out.println(userExercise.getId());
-//				
-//				// remove the Student and Teacher fields that are not necessary
-//				userExercise.setUserTeacher(null);
-//				userExercise.setUserStudent(null);
-//
-//				//Fill the values needed of Student Json
-//				studentValuesJSON.put("Status", userExercise.getStatusExercice());
-//				studentValuesJSON.put("Date_Status", userExercise.getDate_status());				
-//
-//				//Add JSON student values to the global values in JSON of exercise(i) 
-//				exerciseValuesJSON.put("Student_" + studentName, studentValuesJSON);
-//				
-//				System.out.println(userExercise.getId() + ", " + userExercise.getStatusExercice()  + ", " +  userExercise.getDate_status());
-//				
-//				
-////				String userExerciseId = Integer.toString(userExercise.getId());
-////				if(userExerciseId.equals(exerciseId)) {
-////					myAppUser.
-////					// remove the Student and Teacher fields that are not necessary
-////					for (int k = 0; k < userExerciseList.size(); k++) {
-////						userExerciseList.get(k).setUserStudent(null);
-////						userExerciseList.get(k).setUserTeacher(null);
-////					}
-////				}	
-//				
-//			}
-//
-//			exerciseJSON.put("Exercise_" + exerciseId, exerciseValuesJSON);
 			
 			System.out.println(exerciseId + ", " + exerciseName  + ", " +  exerciseItinerary);
 			
@@ -137,7 +112,8 @@ public class UserExerciseService {
 	}
 	
 	
-
+//---------------BLOQUE ANTERIOR QUE DEVUELVE JSON RARO ORIGINAL--------------------------------------------------------
+//	
 //	public JSONObject getExercisesById (String exerciseId ){
 //		
 //		try
@@ -177,7 +153,6 @@ public class UserExerciseService {
 //				myAppUserList.add( myAppUser);
 //				List<UserExercice> userExercisesList = userExerciceRepository.findByUserStudent(myAppUser);
 //				
-//				//HOW CAN I FOCUS TO THE VALUES OF EVERY USEREXERCISE INTO USEREXERCISEMAP
 //				
 //				//remove the Student and Teacher fields that are not necessary
 //				for (int j = 0; j < userExercisesList.size(); j++)
@@ -207,8 +182,7 @@ public class UserExerciseService {
 //		}
 //		
 //	}
-
-	// ---------------------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------------------------
 
 	public JSONObject getExerciseStudentByItinerary(String itineraryIdString) {
 		try {
