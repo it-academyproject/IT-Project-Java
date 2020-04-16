@@ -56,11 +56,9 @@ public class UserExerciseService {
 		//get all exercises
 		List<Exercice> exerciseList = exerciseRepository.findAll();
 		//get all students
-//		List<MyAppUser> studentsList = myAppUserRepository.findAll();
+		List<MyAppUser> studentsList = myAppUserRepository.findAll();
 		//JSON that will return all exercises with their whole info stored
 		JSONObject exerciseJSON = new JSONObject();
-		//JSON that will return the values of each exercise
-		JSONObject exerciseValuesJSON = new JSONObject();
 		//JSON that will return the info of exercise 'x' of 'y' student
 		JSONObject userJSON = new JSONObject();
 		//JSON that will return the values of each user
@@ -94,10 +92,11 @@ public class UserExerciseService {
 //				
 //				userJSON.put("StudentName_" + studentName, userValuesJSON);	
 //			}
-		
+			//JSON that will return the values of each exercise
+			JSONObject exerciseValuesJSON = new JSONObject();
 			exerciseValuesJSON.put("Name", exerciseName);
 			exerciseValuesJSON.put("Itinerary", exerciseItinerary);
-//			exerciseValuesJSON.put("User_", userValuesJSON);
+			exerciseValuesJSON.put("User_", userValuesJSON);
 			
 			exerciseJSON.put("Exercise_" + exerciseId, exerciseValuesJSON); 
 
