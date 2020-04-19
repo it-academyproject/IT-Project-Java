@@ -29,35 +29,35 @@ public class AbsencesController {
 	AbsencesService absencesService;
 
 	// Create absence by student id
-	@PostMapping("/api/students/absences") // modificar URI
+	@PostMapping("api/absences") // modificar URI
 	public Absence createAbsence(@RequestBody Absence absence) {
 		return absencesService.createAbsence(absence, absence.getUserStudent());// userStudent.getId());
 	}
 
 	// Call total absences
 	@JsonView(View.Summary.class)
-	@GetMapping("/api/students/absences")
+	@GetMapping("api/absences")
 	public List<Absence> getAllAbsences() {
 		return absencesService.getAllAbsences();
 	}
 
 	// Call absence by id
 	@JsonView(View.Summary.class)
-	@GetMapping("/api/students/absences/id")
+	@GetMapping("api/absences/id")
 	public Absence getAbsenceById(@RequestBody Absence absence) {
 		return absencesService.getAbsenceById(absence);
 	}
 
 	// Call absences by student id
 	@JsonView(View.Summary.class)
-	@GetMapping("/api/students/absences/student")
+	@GetMapping("api/absences/student")
 	public List<Absence> getAbsenceByStudentId(@RequestBody MyAppUser userStudent) {
 		return absencesService.getAbsenceByStudentId(userStudent);
 	}
 
 	// Edit Absence by id
 	@JsonView(View.SummaryWithOthers.class)
-	@PutMapping("api/students/absences")
+	@PutMapping("api/absences")
 	public Absence putAbsence(@RequestBody Absence absence) {
 		return absencesService.putAbsenceById(absence);
 	}
