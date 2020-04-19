@@ -66,9 +66,9 @@ public class MyAppUser {
 //
 //>>>>>>> ce81c944983fb790a2c201452f59fe6bd208d1ea
 	
-//	@JsonView(View.SummaryWithOthers.class)    
-//	@ManyToOne
-//	private Absence userAbsence;
+	@JsonView(View.Summary.class)    
+	@ManyToOne
+	private Absence absence;
 
 	@ManyToOne (fetch = FetchType.EAGER)
 	@JoinColumn (name="rol_id")
@@ -246,7 +246,21 @@ public class MyAppUser {
 		this.seat = seat;
 	}
 
-//<<<<<<< HEAD
+/**
+	 * @return the absence
+	 */
+	public Absence getAbsence() {
+		return absence;
+	}
+
+	/**
+	 * @param absence the absence to set
+	 */
+	public void setAbsence(Absence absence) {
+		this.absence = absence;
+	}
+
+	//<<<<<<< HEAD
 	/**
 	 * @return the absences
 	 */

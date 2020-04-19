@@ -2,10 +2,12 @@ package com.it_academyproject.services;
 
 import java.util.List;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.google.gson.Gson;
 import com.it_academyproject.domains.Absence;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.repositories.AbsenceRepository;
@@ -18,45 +20,40 @@ public class AbsencesService {
 	AbsenceRepository myAbsenceRepository;
 	@Autowired
 	MyAppUserRepository myAppUserRepository;
-	
-	//post absence
-	public Absence createAbsence(Absence absence, String userStudentId) {
-		
-		Absence absenceCreated = new Absence();
-		
-		//search user by id to set it
-		MyAppUser userStudent = myAppUserRepository.findUserById(userStudentId);
 
-		//get values and set it
+	// post absence
+	public Absence createAbsence(Absence absence, MyAppUser userStudent) {
+
+		Absence absenceCreated = new Absence();
+		String studentId = userStudent.getId();// absence.getUserStudent().getId();
+		userStudent = myAppUserRepository.findUserById(studentId);
+
 		absenceCreated.setComment(absence.getComment());
 		absenceCreated.setDateMissing(absence.getDateMissing());
 		absenceCreated.setUserStudent(userStudent);
-		
-		//chivatos
-		System.out.println("Student Id: " + userStudentId);
-		System.out.println("Comment: " + absenceCreated.getComment());
-		System.out.println("DateMissing: " + absenceCreated.getDateMissing());
-		System.out.println("User: " + absenceCreated.getUserStudent());
-		
+
 		myAbsenceRepository.save(absenceCreated);
 		return absenceCreated;
 	}
-	
-	
-	
-	//get all absences
+
+	// get all absences
 	public List<Absence> getAllAbsences() {
 		return myAbsenceRepository.findAll();
 	}
-	
-	//get absence by id
-	public Absence getAbsenceById(@RequestBody Absence absence) {
+
+	// get absence by id
+	public Absence getAbsenceById(Absence absence) {
 		return myAbsenceRepository.findOneById(absence.getId());
 	}
 
-	//put absence by id
+	// get absence by student id
+	public List<Absence> getAbsenceByStudentId(MyAppUser userStudent) {
+		return myAbsenceRepository.findByUserStudentId(userStudent.getId());
+	}
+
+	// put absence by id
 	public Absence putAbsenceById(Absence absence) {
-		
+
 		// if AbsenceRepo is not empty...
 		if (!myAbsenceRepository.findAll().isEmpty()) {
 
@@ -65,8 +62,8 @@ public class AbsencesService {
 			String dateToEdit = absence.getDateMissing().toString();
 			String commentToEdit = absence.getComment();
 
-			//How to know if the JSON field exists or doesn't in the Postman body??
-			
+			// How to know if the JSON field exists or doesn't in the Postman body??
+
 			if (commentToEdit.isEmpty() || commentToEdit.equals(null)) {
 				absenceToEdit.setComment(absenceToEdit.getComment());
 				System.out.println("sin cambios en comment");
@@ -92,6 +89,6 @@ public class AbsencesService {
 
 		} else {
 			return null;
-		}	
+		}
 	}
 }

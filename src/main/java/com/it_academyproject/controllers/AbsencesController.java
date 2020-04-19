@@ -27,14 +27,13 @@ public class AbsencesController {
 	AbsenceRepository myAbsenceRepository;
 	@Autowired
 	AbsencesService absencesService;
-	
-	//Create absence by student id
-    @PostMapping("/api/students/absences")//modificar URI
-    public Absence createAbsence(@RequestBody Absence absence, MyAppUser userStudent) {
-    	return absencesService.createAbsence(absence, userStudent.getId());
-    }
-    
-    
+
+	// Create absence by student id
+	@PostMapping("/api/students/absences") // modificar URI
+	public Absence createAbsence(@RequestBody Absence absence) {
+		return absencesService.createAbsence(absence, absence.getUserStudent());// userStudent.getId());
+	}
+
 	// Call total absences
 	@JsonView(View.Summary.class)
 	@GetMapping("/api/students/absences")
@@ -49,12 +48,13 @@ public class AbsencesController {
 		return absencesService.getAbsenceById(absence);
 	}
 
-	
-	
-	//MAKE GET ABSENCES BY STUDENT ID!!
-	
-	
-	
+	// Call absences by student id
+	@JsonView(View.Summary.class)
+	@GetMapping("/api/students/absences/student")
+	public List<Absence> getAbsenceByStudentId(@RequestBody MyAppUser userStudent) {
+		return absencesService.getAbsenceByStudentId(userStudent);
+	}
+
 	// Edit Absence by id
 	@JsonView(View.SummaryWithOthers.class)
 	@PutMapping("api/students/absences")

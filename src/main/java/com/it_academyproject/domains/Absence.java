@@ -28,19 +28,19 @@ public class Absence {
 	@JsonView(View.Summary.class)
 	private int id;
 	@Nullable
-	@JsonView(View.SummaryWithOthers.class)
+	@JsonView(View.Summary.class)
 	private Date dateMissing; 
 	
 //	@JsonInclude(value=Include.ALWAYS, content=Include.USE_DEFAULTS)
 	@Nullable
 	@JsonProperty(access = Access.READ_WRITE)
-	@JsonView(View.SummaryWithOthers.class)
+	@JsonView(View.Summary.class)
 	private String comment; 
 	
 	@ManyToOne (fetch = FetchType.EAGER)
 	@JsonView(View.Summary.class)
-	@JoinColumn (name="student_id")
-	@JsonProperty(access = Access.READ_ONLY)
+	@JoinColumn (name="student_id", nullable = false)
+//	@JsonProperty(access = Access.READ_ONLY)
 	private MyAppUser userStudent;
 	
 	public Absence() {
@@ -86,7 +86,7 @@ public class Absence {
 
 	@Override
 	public String toString() {
-		return "Absence [id=" + id + ", dateMissing=" + dateMissing + ", user=" + userStudent + "]";
+		return "Absence [id=" + id + ", dateMissing=" + dateMissing + ", comment=" + comment + ", user=" + userStudent + "]";
 	}
 
 	
