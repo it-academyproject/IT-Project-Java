@@ -2,10 +2,7 @@ package com.it_academyproject.controllers;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.domains.Absence;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.repositories.AbsenceRepository;
-import com.it_academyproject.repositories.MyAppUserRepository;
 import com.it_academyproject.services.AbsencesService;
 import com.it_academyproject.tools.View;
 
@@ -31,7 +27,7 @@ public class AbsencesController {
 	// Create absence by student id
 	@PostMapping("api/absences") // modificar URI
 	public Absence createAbsence(@RequestBody Absence absence) {
-		return absencesService.createAbsence(absence, absence.getUserStudent());// userStudent.getId());
+		return absencesService.createAbsence(absence, absence.getUserStudent());
 	}
 
 	// Call total absences

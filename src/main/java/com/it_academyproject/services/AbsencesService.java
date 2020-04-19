@@ -2,12 +2,9 @@ package com.it_academyproject.services;
 
 import java.util.List;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import com.google.gson.Gson;
 import com.it_academyproject.domains.Absence;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.repositories.AbsenceRepository;
@@ -25,7 +22,7 @@ public class AbsencesService {
 	public Absence createAbsence(Absence absence, MyAppUser userStudent) {
 
 		Absence absenceCreated = new Absence();
-		String studentId = userStudent.getId();// absence.getUserStudent().getId();
+		String studentId = userStudent.getId();
 		userStudent = myAppUserRepository.findUserById(studentId);
 
 		absenceCreated.setComment(absence.getComment());
