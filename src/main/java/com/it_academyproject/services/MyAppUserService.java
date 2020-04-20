@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.it_academyproject.exceptions.GenericResponse;
+import com.it_academyproject.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.it_academyproject.domains.Course;
@@ -17,6 +20,8 @@ import com.it_academyproject.repositories.MyAppUserRepository;
 
 @Service
 public class MyAppUserService {
+
+	private static final int ROLE_ID = 1;
 	
 	@Autowired
 	MyAppUserRepository myAppUserRepository;
@@ -64,6 +69,15 @@ public class MyAppUserService {
 			System.out.println("Student not found 404");
 		}
 		return student;
+	}
+
+	// get student by Id
+	public Optional<MyAppUser> getStudentById (String id) {
+		MyAppUser student = getById(id);
+		if (student!=null) {
+			if (student.getRole().getId() != ROLE_ID) throw new UserNotFoundException("User is not a student");
+		}
+		return Optional.ofNullable(student);
 	}
 	
 	//get by Iteration
