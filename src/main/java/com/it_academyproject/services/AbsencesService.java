@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.it_academyproject.domains.Absence;
 import com.it_academyproject.domains.MyAppUser;
+import com.it_academyproject.exceptions.ResourceNotFoundException;
 import com.it_academyproject.repositories.AbsenceRepository;
 import com.it_academyproject.repositories.MyAppUserRepository;
 
@@ -55,31 +56,10 @@ public class AbsencesService {
 		if (!myAbsenceRepository.findAll().isEmpty()) {
 
 			Absence absenceToEdit = myAbsenceRepository.findOneById(absence.getId());
-
-			String dateToEdit = absence.getDateMissing().toString();
-			String commentToEdit = absence.getComment();
-
-			// How to know if the JSON field exists or doesn't in the Postman body??
-
-			if (commentToEdit.isEmpty() || commentToEdit.equals(null)) {
-				absenceToEdit.setComment(absenceToEdit.getComment());
-				System.out.println("sin cambios en comment");
-			} else if (!commentToEdit.isEmpty()) {
-				absenceToEdit.setComment(commentToEdit);
-				System.out.println("Cambios en comment");
-			}
-
-			if (dateToEdit.isEmpty() || dateToEdit.equals(null)) {
-				absenceToEdit.setDateMissing(absenceToEdit.getDateMissing());
-				System.out.println("sin cambios en date");
-			} else if (!dateToEdit.isEmpty()) {
+			if (absence.getDateMissing()!=null && !absence.getDateMissing().toString().isEmpty())
 				absenceToEdit.setDateMissing(absence.getDateMissing());
-				System.out.println("Cambios en date");
-			}
-
-			// Comment and dateMissing fields can't quit of JSON Body and dateMissing can't
-			// be empty becasue in any of that cases POSTMANthrows 500 internal server
-			// error.
+			if (absence.getComment()!=null && !absence.getComment().isEmpty())
+				absenceToEdit.setComment(absence.getComment());
 
 			myAbsenceRepository.save(absenceToEdit);
 			return absenceToEdit;
