@@ -35,7 +35,10 @@ public class UserExerciseService {
 	CourseRepository courseRepository;
 	@Autowired
 	ItineraryRepository itineraryRepository;
+	@Autowired
+	ExerciceRepository exerciseRepository;
 
+<<<<<<< HEAD
 	// -----------------------------B-36---GET ALL EXERCISES PRUEBA PARTIENDO DEL BLOQUE DE ABAJO QUE ESTÁ COMENTADO-------------------------------------------------------------------------------------
 
 	// List exercises LIKE THAT:
@@ -195,6 +198,22 @@ public class UserExerciseService {
 			for (int i = 0; i < courseList.size(); i++) {
 				MyAppUser myAppUser = courseList.get(i).getUserStudent();
 				myAppUserList.add(myAppUser);
+=======
+	public JSONObject getExerciseStudentByItinerary (String itineraryIdString )
+	{
+		try
+		{
+			int itineraryId = Integer.parseInt(itineraryIdString);
+			Itinerary itinerary = itineraryRepository.findOneById( itineraryId );
+			List<Course> courseList = courseRepository.findByItineraryAndEndDate(itinerary , null);
+			List<MyAppUser> myAppUserList = new ArrayList<>();
+			Map<String , List<UserExercice>> userUserExerciceMap = new HashMap<>();
+			
+			for (int i = 0; i < courseList.size() ; i++)
+			{
+				MyAppUser myAppUser = courseList.get( i ).getUserStudent();
+				myAppUserList.add( myAppUser);
+>>>>>>> fdccecc10e41a1ed16a3006e79e998737c504598
 				List<UserExercice> userExerciceList = userExerciceRepository.findByUserStudent(myAppUser);
 				// remove the Student and Teacher fields that are not necessary
 				for (int j = 0; j < userExerciceList.size(); j++) {
@@ -203,7 +222,12 @@ public class UserExerciseService {
 				}
 				userUserExerciceMap.put(myAppUser.getfullName(), userExerciceList);
 			}
+<<<<<<< HEAD
 			JSONObject sendData = new JSONObject(userUserExerciceMap);
+=======
+			
+			JSONObject sendData = new JSONObject( userUserExerciceMap );
+>>>>>>> fdccecc10e41a1ed16a3006e79e998737c504598
 			return sendData;
 		} catch (Exception e) {
 			String exceptionMessage = e.getMessage();
@@ -216,6 +240,7 @@ public class UserExerciseService {
 		}
 	}
 
+<<<<<<< HEAD
 	public JSONObject getExerciseStudentByItinerary() {
 		// get all the itineraries
 		List<Itinerary> itineraryList = itineraryRepository.findAll();
@@ -224,10 +249,57 @@ public class UserExerciseService {
 			String itineraryId = Integer.toString(itineraryList.get(i).getId());
 			JSONObject returnJson = getExerciseStudentByItinerary(itineraryId);
 			sendData.put("Itinerary_" + itineraryId, returnJson);
+=======
+	
+	public List<Exercice> getAllExercises(){
+		
+		List<Exercice> allExercises = exerciseRepository.findAll();
+		
+
+		return allExercises;
+		
+	}
+	
+	
+	public List<UserExercice> getStudentsByExercise(Exercice exercise) {
+	
+		List<UserExercice> foundStudents = userExerciceRepository.findAllByExercice(exercise);
+		
+		return foundStudents;
+	}
+	
+	
+
+
+
+
+	public JSONObject getExerciseStudentByItinerary (  )
+	{
+
+		List<Itinerary> itineraryList = itineraryRepository.findAll();
+		JSONObject sendData = new JSONObject();
+		
+		for (int i = 0; i < itineraryList.size(); i++)
+		{
+			String itineraryId = Integer.toString( itineraryList.get(i).getId() );
+			JSONObject returnJson = getExerciseStudentByItinerary ( itineraryId );
+			sendData.put("Itinerary_" + itineraryId , returnJson );
+
+
+>>>>>>> fdccecc10e41a1ed16a3006e79e998737c504598
 		}
+		
 		return sendData;
 	}
 
+<<<<<<< HEAD
+=======
+	
+
+
+
+
+>>>>>>> fdccecc10e41a1ed16a3006e79e998737c504598
 	public JSONObject getExerciseStudentByStudent(MyAppUser student) {
 		try {
 
@@ -272,7 +344,11 @@ public class UserExerciseService {
 		}
 
 		return false;
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> fdccecc10e41a1ed16a3006e79e998737c504598
 	}
 
 }
