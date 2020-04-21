@@ -57,18 +57,7 @@ public class MyAppUser {
 	@JsonView(View.Summary.class)
 	@ManyToOne
 	private Seat seat;
-//<<<<<<< HEAD
-//=======
-//
-//	private String password;
-//	private boolean enabled;
-//	private Date lastLogin;
-//
-//>>>>>>> ce81c944983fb790a2c201452f59fe6bd208d1ea
-	
-	@JsonView(View.Summary.class)    
-	@ManyToOne
-	private Absence absence;
+
 
 	@ManyToOne (fetch = FetchType.EAGER)
 	@JoinColumn (name="rol_id")
@@ -246,31 +235,10 @@ public class MyAppUser {
 		this.seat = seat;
 	}
 
-/**
-	 * @return the absence
-	 */
-	public Absence getAbsence() {
-		return absence;
-	}
-
-	/**
-	 * @param absence the absence to set
-	 */
-	public void setAbsence(Absence absence) {
-		this.absence = absence;
-	}
-
-	//<<<<<<< HEAD
-	/**
-	 * @return the absences
-	 */
 	public List<Absence> getAbsences() {
 		return absences;
 	}
 
-	/**
-	 * @param absences the absences to set
-	 */
 	public void setAbsences(List<Absence> absences) {
 		this.absences = absences;
 	}

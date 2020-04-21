@@ -22,23 +22,16 @@ public class UserExercice {
 	//--------------------------Properties--------------------------------------------------------------
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@JsonView({View.SummaryWithOthers.class , View.noShow.class})
 	private int Id;
-	
-	@JsonView({View.SummaryWithOthers.class , View.noShow.class})
 	private String comments;
-	
-	@JsonView({View.SummaryWithOthers.class , View.noShow.class})
 	private Date date_status;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="statusExercice_id")
-	@JsonView({View.SummaryWithOthers.class , View.noShow.class})
 	private StatusExercice statusExercice;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="exercice_id")
-	@JsonView({View.SummaryWithOthers.class , View.noShow.class})
 	private Exercice exercice;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -48,7 +41,6 @@ public class UserExercice {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="teacher_id")
-	@JsonView({View.SummaryWithOthers.class , View.noShow.class})
 	private MyAppUser userTeacher;
 
 	//--------------------------Constructors--------------------------------------------------------------

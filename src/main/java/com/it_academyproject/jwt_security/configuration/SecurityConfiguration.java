@@ -33,52 +33,41 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 @ComponentScan("com.it_academyproject.jwt_security.security")
 @EnableGlobalMethodSecurity(securedEnabled = true)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter
-{
-    @Autowired
-    private WebApplicationContext applicationContext;
-    private MyUserDetailsService userDetailsService;
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+	@Autowired
+	private WebApplicationContext applicationContext;
+	private MyUserDetailsService userDetailsService;
 
-    @Autowired
-    private MyAppUserRepository myAppUserRepository;
-    
-    
+	@Autowired
+	private MyAppUserRepository myAppUserRepository;
 
-    @Autowired
-    private AuthenticationSuccessHandlerImpl successHandler;
+	@Autowired
+	private AuthenticationSuccessHandlerImpl successHandler;
 
-    @Autowired
-    private DataSource dataSource;
+	@Autowired
+	private DataSource dataSource;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
-    @PostConstruct
-    public void completeSetup ()
-    {
-        try
-        {
-            userDetailsService = applicationContext.getBean( MyUserDetailsService.class );
-        }
-        catch (BeansException e)
-        {
-            e.printStackTrace();
-        }
-    }
+	@PostConstruct
+	public void completeSetup() {
+		try {
+			userDetailsService = applicationContext.getBean(MyUserDetailsService.class);
+		} catch (BeansException e) {
+			e.printStackTrace();
+		}
+	}
 
-    @Override
-    protected void configure ( final AuthenticationManagerBuilder auth ) throws Exception
-    {
-        auth.userDetailsService( userDetailsService )
-                .passwordEncoder( encoder () )
-                .and()
-                .authenticationProvider( authenticationProvider() )
-                .jdbcAuthentication().dataSource(dataSource)
-                .usersByUsernameQuery("select email, password, enabled from users where email=?")
-                .authoritiesByUsernameQuery("select email, 'ROLE_USER' from users where email=?");
-    }
+	@Override
+	protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService).passwordEncoder(encoder()).and()
+				.authenticationProvider(authenticationProvider()).jdbcAuthentication().dataSource(dataSource)
+				.usersByUsernameQuery("select email, password, enabled from users where email=?")
+				.authoritiesByUsernameQuery("select email, 'ROLE_USER' from users where email=?");
+	}
 
-    @Override
+	@Override
     public void configure (WebSecurity web) throws Exception
     {
     //Original web ignoring. Expose only /public for data importer, and get/save pass
@@ -88,70 +77,55 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
     //B-17 task. Add to web.ignoring controllers used during development to avoid asking for a Token during dev
     	//Add endpoints when new controller is added in the API
     	web.ignoring()
-<<<<<<< HEAD
-        .antMatchers("/api/test/**","/api/public/**" , "/api/get-reset-email/**" , "/api/save-new-password/**" , "/api/students/**" , "/api/statistics/**" , "/api/userExercise/**","/api/iterations/**", "/api/projects/**", "/api/itineraries/**", "/api/useriteration/**", "/api/projectitinerary/**", "/api/absences/**");
-=======
-        .antMatchers("/api/test/**","/api/public/**" , "/api/get-reset-email/**" , "/api/save-new-password/**" , "/api/students/**" , "/api/statistics/**" , "/api/exercises/**","/api/iterations/**", "/api/projects/**", "/api/itineraries/**", "/api/useriteration/**", "/api/projectitinerary/**");
->>>>>>> fdccecc10e41a1ed16a3006e79e998737c504598
+        .antMatchers("/api/test/**","/api/public/**" , "/api/get-reset-email/**" , "/api/save-new-password/**" , "/api/students/**" , "/api/statistics/**" , "/api/exercises/**","/api/iterations/**", "/api/projects/**", "/api/itineraries/**", "/api/useriteration/**", "/api/projectitinerary/**", "/api/absences/**");
     }
 
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable().cors().and().authorizeRequests()
+				/* .antMatchers("/api/public/**").anonymous() */
+				.antMatchers("/api/**").authenticated().and()
+				.addFilter(new JwtAuthenticationFilter(authenticationManager(), myAppUserRepository))
+				.addFilter(new JwtAuthorizationFilter(authenticationManager())).sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+	}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception
-    {
-            http.csrf().disable()
-                .cors().and()
-                .authorizeRequests()
-                /*.antMatchers("/api/public/**").anonymous()*/
-                .antMatchers("/api/**").authenticated()
-                .and()
-                    .addFilter(new JwtAuthenticationFilter(authenticationManager() , myAppUserRepository))
-                .addFilter(new JwtAuthorizationFilter(authenticationManager()))
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    }
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider ()
-    {
-        final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService( userDetailsService );
-        authProvider.setPasswordEncoder( encoder() );
-        return authProvider;
-    }
-    @Bean
-    public PasswordEncoder encoder()
-    {
+	@Bean
+	public DaoAuthenticationProvider authenticationProvider() {
+		final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+		authProvider.setUserDetailsService(userDetailsService);
+		authProvider.setPasswordEncoder(encoder());
+		return authProvider;
+	}
 
-        //return passwordEncoder;
-        //return NoOpPasswordEncoder.getInstance();
-        return new BCryptPasswordEncoder(11);
-    }
-    @Bean
-    public SecurityEvaluationContextExtension securityEvaluationContextExtension()
-    {
-        return new SecurityEvaluationContextExtension();
-    }
-    /*@Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception
-    {
-        auth.inMemoryAuthentication()
-                .withUser("user")
-                .password(passwordEncoder().encode("password"))
-                .authorities("ROLE_USER");
-    }*/
+	@Bean
+	public PasswordEncoder encoder() {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(11);
-    }
+		// return passwordEncoder;
+		// return NoOpPasswordEncoder.getInstance();
+		return new BCryptPasswordEncoder(11);
+	}
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource()
-    {
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
-        return source;
-    }
+	@Bean
+	public SecurityEvaluationContextExtension securityEvaluationContextExtension() {
+		return new SecurityEvaluationContextExtension();
+	}
+	/*
+	 * @Override public void configure(AuthenticationManagerBuilder auth) throws
+	 * Exception { auth.inMemoryAuthentication() .withUser("user")
+	 * .password(passwordEncoder().encode("password")) .authorities("ROLE_USER"); }
+	 */
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder(11);
+	}
+
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+		return source;
+	}
 
 }
-

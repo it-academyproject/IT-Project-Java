@@ -5,11 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.it_academyproject.services.MyAppUserService;
 import com.it_academyproject.tools.View;
@@ -53,13 +49,20 @@ public class MyAppUserController {
 		return myAppUserService.getBySurname(student.getLastName());
 	}
 	
-	//Call student by Id
+	//Call student by Id in JSON Body request
 	@JsonView(View.SummaryWithOthers.class)
 	@GetMapping("api/students/id")
 	public MyAppUser getStudentById(@RequestBody MyAppUser student){
 		return myAppUserService.getById(student.getId());
 	}
-	
+
+	//Call student by Id as path variable
+	@JsonView(View.SummaryWithOthers.class)
+	@GetMapping("api/students/id/{id}")
+	public MyAppUser getStudentById(@PathVariable String id){
+		return myAppUserService.getById(id);
+	}
+
 	//Call students by iteration
 //	@JsonView(View.SummaryWithOthers.class)
 //	@GetMapping("api/students/iteration")
@@ -92,6 +95,4 @@ public class MyAppUserController {
 //		user.setIterations(iteration);	
 		
 }
-	
-	
 

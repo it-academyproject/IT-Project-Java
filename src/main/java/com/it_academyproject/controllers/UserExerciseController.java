@@ -1,4 +1,3 @@
-
 package com.it_academyproject.controllers;
 
 
@@ -59,44 +58,6 @@ public class UserExerciseController
 		}
 	}
 	
-<<<<<<< HEAD
-//	-----------------------------MODELO ANTERIOR JSON RARO------------------------------------------------------------------
-//	
-//	@GetMapping ("/api/userExercise")
-//	public ResponseEntity  getExerciseStudentByItinerary ( )
-//	{
-//		try
-//		{
-//			//get a list of all the itnerarys
-//
-//			JSONObject sendData = userExerciseService.getExerciseStudentByItinerary( );
-//			return new ResponseEntity( sendData.toString() , HttpStatus.FOUND);
-//		}
-//		catch (Exception e)
-//		{
-//			String exceptionMessage = e.getMessage();
-//			JSONObject sendData = new JSONObject();
-//			JSONObject message = new JSONObject();
-//			message.put("type" , "error");
-//			message.put("message" , exceptionMessage);
-//			sendData.put("Message" , message);
-//			return new ResponseEntity( sendData.toString() , HttpStatus.BAD_REQUEST);
-//		}
-//	}
-//	-----------------------------------------------------------------------------------------------------------------------
-	
-	@GetMapping ("/api/userExercise")
-	public ResponseEntity  getExercises ( )
-	{
-		try
-		{
-			//get a list of all the itnerarys
-
-			JSONObject sendData = userExerciseService.getAllExercises( );
-			return new ResponseEntity( sendData.toString() , HttpStatus.FOUND);
-		}
-		catch (Exception e)
-=======
 	
 	@GetMapping ("/api/exercises")
 	public Map<Integer,ExerciseListDTO> getAllExerciseswithStudents ( )
@@ -105,7 +66,6 @@ public class UserExerciseController
 		Map<Integer,ExerciseListDTO> allExerciseswithStudents = new HashMap<Integer,ExerciseListDTO>();
 		
 		for (Exercice exercise : foundExercises)
->>>>>>> fdccecc10e41a1ed16a3006e79e998737c504598
 		{
 		
 			List<UserExercice> studentsforThatExercise= userExerciseService.getStudentsByExercise(exercise);
@@ -154,5 +114,7 @@ public class UserExerciseController
 		return userExerciseService.setUserExerciseStatusData(userExercice);
 		
 	}
-}
+	
 
+
+}
