@@ -17,7 +17,9 @@ import com.it_academyproject.tools.View;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -83,22 +85,24 @@ public class UserExerciseController
 	@GetMapping ("/api/exercises/Student_id")
 	public ResponseEntity<String>  getExercicesbyStudentId (@RequestBody MyAppUser student){
 
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.setContentType(MediaType.APPLICATION_JSON);
+
 		try
 		{
 			JSONObject sendData = userExerciseService.getExerciseStudentByStudent(userService.getStudentById(student.getId())
 					.orElseThrow(()-> new UserNotFoundException("User not found: " + student.getId())));
-			return new ResponseEntity( sendData.toString() , HttpStatus.FOUND);
+			return new ResponseEntity( sendData.toString() , responseHeaders, HttpStatus.FOUND);
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception message: " + e.getMessage());
 			String exceptionMessage = e.getMessage();
 			JSONObject sendData = new JSONObject();
 			JSONObject message = new JSONObject();
 			message.put("type" , "error");
 			message.put("message" , exceptionMessage);
 			sendData.put("Message" , message);
-			return new ResponseEntity( sendData.toString() ,
+			return new ResponseEntity( sendData.toString() , responseHeaders,
 					(e.getClass()==UserNotFoundException.class)?HttpStatus.NOT_FOUND:HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -107,11 +111,14 @@ public class UserExerciseController
 	@GetMapping ("/api/exercises/student_id/{id}")
 	public ResponseEntity<String>  getExercisesByStudentId (@PathVariable(name="id") String id){
 
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.setContentType(MediaType.APPLICATION_JSON);
+
 		try
 		{
 			JSONObject sendData = userExerciseService.getExerciseStudentByStudent(userService.getStudentById(id)
 					.orElseThrow(()-> new UserNotFoundException("User not found: " + id)));
-			return new ResponseEntity( sendData.toString() , HttpStatus.OK);
+			return new ResponseEntity( sendData.toString(), responseHeaders, HttpStatus.OK);
 		}
 		catch (Exception e)
 		{
@@ -121,7 +128,7 @@ public class UserExerciseController
 			message.put("type" , "error");
 			message.put("message" , exceptionMessage);
 			sendData.put("Message" , message);
-			return new ResponseEntity( sendData.toString() ,
+			return new ResponseEntity( sendData.toString(), responseHeaders,
 					(e.getClass()==UserNotFoundException.class)?HttpStatus.NOT_FOUND:HttpStatus.BAD_REQUEST);
 		}
 	}
