@@ -36,7 +36,7 @@ public class MyAppUserController {
 	}
 	
 	@JsonView(View.ShortDetails.class)
-	@GetMapping("/api/students/shortDetails")
+	@GetMapping("/api/students/short-details")
 	public List<MyAppUser> getAllStudentsshortDetails()
 	{
 		return myAppUserService.getAllStudents();
