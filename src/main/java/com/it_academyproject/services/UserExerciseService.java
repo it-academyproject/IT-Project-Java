@@ -139,7 +139,8 @@ public class UserExerciseService
 				{
 					userExerciceList.get(j).setUserStudent ( null );
 					// Avoid show the hashed teacher password
-					userExerciceList.get(j).getUserTeacher().setPassword(null);
+					if (userExerciceList.get(j).getUserTeacher()!=null)
+						userExerciceList.get(j).getUserTeacher().setPassword(null);
 				}
 				userUserExerciceMap.put(myAppUser.getId() , userExerciceList );
 			}
