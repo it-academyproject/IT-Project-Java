@@ -1,7 +1,6 @@
-package com.it_academyproject.controllers.exerciseListDTOs;
+package com.it_academyproject.controllers.DTOs.exerciseListDTOs;
 
 import com.it_academyproject.domains.UserExercice;
-import org.springframework.web.servlet.support.JstlUtils;
 
 import java.util.ArrayList;
 import java.util.List;

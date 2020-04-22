@@ -3,8 +3,8 @@ package com.it_academyproject.controllers;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.it_academyproject.controllers.exerciseListDTOs.ExercisesFromStudentDTO;
-import com.it_academyproject.controllers.exerciseListDTOs.ExerciseListDTO;
+import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExercisesFromStudentDTO;
+import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseListDTO;
 import com.it_academyproject.domains.Exercice;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.UserExercice;
