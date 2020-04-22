@@ -58,8 +58,7 @@ public class UserExerciseController
 			return new ResponseEntity( sendData.toString() , HttpStatus.BAD_REQUEST);
 		}
 	}
-	
-	
+
 	@GetMapping ("/api/exercises")
 	public Map<Integer,ExerciseListDTO> getAllExerciseswithStudents ( )
 	{
@@ -72,75 +71,14 @@ public class UserExerciseController
 			List<UserExercice> studentsforThatExercise= userExerciseService.getStudentsByExercise(exercise);
 			allExerciseswithStudents.put(exercise.getId(), new ExerciseListDTO(exercise.getName(),exercise.getItinerary(),studentsforThatExercise));
 		}
-		
 
 	return allExerciseswithStudents;
 	}
-	
 
-	@JsonView(View.Summary.class)
-	@GetMapping ("/api/exercises/Student_id")
-	public ResponseEntity<String>  getExercicesbyStudentId (@RequestBody MyAppUser student){
-
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setContentType(MediaType.APPLICATION_JSON);
-
-		try
-		{
-			JSONObject sendData = userExerciseService.getExerciseStudentByStudent(userService.getStudentById(student.getId())
-					.orElseThrow(()-> new UserNotFoundException("User not found: " + student.getId())));
-			return new ResponseEntity( sendData.toString() , responseHeaders, HttpStatus.FOUND);
-		}
-		catch (Exception e)
-		{
-			String exceptionMessage = e.getMessage();
-			JSONObject sendData = new JSONObject();
-			JSONObject message = new JSONObject();
-			message.put("type" , "error");
-			message.put("message" , exceptionMessage);
-			sendData.put("Message" , message);
-			return new ResponseEntity( sendData.toString() , responseHeaders,
-					(e.getClass()==UserNotFoundException.class)?HttpStatus.NOT_FOUND:HttpStatus.BAD_REQUEST);
-		}
-	}
-
-	@GetMapping ("/api/exercises/student_id-new/{id}")
+	@GetMapping ("/api/exercises/student-id/{id}")
 	public List<ExerciseFromStudentDTO> getExercisesByStudentIdNew (@PathVariable(name="id") String id){
 		return ExerciseFromStudentDTO.getList(userExerciseService.getExercisesByStudentId(id));
 	}
-	/*public Map<String, List<UserExercice>>  getExercisesByStudentIdNew (@PathVariable(name="id") String id){
-		Map<String, List<UserExercice>> response = new HashMap<>();
-		response.put(id, userExerciseService.getExercisesByStudentId(id));
-		return response;
-	}*/
-
-	@JsonView(View.Summary.class)
-	@GetMapping ("/api/exercises/student_id/{id}")
-	public ResponseEntity<String>  getExercisesByStudentId (@PathVariable(name="id") String id){
-
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setContentType(MediaType.APPLICATION_JSON);
-
-		try
-		{
-			JSONObject sendData = userExerciseService.getExerciseStudentByStudent(userService.getStudentById(id)
-					.orElseThrow(()-> new UserNotFoundException("User not found: " + id)));
-			return new ResponseEntity( sendData.toString(), responseHeaders, HttpStatus.OK);
-		}
-		catch (Exception e)
-		{
-			String exceptionMessage = e.getMessage();
-			JSONObject sendData = new JSONObject();
-			JSONObject message = new JSONObject();
-			message.put("type" , "error");
-			message.put("message" , exceptionMessage);
-			sendData.put("Message" , message);
-			return new ResponseEntity( sendData.toString(), responseHeaders,
-					(e.getClass()==UserNotFoundException.class)?HttpStatus.NOT_FOUND:HttpStatus.BAD_REQUEST);
-		}
-	}
-
-
 
 	/*
 	 * Modelo de llamada PUT: { "id": 1, "statusExercice":{"id":4} }
@@ -152,12 +90,7 @@ public class UserExerciseController
 	@JsonView(View.Summary.class)
 	@PutMapping("/api/exercises/exercice_id")
 	public boolean setUserExerciseStatusData(@RequestBody UserExercice userExercice) { 
-
 		return userExerciseService.setUserExerciseStatusData(userExercice);
-		
 	}
-	
-
-
 }
 
