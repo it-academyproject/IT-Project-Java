@@ -22,6 +22,7 @@ public class Course {
 	@Id
 	@JsonView(View.Summary.class)
 	private int id;
+	@JsonView(View.Summary.class)
 	private Date beginDate;
 	@JsonView(View.Summary.class)
 	private Date endDate;

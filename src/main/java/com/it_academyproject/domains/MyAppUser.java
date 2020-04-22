@@ -68,6 +68,7 @@ public class MyAppUser {
 	private Role role;
 	
 	@OneToMany (targetEntity = Absence.class, cascade = CascadeType.ALL)
+	@JsonView(View.Summary.class)
 	private List <Absence> absences = new ArrayList <Absence>();
 	@OneToMany (targetEntity = Course.class, cascade = CascadeType.ALL)
 	@JsonView(View.Summary.class)
@@ -233,6 +234,10 @@ public class MyAppUser {
 
 	public void setCourses(List<Course> courses) {
 		this.courses = courses;
+	}
+	
+	public void setAbsences(List<Absence> absences) {
+		this.absences = absences;
 	}
 
 //	public Set<Iteration> getIterations() {
