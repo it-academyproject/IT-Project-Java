@@ -3,7 +3,7 @@ package com.it_academyproject.controllers;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExercisesFromStudentDTO;
+import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseFromStudentDTO;
 import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseListDTO;
 import com.it_academyproject.domains.Exercice;
 import com.it_academyproject.domains.MyAppUser;
@@ -105,8 +105,8 @@ public class UserExerciseController
 	}
 
 	@GetMapping ("/api/exercises/student_id-new/{id}")
-	public ExercisesFromStudentDTO getExercisesByStudentIdNew (@PathVariable(name="id") String id){
-		return new ExercisesFromStudentDTO(id, userExerciseService.getExercisesByStudentId(id));
+	public List<ExerciseFromStudentDTO> getExercisesByStudentIdNew (@PathVariable(name="id") String id){
+		return ExerciseFromStudentDTO.getList(userExerciseService.getExercisesByStudentId(id));
 	}
 	/*public Map<String, List<UserExercice>>  getExercisesByStudentIdNew (@PathVariable(name="id") String id){
 		Map<String, List<UserExercice>> response = new HashMap<>();
