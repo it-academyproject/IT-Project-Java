@@ -1,3 +1,4 @@
+
 package com.it_academyproject.domains;
 
 
@@ -32,13 +33,13 @@ public class MyAppUser {
 	
 	//@GeneratedValue(strategy=GenerationType.IDENTITY)	
 	@Id
-	@JsonView(View.Summary.class)
+	@JsonView({View.Summary.class, View.ShortDetails.class})
 	private String id;
 	
-	@JsonView(View.Summary.class)
+	@JsonView({View.Summary.class, View.ShortDetails.class})
 	private String firstName;
 	
-	@JsonView(View.Summary.class)
+	@JsonView({View.Summary.class, View.ShortDetails.class})
 	private String lastName;
 
 	@JsonView(View.SummaryWithOthers.class)
