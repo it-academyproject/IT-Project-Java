@@ -26,6 +26,9 @@ public class MyAppUserService {
 
 	@Autowired
 	CourseService courseService;
+	
+	@Autowired
+	AbsencesService absencesService;
 		
 	//getAll
 	public List<MyAppUser> getAllStudents(){
@@ -61,7 +64,7 @@ public class MyAppUserService {
 		if(studentOptional.isPresent()) {
 			student = studentOptional.get();
 			student.setCourses(courseService.findByUserStudent(student));
-//			student.setAbsences(absenceS);
+			student.setTotalAbsences(absencesService.getAbsenceByStudentId(student).size());
 
 		}else {
 			System.out.println("Student not found 404");
