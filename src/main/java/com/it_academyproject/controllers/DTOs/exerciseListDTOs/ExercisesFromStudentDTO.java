@@ -17,6 +17,8 @@ public class ExercisesFromStudentDTO {
         userExercices.forEach(userExercice -> exercises.add(new ExerciseDTO(userExercice)));*/
     }
 
+
+
     /*public static ExercisesFromStudentDTO userExercisesList(String id, List<UserExercice> exercises) {
         return new ExercisesFromStudentDTO()
     }*/
@@ -31,8 +33,8 @@ public class ExercisesFromStudentDTO {
 
     static class ExerciseDTO {
 
-        private String itinerary;
         private String name;
+        private String itinerary;
         private String status;
         private String teacher;
 
