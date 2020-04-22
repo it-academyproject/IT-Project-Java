@@ -3,12 +3,12 @@ package com.it_academyproject.controllers;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.it_academyproject.controllers.exerciseListDTOs.ExercisesFromStudentDTO;
 import com.it_academyproject.controllers.exerciseListDTOs.ExerciseListDTO;
 import com.it_academyproject.domains.Exercice;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.UserExercice;
 import com.it_academyproject.exceptions.UserNotFoundException;
-import com.it_academyproject.repositories.MyAppUserRepository;
 import com.it_academyproject.repositories.UserExerciceRepository;
 import com.it_academyproject.services.MyAppUserService;
 import com.it_academyproject.services.UserExerciseService;
@@ -23,12 +23,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 public class UserExerciseController
@@ -106,6 +103,16 @@ public class UserExerciseController
 					(e.getClass()==UserNotFoundException.class)?HttpStatus.NOT_FOUND:HttpStatus.BAD_REQUEST);
 		}
 	}
+
+	@GetMapping ("/api/exercises/student_id-new/{id}")
+	public ExercisesFromStudentDTO getExercisesByStudentIdNew (@PathVariable(name="id") String id){
+		return new ExercisesFromStudentDTO(id, userExerciseService.getExercisesByStudentId(id));
+	}
+	/*public Map<String, List<UserExercice>>  getExercisesByStudentIdNew (@PathVariable(name="id") String id){
+		Map<String, List<UserExercice>> response = new HashMap<>();
+		response.put(id, userExerciseService.getExercisesByStudentId(id));
+		return response;
+	}*/
 
 	@JsonView(View.Summary.class)
 	@GetMapping ("/api/exercises/student_id/{id}")

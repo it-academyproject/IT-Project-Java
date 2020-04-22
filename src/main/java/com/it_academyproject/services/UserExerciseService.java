@@ -5,6 +5,7 @@ import com.it_academyproject.domains.Exercice;
 import com.it_academyproject.domains.Itinerary;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.UserExercice;
+import com.it_academyproject.exceptions.UserNotFoundException;
 import com.it_academyproject.repositories.CourseRepository;
 import com.it_academyproject.repositories.ExerciceRepository;
 import com.it_academyproject.repositories.ItineraryRepository;
@@ -30,6 +31,8 @@ public class UserExerciseService
 	UserExerciceRepository userExerciceRepository;
 	@Autowired
 	MyAppUserRepository myAppUserRepository;
+	@Autowired
+	MyAppUserService userService;
 	@Autowired
 	CourseRepository courseRepository;
 	@Autowired
@@ -116,10 +119,10 @@ public class UserExerciseService
 		return sendData;
 	}
 
-	
-
-
-
+	public List<UserExercice> getExercisesByStudentId(String id) {
+		return userExerciceRepository.findByUserStudent(userService.getStudentById(id)
+				.orElseThrow(() -> new UserNotFoundException("Student not found: " + id)));
+	}
 
 	public JSONObject getExerciseStudentByStudent(MyAppUser student) {
 		try
@@ -144,6 +147,7 @@ public class UserExerciseService
 				}
 				userUserExerciceMap.put(myAppUser.getId() , userExerciceList );
 			}
+			List <UserExercice> result = getExercisesByStudentId(student.getId());
 			JSONObject sendData = new JSONObject( userUserExerciceMap );
 			return sendData;
 		}
