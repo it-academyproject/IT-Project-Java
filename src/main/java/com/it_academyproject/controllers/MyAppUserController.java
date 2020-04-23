@@ -28,7 +28,6 @@ public class MyAppUserController {
 	IterationRepository iterationRepository;
 	
 	//Call for students
-	//@JsonView(View.Summary.class)
 	@JsonView(View.Summary.class)
 	@GetMapping("/api/students")
 	public List<MyAppUser> getAllStudents(){
