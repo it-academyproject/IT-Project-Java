@@ -81,12 +81,9 @@ public class UserExerciseController
 	public List<ExerciseFromStudentDTO> getExercisesByStudentIdNew (@PathVariable(name="id") String id){
 		try {
 			return ExerciseFromStudentDTO.getList(userExerciseService.getExercisesByStudentId(id));
-		} catch (UserNotFoundException e) {
+		} catch (UserNotFoundException | BadRoleException e) {
 			throw new ResponseStatusException(
-					HttpStatus.NOT_FOUND, e.getMessage(), e);
-		} catch (BadRoleException e) {
-			throw new ResponseStatusException(
-					HttpStatus.BAD_REQUEST, e.getMessage());
+					HttpStatus.NOT_FOUND, "User does not exist or it's not a student", e);
 		}
 	}
 
