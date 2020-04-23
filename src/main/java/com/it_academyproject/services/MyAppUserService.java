@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.it_academyproject.exceptions.BadRoleException;
 import com.it_academyproject.exceptions.GenericResponse;
 import com.it_academyproject.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +76,7 @@ public class MyAppUserService {
 	public Optional<MyAppUser> getStudentById (String id) {
 		MyAppUser student = getById(id);
 		if (student!=null) {
-			if (student.getRole().getId() != ROLE_ID) throw new UserNotFoundException("User is not a student");
+			if (student.getRole().getId() != ROLE_ID) throw new BadRoleException("User is not a student");
 		}
 		return Optional.ofNullable(student);
 	}

@@ -8,6 +8,7 @@ import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseListDTO;
 import com.it_academyproject.domains.Exercice;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.UserExercice;
+import com.it_academyproject.exceptions.BadRoleException;
 import com.it_academyproject.exceptions.UserNotFoundException;
 import com.it_academyproject.repositories.UserExerciceRepository;
 import com.it_academyproject.services.MyAppUserService;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -77,7 +79,15 @@ public class UserExerciseController
 
 	@GetMapping ("/api/exercises/student-id/{id}")
 	public List<ExerciseFromStudentDTO> getExercisesByStudentIdNew (@PathVariable(name="id") String id){
-		return ExerciseFromStudentDTO.getList(userExerciseService.getExercisesByStudentId(id));
+		try {
+			return ExerciseFromStudentDTO.getList(userExerciseService.getExercisesByStudentId(id));
+		} catch (UserNotFoundException e) {
+			throw new ResponseStatusException(
+					HttpStatus.NOT_FOUND, e.getMessage(), e);
+		} catch (BadRoleException e) {
+			throw new ResponseStatusException(
+					HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 	}
 
 	/*
