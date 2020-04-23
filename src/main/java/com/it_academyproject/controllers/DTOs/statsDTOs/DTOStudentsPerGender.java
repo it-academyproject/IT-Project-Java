@@ -1,4 +1,4 @@
-package com.it_academyproject.controllers.statsDTOs;
+package com.it_academyproject.controllers.DTOs.statsDTOs;
 
 public class DTOStudentsPerGender {
 

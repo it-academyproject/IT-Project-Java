@@ -1,4 +1,4 @@
-package com.it_academyproject.controllers.exerciseListDTOs;
+package com.it_academyproject.controllers.DTOs.exerciseListDTOs;
 
 import java.util.Date;
 
