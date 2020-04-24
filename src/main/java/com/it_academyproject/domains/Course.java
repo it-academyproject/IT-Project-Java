@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.tools.View;
 
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -104,5 +105,23 @@ public class Course {
 
 	public void setItinerary(Itinerary itinerary) {
 		this.itinerary = itinerary;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Course)) return false;
+		Course course = (Course) o;
+		return getId() == course.getId() &&
+				Objects.equals(getBeginDate(), course.getBeginDate()) &&
+				Objects.equals(getEndDate(), course.getEndDate()) &&
+				getUserStudent().equals(course.getUserStudent()) &&
+				Objects.equals(getUserTeacher(), course.getUserTeacher()) &&
+				Objects.equals(getItinerary(), course.getItinerary());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getId(), getBeginDate(), getEndDate(), getUserStudent(), getUserTeacher(), getItinerary());
 	}
 }

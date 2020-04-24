@@ -65,7 +65,7 @@ public class MyAppUserService {
 		MyAppUser student = null;
 		Optional<MyAppUser> studentOptional = myAppUserRepository.findById(id);
 		if(studentOptional.isPresent()) {
-			student = studentOptional.get();
+			student = updateStudentCourses(studentOptional.get());
 		}else {
 			System.out.println("Student not found 404");
 		}
@@ -109,7 +109,7 @@ public class MyAppUserService {
 				user.setLastName(student.getLastName());
 			myAppUserRepository.save(user);
 
-			return user;
+			return updateStudentCourses(user);
 
 		} else {
 			return null;

@@ -9,7 +9,7 @@ public class Constants {
     public static final String STUDENT_LAST_NAME ="CAMPO LEMUS";
     public static final String STUDENT_EMAIL="email.student46@gmail.com";
     // jsonPath doesn't like chars, need to be String
-    public static final String STUDENT_GENDER = "F";
+    public static final char STUDENT_GENDER = 'F';
     public static final int STUDENT_AGE = 43;
     public static final String STUDENT_PORTRAIT = null;
     public static final int STUDENT_SEAT_ROW = 2;

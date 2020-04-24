@@ -82,7 +82,6 @@ public class MyAppUserController {
 	@PutMapping("api/students/id")
 	public MyAppUser putStudentById(@RequestBody MyAppUser student){
 		return myAppUserService.editStudent( student);
-
 	}
 		
 //	@PutMapping("/api/students/{userId}")
