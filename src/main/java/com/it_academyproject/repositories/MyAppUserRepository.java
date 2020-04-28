@@ -23,6 +23,8 @@ public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
 	
 
 	Optional <MyAppUser> findOneById(String id );
+	
+	MyAppUser findUserById(String id );
 
 	MyAppUser findByEmail(String email);
 
