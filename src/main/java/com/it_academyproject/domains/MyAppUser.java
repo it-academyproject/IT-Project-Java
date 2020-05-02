@@ -1,3 +1,4 @@
+
 package com.it_academyproject.domains;
 
 
@@ -24,13 +25,14 @@ public abstract class MyAppUser {
 
 	//@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
-	@JsonView(View.Summary.class)
+	@JsonView({View.Summary.class, View.ShortDetails.class})
 	private String id;
 
-	@JsonView(View.Summary.class)
+	
+	@JsonView({View.Summary.class, View.ShortDetails.class})
 	private String firstName;
-
-	@JsonView(View.Summary.class)
+	
+	@JsonView({View.Summary.class, View.ShortDetails.class})
 	private String lastName;
 
 	@JsonView(View.SummaryWithOthers.class)
@@ -53,6 +55,11 @@ public abstract class MyAppUser {
 
 	private Role role;
 
+	
+	@OneToMany (targetEntity = Absence.class, cascade = CascadeType.ALL)
+	private List <Absence> absences = new ArrayList <Absence>();
+	@JsonView(View.Summary.class)
+	private int totalAbsences;
 	@OneToMany (targetEntity = Course.class, cascade = CascadeType.ALL)
 	@JsonView(View.Summary.class)
 	private List <Course> courses = new ArrayList <Course>();
@@ -189,7 +196,7 @@ public abstract class MyAppUser {
 	}
 
 	public Role getRole() {
-		return role;
+		return this.role;
 	}
 
 	public void setRole(Role role) {
@@ -230,6 +237,19 @@ public abstract class MyAppUser {
 				", emails=" + emails +
 				", userIterations=" + userIterations +
 				'}';
+	}
+	
+
+	public List<Absence> getAbsences() {
+		return absences;
+	}
+	
+	public void setAbsences(List<Absence> absences) {
+		this.absences = absences;
+	}
+
+	public void setTotalAbsences(int totalAbsences) {
+		this.totalAbsences = totalAbsences;
 	}
 
 	//	public Set<Iteration> getIterations() {

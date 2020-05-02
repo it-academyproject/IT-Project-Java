@@ -1,6 +1,22 @@
 package com.it_academyproject.services;
 
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import com.it_academyproject.exceptions.BadRoleException;
+import com.it_academyproject.exceptions.GenericResponse;
+import com.it_academyproject.exceptions.UserNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import com.it_academyproject.domains.Course;
+import com.it_academyproject.domains.Iteration;
 import com.it_academyproject.domains.MyAppUser;
+import com.it_academyproject.domains.MyAppUser.Role;
 import com.it_academyproject.domains.Student;
 import com.it_academyproject.domains.Teacher;
 import com.it_academyproject.exceptions.ResourceNotFoundException;
@@ -16,6 +32,10 @@ import java.util.Optional;
 @Service
 public class MyAppUserService {
 
+
+	private static final Role ROLE_ID = Role.STUDENT;
+	
+
 	@Autowired
 	MyAppUserRepository myAppUserRepository;
 	
@@ -24,6 +44,11 @@ public class MyAppUserService {
 
 	@Autowired
 	CourseService courseService;
+
+	
+	@Autowired
+	AbsencesService absencesService;
+		
 
 	//getAll
 	public List<Student> getAllStudents(){
@@ -61,11 +86,17 @@ public class MyAppUserService {
 	}*/
 
 	//get by Id
-	public MyAppUser getById(String id) {
-		MyAppUser myAppUser = null;
+	public Student getById(String id) {
+		System.out.println(id);
+		Student myAppUser = null;
 		Optional<MyAppUser> studentOptional = myAppUserRepository.findById(id);
 		if(studentOptional.isPresent()) {
-			myAppUser = studentOptional.get();
+
+			myAppUser = (Student)studentOptional.get();
+
+			myAppUser.setCourses(courseService.findByUserStudent(myAppUser));
+			myAppUser.setTotalAbsences(absencesService.getAbsenceByStudentId(myAppUser).size());
+
 		}else {
 			System.out.println("User not found 404");
 		}
@@ -73,9 +104,18 @@ public class MyAppUserService {
 		return updateStudentCourses((Student) myAppUser);
 	}
 
-	private MyAppUser updateStudentCourses(Student student) {
+	private Student updateStudentCourses(Student student) {
 		student.setCourses(courseService.findByUserStudent(student));
 		return student;
+	}
+
+	// get student by Id
+	public Optional<Student> getStudentById (String id) {
+		Student student = (Student)getById(id);
+		if (student!=null) {
+			if (student.getRole() != ROLE_ID) throw new BadRoleException("User is not a student");
+		}
+		return Optional.ofNullable(student);
 	}
 	
 	//get by Iteration
@@ -128,7 +168,7 @@ public class MyAppUserService {
 
 	// Return full name given an id . Format "surname, name"
 	public String getFullNameById(String studentId) {
-		MyAppUser student = getById(studentId);
+		Student student = getById(studentId);
 		return student.getLastName() + ", " + student.getFirstName();
 	}
 

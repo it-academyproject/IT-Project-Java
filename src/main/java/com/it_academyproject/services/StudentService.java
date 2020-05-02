@@ -16,9 +16,20 @@ public class StudentService {
 	@Autowired
 	MyAppUserRepository userRepository;
 
+	
+	@Autowired
+	CourseService courseService;
+
 	//getAll
 	public List<Student> getAllStudents(){
-		return (List<Student>) userRepository.findByRole(MyAppUser.Role.STUDENT);
+		return updateStudentCourses((List<Student>) userRepository.findByRole(MyAppUser.Role.STUDENT));
+	}
+
+	private List<Student> updateStudentCourses(List<Student> students) {
+		for (Student student : students) {
+			student.setCourses(courseService.findByUserStudent(student));
+		}
+		return students;
 	}
 
 	//get by name

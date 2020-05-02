@@ -1,19 +1,18 @@
 package com.it_academyproject.services;
 
 import com.it_academyproject.domains.*;
+import com.it_academyproject.exceptions.UserNotFoundException;
 import com.it_academyproject.repositories.CourseRepository;
 import com.it_academyproject.repositories.ItineraryRepository;
 import com.it_academyproject.repositories.MyAppUserRepository;
 import com.it_academyproject.repositories.UserExerciseRepository;
+import com.it_academyproject.repositories.ExerciseRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 @Service
 public class UserExerciseService
@@ -21,23 +20,25 @@ public class UserExerciseService
 	@Autowired
 	UserExerciseRepository userExerciseRepository;
 	@Autowired
-	MyAppUserRepository myAppUserRepository;
+	MyAppUserService userService;
 	@Autowired
 	CourseRepository courseRepository;
 	@Autowired
 	ItineraryRepository itineraryRepository;
+	@Autowired
+	ExerciseRepository exerciseRepository;
 
 	public JSONObject getExerciseStudentByItinerary (String itineraryIdString )
 	{
 		try
 		{
-			//convert the itineraryIdString to a int
 			int itineraryId = Integer.parseInt(itineraryIdString);
 			Itinerary itinerary = itineraryRepository.findOneById( itineraryId );
-			//get only active students
 			List<Course> courseList = courseRepository.findByItineraryAndEndDate(itinerary , null);
 			List<Student> students = new ArrayList<>();
 			Map<String , List<UserExercise>> userUserExerciseMap = new HashMap<>();
+
+
 			for (int i = 0; i < courseList.size() ; i++)
 			{
 				Student student = courseList.get( i ).getUserStudent();
@@ -50,6 +51,7 @@ public class UserExerciseService
 				}
 				userUserExerciseMap.put(student.getId() , userExerciseList);
 			}
+
 			JSONObject sendData = new JSONObject( userUserExerciseMap );
 			return sendData;
 		}
@@ -65,28 +67,10 @@ public class UserExerciseService
 		}
 	}
 
-	
-
-
-
-
-
-	public JSONObject getExerciseStudentByItinerary (  )
-	{
-		//get all the itineraries
-		List<Itinerary> itineraryList = itineraryRepository.findAll();
-		JSONObject sendData = new JSONObject();
-		for (int i = 0; i < itineraryList.size(); i++)
-		{
-			String itineraryId = Integer.toString( itineraryList.get(i).getId() );
-			JSONObject returnJson = getExerciseStudentByItinerary ( itineraryId );
-			sendData.put("Itinerary_" + itineraryId , returnJson );
-
-
-		}
-		return sendData;
+	public List<Exercise> getAllExercises(){
+		List<Exercise> allExercises = exerciseRepository.findAll();
+		return allExercises;
 	}
-
 
 
 
@@ -125,12 +109,21 @@ public class UserExerciseService
 		}
 	}
 
+	public List<UserExercise> getStudentsByExercise(Exercise exercise) {
+		List<UserExercise> foundStudents = userExerciseRepository.findAllByExercise(exercise);
+		return foundStudents;
+	}
 
+	public List<UserExercise> getExercisesByStudentId(String id) {
+		return userExerciseRepository.findByUserStudent(userService.getStudentById(id)
+				.orElseThrow(() -> new UserNotFoundException("Student not found: " + id)));
+	}
 
 	public boolean setUserExerciseStatusData(UserExercise userExercise) {
 		System.out.println("UserExercise: " + userExercise.toString());
 		List <UserExercise> list = userExerciseRepository.findAll();
 		for (int i=0; i<list.size(); i++) {
+
 			if (list.get(i).getId() == userExercise.getId()) {
 				Date date = new Date();	
 				list.get(i).setDate_status(date);
@@ -139,14 +132,8 @@ public class UserExerciseService
 				return true;
 			}
 		}
-
 		return false;
-		
 	}
-
-	
-
-
 }
 
 

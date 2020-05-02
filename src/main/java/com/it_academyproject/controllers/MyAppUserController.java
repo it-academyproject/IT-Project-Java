@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.web.bind.annotation.*;
+
+
 import java.util.List;
 
 @RestController
@@ -21,6 +24,7 @@ public class MyAppUserController {
 	@Autowired
 	StudentService studentService;
 
+	@Autowired
 	MyAppUserService myAppUserService;
 	
 	@Autowired
@@ -37,6 +41,13 @@ public class MyAppUserController {
 		return studentService.getAllStudents();
 	}
 	
+	@JsonView(View.ShortDetails.class)
+	@GetMapping("/api/students/short-details")
+	public List<Student> getAllStudentsshortDetails()
+	{
+		return myAppUserService.getAllStudents();
+	}
+	
 	//Call students by name
 	@JsonView(View.Summary.class)
 	@GetMapping("/api/students/name")
@@ -51,13 +62,20 @@ public class MyAppUserController {
 		return studentService.getBySurname(student.getLastName());
 	}
 
-	//Call student by Id
+	
 	@JsonView(View.SummaryWithOthers.class)
 	@GetMapping("/api/students/id")
 	public Student getStudentById(@RequestBody Student student){
 		return studentService.getById(student.getId());
 	}
-	
+
+	//Call student by Id as path variable
+	@JsonView(View.SummaryWithOthers.class)
+	@GetMapping("api/students/id/{id}")
+	public Student getStudentById(@PathVariable String id) {
+		return myAppUserService.getById(id);
+	}
+
 	//Call students by iteration
 //	@JsonView(View.SummaryWithOthers.class)
 //	@GetMapping("api/students/iteration")

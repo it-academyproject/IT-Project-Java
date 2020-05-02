@@ -207,10 +207,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
 
+        MyAppUser myAppUser = myAppUserRepository.findByEmail(userDetails.getUsername());
+
         try {
             JSONObject json = new JSONObject();
             json.put("success", true);
             json.put("token", token);
+            json.put("firstName", myAppUser.getFirstName());
+            json.put("lastName", myAppUser.getLastName());
             json.write(response.getWriter());
         } catch (IOException e) {
             e.printStackTrace();

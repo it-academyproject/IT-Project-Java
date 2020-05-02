@@ -31,6 +31,10 @@ public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
 	
 
 
+	
+	MyAppUser findUserById(String id );
+
+
 	MyAppUser findByEmail(String email);
 
 	List<MyAppUser> findByFirstNameAndLastName (String name , String lastName );

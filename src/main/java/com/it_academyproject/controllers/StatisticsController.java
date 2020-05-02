@@ -1,8 +1,10 @@
 package com.it_academyproject.controllers;
 
-import com.it_academyproject.controllers.statsDTOs.DTOStudentAbsence;
-import com.it_academyproject.controllers.statsDTOs.DTOStudentsPerGender;
-import com.it_academyproject.controllers.statsDTOs.DTOStudentsPerItinerary;
+
+import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentAbsence;
+import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsPerGender;
+import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsPerItinerary;
+import com.it_academyproject.services.MyAppUserService;
 import com.it_academyproject.services.StatisticsService;
 import com.it_academyproject.services.StudentService;
 import org.json.JSONObject;
