@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.it_academyproject.domains.Absence;
-import com.it_academyproject.domains.MyAppUser;
+import com.it_academyproject.domains.Student;
 import com.it_academyproject.exceptions.ResourceNotFoundException;
 import com.it_academyproject.repositories.AbsenceRepository;
 import com.it_academyproject.repositories.MyAppUserRepository;
@@ -20,11 +20,11 @@ public class AbsencesService {
 	MyAppUserRepository myAppUserRepository;
 
 	// post absence
-	public Absence createAbsence(Absence absence, MyAppUser userStudent) {
+	public Absence createAbsence(Absence absence, Student userStudent) {
 
 		Absence absenceCreated = new Absence();
 		String studentId = userStudent.getId();
-		userStudent = myAppUserRepository.findUserById(studentId);
+		userStudent = (Student)myAppUserRepository.findUserById(studentId);
 
 		absenceCreated.setComment(absence.getComment());
 		absenceCreated.setDateMissing(absence.getDateMissing());
@@ -45,7 +45,7 @@ public class AbsencesService {
 	}
 
 	// get absence by student id
-	public List<Absence> getAbsenceByStudentId(MyAppUser userStudent) {
+	public List<Absence> getAbsenceByStudentId(Student userStudent) {
 		return myAbsenceRepository.findByUserStudentId(userStudent.getId());
 	}
 

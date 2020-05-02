@@ -17,7 +17,7 @@ import javax.persistence.ManyToOne;
 
 
 @Entity
-public class UserExercice {
+public class UserExercise {
 	
 	//--------------------------Properties--------------------------------------------------------------
 	@Id
@@ -27,29 +27,29 @@ public class UserExercice {
 	private Date date_status;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="statusExercice_id")
-	private StatusExercice statusExercice;
+	@JoinColumn(name="statusExercise_id")
+	private StatusExercise statusExercise;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="exercice_id")
-	private Exercice exercice;
+	@JoinColumn(name="exercise_id")
+	private Exercise exercise;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="student_id")
 	@JsonView({View.SummaryWithOthers.class , View.noShow.class})
-	private MyAppUser userStudent;
+	private Student userStudent;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="teacher_id")
-	private MyAppUser userTeacher;
+	private Teacher userTeacher;
 
 	//--------------------------Constructors--------------------------------------------------------------
 	
 
-	public UserExercice() {
+	public UserExercise() {
 	}
 	
-	public UserExercice(String comments, Date date_status) {
+	public UserExercise(String comments, Date date_status) {
 		this.comments = comments;
 		this.date_status = new Date();
 	}
@@ -75,39 +75,48 @@ public class UserExercice {
 		this.date_status = date_status;
 	}
 
-	public StatusExercice getStatusExercice() {
-		return statusExercice;
+	public StatusExercise getStatusExercise() {
+		return statusExercise;
 	}
 
-	public void setStatusExercice(StatusExercice statusExercice) {
-		this.statusExercice = statusExercice;
+	public void setStatusExercise(StatusExercise statusExercise) {
+		this.statusExercise = statusExercise;
 	}
 
-	public Exercice getExercice() {
-		return exercice;
+	public Exercise getExercise() {
+		return exercise;
 	}
 
-	public void setExercice(Exercice exercice) {
-		this.exercice = exercice;
+	public void setExercise(Exercise exercise) {
+		this.exercise = exercise;
 	}
 
-	public MyAppUser getUserStudent() {
+	public Student getUserStudent() {
 		return userStudent;
 	}
 
-	public void setUserStudent(MyAppUser userStudent) {
+	public void setUserStudent(Student  userStudent) {
 		this.userStudent = userStudent;
 	}
 
-	public MyAppUser getUserTeacher() {
+	public Teacher getUserTeacher() {
 		return userTeacher;
 	}
 
-	public void setUserTeacher(MyAppUser userTeacher) {
+	public void setUserTeacher(Teacher userTeacher) {
 		this.userTeacher = userTeacher;
 	}
 
-
-	
-
+	@Override
+	public String toString() {
+		return "UserExercise{" +
+				"Id=" + Id +
+				", comments='" + comments + '\'' +
+				", date_status=" + date_status +
+				", statusExercise=" + statusExercise +
+				", exercise=" + exercise +
+				", userStudent=" + userStudent +
+				", userTeacher=" + userTeacher +
+				'}';
+	}
 }

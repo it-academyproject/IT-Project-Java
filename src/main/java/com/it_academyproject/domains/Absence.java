@@ -30,6 +30,7 @@ public class Absence {
 	@JsonInclude(Include.NON_NULL)
 	@JsonView(View.Summary.class)
 	private Date dateMissing;
+
 //	@JsonInclude(value=Include.ALWAYS, content=Include.USE_DEFAULTS)
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty(access = Access.READ_WRITE)
@@ -41,7 +42,7 @@ public class Absence {
 	@JsonView(View.Summary.class)
 	@JoinColumn(name = "student_id", nullable = false)
 //	@JsonProperty(access = Access.READ_ONLY)
-	private MyAppUser userStudent;
+	private Student userStudent;
 
 	public Absence() {
 
@@ -77,11 +78,11 @@ public class Absence {
 		this.comment = comment;
 	}
 
-	public MyAppUser getUserStudent() {
+	public Student getUserStudent() {
 		return userStudent;
 	}
 
-	public void setUserStudent(MyAppUser userStudent) {
+	public void setUserStudent(Student userStudent) {
 		this.userStudent = userStudent;
 	}
 
@@ -90,7 +91,6 @@ public class Absence {
 		return "Absence [id=" + id + ", dateMissing=" + dateMissing + ", comment=" + comment + ", user=" + userStudent
 				+ "]";
 	}
-
 }
 
 

@@ -5,17 +5,17 @@ import java.util.List;
 import java.util.Map;
 
 import com.it_academyproject.domains.Itinerary;
-import com.it_academyproject.domains.UserExercice;
+import com.it_academyproject.domains.UserExercise;
 
 public class ExerciseListDTO {
 	
 	
 	String name;
 	int itinerary;
-	Map<String,UserExerciceDTO> students;
+	Map<String,UserExerciseDTO> students;
 	
 
-	public ExerciseListDTO(String name, Itinerary itinerary, List<UserExercice> students) {
+	public ExerciseListDTO(String name, Itinerary itinerary, List<UserExercise> students) {
 	
 		this.name=name;
 		this.itinerary=itinerary.getId();
@@ -23,18 +23,18 @@ public class ExerciseListDTO {
 	}
 
 
-	private Map<String, UserExerciceDTO> selectRelevantData(List<UserExercice> students) {
+	private Map<String, UserExerciseDTO> selectRelevantData(List<UserExercise> students) {
 		
-		Map<String,UserExerciceDTO> userExerciceDTO = new HashMap<String,UserExerciceDTO>();	
+		Map<String,UserExerciseDTO> userExerciseDTO = new HashMap<String,UserExerciseDTO>();	
 		
-		for (UserExercice userExercice: students)	
+		for (UserExercise userExercise: students)	
 		{	
-			if (userExercice.getUserStudent()!=null)
+			if (userExercise.getUserStudent()!=null)
 			{
-			userExerciceDTO.put(userExercice.getUserStudent().getId(),new UserExerciceDTO(userExercice));
+			userExerciseDTO.put(userExercise.getUserStudent().getId(),new UserExerciseDTO(userExercise));
 			}
 		}
-		return userExerciceDTO;
+		return userExerciseDTO;
 	}
 
 
@@ -58,12 +58,12 @@ public class ExerciseListDTO {
 	}
 
 
-	public Map<String,UserExerciceDTO> getStudents() {
+	public Map<String,UserExerciseDTO> getStudents() {
 		return students;
 	}
 
 
-	public void setStudents(Map<String,UserExerciceDTO> students) {
+	public void setStudents(Map<String,UserExerciseDTO> students) {
 		this.students = students;
 	}
 	

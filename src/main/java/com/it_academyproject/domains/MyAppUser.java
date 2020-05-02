@@ -2,39 +2,32 @@
 package com.it_academyproject.domains;
 
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.exceptions.EmptyFieldException;
 import com.it_academyproject.tools.View;
 
-
+import javax.persistence.*;
+import java.util.*;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "subclass", discriminatorType = DiscriminatorType.STRING)
 @Table(name="users")
-public class MyAppUser {
-	
-	//@GeneratedValue(strategy=GenerationType.IDENTITY)	
+public abstract class MyAppUser {
+
+	// Order according to former implementation
+	// This order helps SQL data import (IT role=0, Student=1...)
+	public enum Role {
+		IT, STUDENT, TEACHER, ADMIN
+	}
+
+	//@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
 	@JsonView({View.Summary.class, View.ShortDetails.class})
 	private String id;
+
 	
 	@JsonView({View.Summary.class, View.ShortDetails.class})
 	private String firstName;
@@ -44,29 +37,24 @@ public class MyAppUser {
 
 	@JsonView(View.SummaryWithOthers.class)
 	private String email;
-	
+
 	@JsonView(View.SummaryWithOthers.class)
 	private char gender;
 
 	@JsonView(View.SummaryWithOthers.class)
-	private int age;
-	
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(pattern="dd-MM-yyyy")
+	private Date birthdate;
+
 	@JsonView(View.SummaryWithOthers.class)
 	private String portrait;
-
-
-	@JsonView(View.Summary.class)
-	@ManyToOne
-	private Seat seat;
 
 	private String password;
 	private boolean enabled;
 	private Date lastLogin;
 
-	
-	@ManyToOne (fetch = FetchType.EAGER)
-	@JoinColumn (name="rol_id")
 	private Role role;
+
 	
 	@OneToMany (targetEntity = Absence.class, cascade = CascadeType.ALL)
 	private List <Absence> absences = new ArrayList <Absence>();
@@ -74,12 +62,10 @@ public class MyAppUser {
 	private int totalAbsences;
 	@OneToMany (targetEntity = Course.class, cascade = CascadeType.ALL)
 	@JsonView(View.Summary.class)
-	public List <Course> courses = new ArrayList <Course>();
-	@OneToMany (targetEntity = UserExercice.class, cascade = CascadeType.ALL)
-	private List <UserExercice> userExercices = new ArrayList <UserExercice>();
+	private List <Course> courses = new ArrayList <Course>();
 	@OneToMany (targetEntity = Emails.class, cascade = CascadeType.ALL)
 	private List <Emails> emails = new ArrayList <Emails>();
-	
+
 //	@ManyToMany(fetch = FetchType.LAZY,
 //            cascade = {
 //                CascadeType.PERSIST,
@@ -97,7 +83,6 @@ public class MyAppUser {
 	
 	
 	public MyAppUser() {
-		
 	}
 	
 	public MyAppUser(String firstName, String lastName, String email, char gender,
@@ -174,12 +159,12 @@ public class MyAppUser {
 		return gender;
 	}
 
-	public int getAge() {
-		return age;
+	public Date getBirthdate() {
+		return birthdate;
 	}
 
-	public void setAge(int age) {
-		this.age = age;
+	public void setBirthdate(Date birthdate) {
+		this.birthdate = birthdate;
 	}
 
 	public void setGender(char gender) {
@@ -211,7 +196,7 @@ public class MyAppUser {
 	}
 
 	public Role getRole() {
-		return role;
+		return this.role;
 	}
 
 	public void setRole(Role role) {
@@ -226,16 +211,32 @@ public class MyAppUser {
 		this.lastLogin = lastLogin;
 	}
 
-	public Seat getSeat() {
-		return seat;
-	}
-
-	public void setSeat(Seat seat) {
-		this.seat = seat;
-	}
-
 	public void setCourses(List<Course> courses) {
 		this.courses = courses;
+	}
+
+	public List<Course> getCourses() {
+		return courses;
+	}
+
+	@Override
+	public String toString() {
+		return "MyAppUser{" +
+				"id='" + id + '\'' +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", email='" + email + '\'' +
+				", gender=" + gender +
+				", birthdate=" + birthdate +
+				", portrait='" + portrait + '\'' +
+				", password='" + password + '\'' +
+				", enabled=" + enabled +
+				", lastLogin=" + lastLogin +
+				", role=" + role +
+				", courses=" + courses +
+				", emails=" + emails +
+				", userIterations=" + userIterations +
+				'}';
 	}
 	
 
@@ -251,7 +252,7 @@ public class MyAppUser {
 		this.totalAbsences = totalAbsences;
 	}
 
-//	public Set<Iteration> getIterations() {
+	//	public Set<Iteration> getIterations() {
 //		return iterations;
 //	}
 //
@@ -263,12 +264,9 @@ public class MyAppUser {
 	
 
 	/*	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", idDocument=" + idDocument
-				+ ", email=" + email + ", gender=" + gender + ", portrait=" + portrait + ", password=" + password
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", gender=" + gender + ", portrait=" + portrait + ", password=" + password
 				+ ", enabled=" + enabled + "]";
 	}	*/
-	
-	
-	
 
 }
+// {"id":"030027e8-3bd2-431d-b57b-2f3b60aed01b"}

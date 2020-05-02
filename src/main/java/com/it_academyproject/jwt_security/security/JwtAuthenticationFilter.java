@@ -1,6 +1,7 @@
 package com.it_academyproject.jwt_security.security;
 
 import com.it_academyproject.domains.MyAppUser;
+import com.it_academyproject.domains.Student;
 import com.it_academyproject.exceptions.EmptyFieldException;
 import com.it_academyproject.exceptions.ResourceNotFoundException;
 import com.it_academyproject.exceptions.UserNotEnabled;
@@ -45,6 +46,23 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.myAppUserRepository = myAppUserRepository;
         setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
     }
+
+	//B-27 Task: Update last time an user do login.
+    public MyAppUser updateLastLogin(MyAppUser myAppUser) {
+
+        if (myAppUserRepository.existsById(myAppUser.getId())) {
+            MyAppUser user = myAppUserRepository.findOneById(myAppUser.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("not found"));
+            java.util.Date date = new java.util.Date();
+            java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
+            user.setLastLogin(timestamp);
+            myAppUserRepository.save(user);
+            return user;
+        } else {
+            return null;
+        }
+    }
+
     //B-27 Task: Update last time an user do login.
     public MyAppUser editGetByDni(MyAppUser student) {
         
@@ -93,8 +111,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
                     try
                     {
-                        //B27 Task: When authentication is succeed, date of last login is updated calling: 
-                        editGetByDni(myAppUser);
+						//B27 Task: When authentication is succeed, date of last login is updated calling:
+                    	updateLastLogin(myAppUser);
                         return authenticationManager.authenticate(authenticationToken);
                     }
                     catch ( AuthenticationException e )

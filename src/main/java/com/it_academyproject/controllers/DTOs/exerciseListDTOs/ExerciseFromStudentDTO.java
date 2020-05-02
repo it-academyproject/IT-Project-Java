@@ -1,7 +1,7 @@
 package com.it_academyproject.controllers.DTOs.exerciseListDTOs;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.it_academyproject.domains.UserExercice;
+import com.it_academyproject.domains.UserExercise;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,17 +15,17 @@ public class ExerciseFromStudentDTO {
     private ItineraryDTO itinerary;
     private TeacherDTO teacher;
 
-    ExerciseFromStudentDTO (UserExercice exercise) {
-        name = exercise.getExercice().getName();
-        id = exercise.getExercice().getId();
-        status = new StatusDTO(exercise.getStatusExercice().getName(),
-                exercise.getStatusExercice().getId(), exercise.getDate_status());
-        itinerary = new ItineraryDTO(exercise.getExercice().getItinerary().getName(), exercise.getExercice().getItinerary().getId());
+    ExerciseFromStudentDTO (UserExercise exercise) {
+        name = exercise.getExercise().getName();
+        id = exercise.getExercise().getId();
+        status = new StatusDTO(exercise.getStatusExercise().getName(),
+                exercise.getStatusExercise().getId(), exercise.getDate_status());
+        itinerary = new ItineraryDTO(exercise.getExercise().getItinerary().getName(), exercise.getExercise().getItinerary().getId());
         if (exercise.getUserTeacher() != null)
             teacher = new TeacherDTO(exercise.getUserTeacher().getLastName() + ", " + exercise.getUserTeacher().getFirstName(), exercise.getUserTeacher().getId());
     }
 
-    public static List<ExerciseFromStudentDTO> getList (List<UserExercice> exercises) {
+    public static List<ExerciseFromStudentDTO> getList (List<UserExercise> exercises) {
         List<ExerciseFromStudentDTO> result = new ArrayList<>();
         exercises.forEach(exercise -> result.add(new ExerciseFromStudentDTO(exercise)));
         return result;

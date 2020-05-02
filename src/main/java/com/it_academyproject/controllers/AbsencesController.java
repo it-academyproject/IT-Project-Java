@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.domains.Absence;
-import com.it_academyproject.domains.MyAppUser;
+import com.it_academyproject.domains.Student;
 import com.it_academyproject.repositories.AbsenceRepository;
 import com.it_academyproject.services.AbsencesService;
 import com.it_academyproject.tools.View;
@@ -47,7 +47,7 @@ public class AbsencesController {
 	// Call absences by student id
 	@JsonView(View.Summary.class)
 	@GetMapping("api/absences/student")
-	public List<Absence> getAbsenceByStudentId(@RequestBody MyAppUser userStudent) {
+	public List<Absence> getAbsenceByStudentId(@RequestBody Student userStudent) {
 		return absencesService.getAbsenceByStudentId(userStudent);
 	}
 

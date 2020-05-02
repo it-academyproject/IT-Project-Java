@@ -1,18 +1,11 @@
 package com.it_academyproject.repositories;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import javax.validation.Valid;
-
+import com.it_academyproject.domains.Iteration;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-
-import com.it_academyproject.domains.Exercice;
-import com.it_academyproject.domains.Iteration;
-import com.it_academyproject.domains.MyAppUser;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IterationRepository extends JpaRepository<Iteration, Long> {

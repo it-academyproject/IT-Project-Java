@@ -3,9 +3,9 @@ package com.it_academyproject.controllers.DTOs.exerciseListDTOs;
 import java.util.Date;
 
 
-import com.it_academyproject.domains.UserExercice;
+import com.it_academyproject.domains.UserExercise;
 
-public class UserExerciceDTO {
+public class UserExerciseDTO {
 
 	
 
@@ -15,12 +15,12 @@ public class UserExerciceDTO {
 	Date date;
 	
 	
-	public UserExerciceDTO(UserExercice userExercice) {
+	public UserExerciseDTO(UserExercise userExercise) {
 	
-		this.studentName=userExercice.getUserStudent().getFirstName();
-		this.studentLastName=userExercice.getUserStudent().getLastName();
-		this.statusExercise=userExercice.getStatusExercice().getName();
-		this.date=userExercice.getDate_status();
+		this.studentName=userExercise.getUserStudent().getFirstName();
+		this.studentLastName=userExercise.getUserStudent().getLastName();
+		this.statusExercise=userExercise.getStatusExercise().getName();
+		this.date=userExercise.getDate_status();
 		
 		
 	}

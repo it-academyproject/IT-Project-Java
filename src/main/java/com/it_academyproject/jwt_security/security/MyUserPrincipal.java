@@ -57,8 +57,6 @@ public class MyUserPrincipal implements UserDetails
         return myAppUser.isEnabled();
     }
 
-    //
-
     public MyAppUser getUser() {
         return myAppUser;
     }

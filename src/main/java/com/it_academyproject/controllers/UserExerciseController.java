@@ -5,17 +5,16 @@ package com.it_academyproject.controllers;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseFromStudentDTO;
 import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseListDTO;
-import com.it_academyproject.domains.Exercice;
+import com.it_academyproject.domains.Exercise;
+import com.it_academyproject.domains.UserExercise;
+import com.it_academyproject.domains.Student;
 import com.it_academyproject.domains.MyAppUser;
-import com.it_academyproject.domains.UserExercice;
 import com.it_academyproject.exceptions.BadRoleException;
 import com.it_academyproject.exceptions.UserNotFoundException;
-import com.it_academyproject.repositories.UserExerciceRepository;
+import com.it_academyproject.repositories.UserExerciseRepository;
 import com.it_academyproject.services.MyAppUserService;
 import com.it_academyproject.services.UserExerciseService;
 import com.it_academyproject.tools.View;
-
-
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -23,11 +22,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 @RestController
 public class UserExerciseController
@@ -36,7 +37,7 @@ public class UserExerciseController
 	UserExerciseService userExerciseService;
 
 	@Autowired
-	UserExerciceRepository userExerciceRepository;
+	UserExerciseRepository userExerciseRepository;
 
 	@Autowired
 	MyAppUserService userService;
@@ -64,18 +65,19 @@ public class UserExerciseController
 	@GetMapping ("/api/exercises")
 	public Map<Integer,ExerciseListDTO> getAllExerciseswithStudents ( )
 	{
-		List<Exercice> foundExercises = userExerciseService.getAllExercises();
+		List<Exercise> foundExercises = userExerciseService.getAllExercises();
 		Map<Integer,ExerciseListDTO> allExerciseswithStudents = new HashMap<Integer,ExerciseListDTO>();
 		
-		for (Exercice exercise : foundExercises)
+		for (Exercise exercise : foundExercises)
 		{
 		
-			List<UserExercice> studentsforThatExercise= userExerciseService.getStudentsByExercise(exercise);
+			List<UserExercise> studentsforThatExercise= userExerciseService.getStudentsByExercise(exercise);
 			allExerciseswithStudents.put(exercise.getId(), new ExerciseListDTO(exercise.getName(),exercise.getItinerary(),studentsforThatExercise));
 		}
 
-	return allExerciseswithStudents;
+		return allExerciseswithStudents;
 	}
+
 
 	@GetMapping ("/api/exercises/student-id/{id}")
 	public List<ExerciseFromStudentDTO> getExercisesByStudentIdNew (@PathVariable(name="id") String id){
@@ -88,16 +90,14 @@ public class UserExerciseController
 	}
 
 	/*
-	 * Modelo de llamada PUT: { "id": 1, "statusExercice":{"id":4} }
+	 * Modelo de llamada PUT: { "id": 1, "statusExercise":{"id":4} }
 	 * La fecha se actualiza automáticamente desde el back end, 
 	 * no hace falta incorporarla en el JSON
 	 */
-	//SET @CrossOrigin BEFORE DEPLOYING TO PRODUCTION!
-	@CrossOrigin
 	@JsonView(View.Summary.class)
 	@PutMapping("/api/exercises/exercice_id")
-	public boolean setUserExerciseStatusData(@RequestBody UserExercice userExercice) { 
-		return userExerciseService.setUserExerciseStatusData(userExercice);
+	public boolean setUserExerciseStatusData(@RequestBody UserExercise userExercise) { 
+		return userExerciseService.setUserExerciseStatusData(userExercise);
 	}
 }
 

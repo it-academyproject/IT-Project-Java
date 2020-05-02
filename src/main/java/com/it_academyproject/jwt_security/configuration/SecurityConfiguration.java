@@ -89,6 +89,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
     	//Add endpoints when new controller is added in the API
     	web.ignoring()
         .antMatchers("/api/test/**","/api/public/**" , "/api/get-reset-email/**" , "/api/save-new-password/**" , "/api/students/**" , "/api/statistics/**" , "/api/exercises/**","/api/iterations/**", "/api/projects/**", "/api/itineraries/**", "/api/useriteration/**", "/api/projectitinerary/**", "/api/absences/**");
+
     }
 
 
