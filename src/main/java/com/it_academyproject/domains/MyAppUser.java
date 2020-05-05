@@ -23,8 +23,9 @@ public abstract class MyAppUser {
 		IT, STUDENT, TEACHER, ADMIN
 	}
 
-	//@GeneratedValue(strategy=GenerationType.IDENTITY)
+	
 	@Id
+	// @GeneratedValue(strategy=GenerationType.IDENTITY)
 	@JsonView({View.Summary.class, View.ShortDetails.class})
 	private String id;
 

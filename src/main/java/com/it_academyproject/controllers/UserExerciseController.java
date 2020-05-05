@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,16 +64,21 @@ public class UserExerciseController
 	}
 
 	@GetMapping ("/api/exercises")
-	public Map<Integer,ExerciseListDTO> getAllExerciseswithStudents ( )
+	public List<ExerciseListDTO> getAllExerciseswithStudents ( )
 	{
 		List<Exercise> foundExercises = userExerciseService.getAllExercises();
-		Map<Integer,ExerciseListDTO> allExerciseswithStudents = new HashMap<Integer,ExerciseListDTO>();
+		List<ExerciseListDTO> allExerciseswithStudents = new ArrayList<ExerciseListDTO>();
 		
 		for (Exercise exercise : foundExercises)
 		{
 		
 			List<UserExercise> studentsforThatExercise= userExerciseService.getStudentsByExercise(exercise);
-			allExerciseswithStudents.put(exercise.getId(), new ExerciseListDTO(exercise.getName(),exercise.getItinerary(),studentsforThatExercise));
+			allExerciseswithStudents.add(
+					new ExerciseListDTO(
+							exercise.getId(),
+							exercise.getName(),
+							exercise.getItinerary(),
+							studentsforThatExercise));
 		}
 
 		return allExerciseswithStudents;
