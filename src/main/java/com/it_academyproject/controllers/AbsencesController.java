@@ -3,15 +3,21 @@ package com.it_academyproject.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseFromStudentDTO;
 import com.it_academyproject.domains.Absence;
 import com.it_academyproject.domains.Student;
+import com.it_academyproject.exceptions.BadRoleException;
+import com.it_academyproject.exceptions.UserNotFoundException;
 import com.it_academyproject.repositories.AbsenceRepository;
 import com.it_academyproject.services.AbsencesService;
 import com.it_academyproject.tools.View;
@@ -44,12 +50,14 @@ public class AbsencesController {
 		return absencesService.getAbsenceById(absence);
 	}
 
-	// Call absences by student id
+	
+//	 Call absences by student id
 	@JsonView(View.Summary.class)
-	@GetMapping("api/absences/student")
-	public List<Absence> getAbsenceByStudentId(@RequestBody Student userStudent) {
-		return absencesService.getAbsenceByStudentId(userStudent);
+	@GetMapping("api/absences/student/{student_id}")
+	public List<Absence> getAbsenceByStudentId(@RequestBody Student userStudent, @PathVariable(name="student_id") String studentId) {
+		return absencesService.findAbsenceByStudentId(userStudent, studentId);
 	}
+	
 
 	// Edit Absence by id
 	@JsonView(View.SummaryWithOthers.class)
