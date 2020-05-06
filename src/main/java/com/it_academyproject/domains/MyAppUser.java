@@ -55,6 +55,11 @@ public abstract class MyAppUser {
 	private Date lastLogin;
 
 	private Role role;
+	
+	@JsonView(View.Summary.class)
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(pattern="dd-MM-yyyy")
+	private Date lastClassAttendance;
 
 	
 	@OneToMany (targetEntity = Absence.class, cascade = CascadeType.ALL)
@@ -97,6 +102,7 @@ public abstract class MyAppUser {
 		this.password = password;
 		this.enabled = enabled;
 		this.role = role;
+		
 	}
 	
 	 public MyAppUser(String email, String password) throws EmptyFieldException
@@ -164,6 +170,7 @@ public abstract class MyAppUser {
 		return birthdate;
 	}
 
+
 	public void setBirthdate(Date birthdate) {
 		this.birthdate = birthdate;
 	}
@@ -174,6 +181,14 @@ public abstract class MyAppUser {
 
 	public String getPortrait() {
 		return portrait;
+	}
+
+	public Date getLastClassAttendance() {
+		return lastClassAttendance;
+	}
+
+	public void setLastClassAttendance(Date lastClassAttendance) {
+		this.lastClassAttendance = lastClassAttendance;
 	}
 
 	public void setPortrait(String portrait) {
@@ -220,26 +235,7 @@ public abstract class MyAppUser {
 		return courses;
 	}
 
-	@Override
-	public String toString() {
-		return "MyAppUser{" +
-				"id='" + id + '\'' +
-				", firstName='" + firstName + '\'' +
-				", lastName='" + lastName + '\'' +
-				", email='" + email + '\'' +
-				", gender=" + gender +
-				", birthdate=" + birthdate +
-				", portrait='" + portrait + '\'' +
-				", password='" + password + '\'' +
-				", enabled=" + enabled +
-				", lastLogin=" + lastLogin +
-				", role=" + role +
-				", courses=" + courses +
-				", emails=" + emails +
-				", userIterations=" + userIterations +
-				'}';
-	}
-	
+
 
 	public List<Absence> getAbsences() {
 		return absences;
@@ -252,6 +248,18 @@ public abstract class MyAppUser {
 	public void setTotalAbsences(int totalAbsences) {
 		this.totalAbsences = totalAbsences;
 	}
+
+	@Override
+	public String toString() {
+		return "MyAppUser [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", gender=" + gender + ", birthdate=" + birthdate + ", portrait=" + portrait + ", password="
+				+ password + ", enabled=" + enabled + ", lastLogin=" + lastLogin + ", role=" + role
+				+ ", lastClassAttendance=" + lastClassAttendance + ", absences=" + absences + ", totalAbsences="
+				+ totalAbsences + ", courses=" + courses + ", emails=" + emails + ", userIterations=" + userIterations
+				+ "]";
+	}
+	
+	
 
 	//	public Set<Iteration> getIterations() {
 //		return iterations;
