@@ -29,7 +29,7 @@ public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
 	public List<MyAppUser> findByGender(char gender);
 	//public ArrayList<MyAppUser> findByRoleId(int roleId);
 	
-
+	public String getUserById(String id);
 
 	
 	MyAppUser findUserById(String id );

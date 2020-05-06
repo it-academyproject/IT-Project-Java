@@ -88,7 +88,7 @@ public abstract class MyAppUser {
 	
 	public MyAppUser(String firstName, String lastName, String email, char gender,
 					 String portrait, String password, boolean enabled, Role role) {
-
+		
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
