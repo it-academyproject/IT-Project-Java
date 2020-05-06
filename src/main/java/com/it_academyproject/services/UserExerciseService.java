@@ -11,12 +11,10 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import java.util.*;
 
 @Service
-public class UserExerciseService
-{
+public class UserExerciseService {
 	@Autowired
 	UserExerciseRepository userExerciseRepository;
 	@Autowired
@@ -28,83 +26,69 @@ public class UserExerciseService
 	@Autowired
 	ExerciseRepository exerciseRepository;
 
-	public JSONObject getExerciseStudentByItinerary (String itineraryIdString )
-	{
-		try
-		{
+	public JSONObject getExerciseStudentByItinerary(String itineraryIdString) {
+		try {
 			int itineraryId = Integer.parseInt(itineraryIdString);
-			Itinerary itinerary = itineraryRepository.findOneById( itineraryId );
-			List<Course> courseList = courseRepository.findByItineraryAndEndDate(itinerary , null);
+			Itinerary itinerary = itineraryRepository.findOneById(itineraryId);
+			List<Course> courseList = courseRepository.findByItineraryAndEndDate(itinerary, null);
 			List<Student> students = new ArrayList<>();
-			Map<String , List<UserExercise>> userUserExerciseMap = new HashMap<>();
+			Map<String, List<UserExercise>> userUserExerciseMap = new HashMap<>();
 
-
-			for (int i = 0; i < courseList.size() ; i++)
-			{
-				Student student = courseList.get( i ).getUserStudent();
-				students.add( student);
+			for (int i = 0; i < courseList.size(); i++) {
+				Student student = courseList.get(i).getUserStudent();
+				students.add(student);
 				List<UserExercise> userExerciseList = userExerciseRepository.findByUserStudent(student);
-				//remove the Student field that is not necessary
-				for (int j = 0; j < userExerciseList.size(); j++)
-				{
-					userExerciseList.get(j).setUserStudent ( null );
+				// remove the Student field that is not necessary
+				for (int j = 0; j < userExerciseList.size(); j++) {
+					userExerciseList.get(j).setUserStudent(null);
 				}
-				userUserExerciseMap.put(student.getId() , userExerciseList);
+				userUserExerciseMap.put(student.getId(), userExerciseList);
 			}
 
-			JSONObject sendData = new JSONObject( userUserExerciseMap );
+			JSONObject sendData = new JSONObject(userUserExerciseMap);
 			return sendData;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			String exceptionMessage = e.getMessage();
 			JSONObject sendData = new JSONObject();
 			JSONObject message = new JSONObject();
-			message.put("type" , "error");
-			message.put("message" , exceptionMessage);
-			sendData.put("Message" , message);
+			message.put("type", "error");
+			message.put("message", exceptionMessage);
+			sendData.put("Message", message);
 			return sendData;
 		}
 	}
 
-	public List<Exercise> getAllExercises(){
+	public List<Exercise> getAllExercises() {
 		List<Exercise> allExercises = exerciseRepository.findAll();
 		return allExercises;
 	}
 
-
-
 	public JSONObject getExerciseStudentByStudent(Student student) {
-		try
-		{
+		try {
 
-			//get only active students
+			// get only active students
 			List<Course> courseList = courseRepository.findByUserStudent(student);
 			List<Student> studentList = new ArrayList<>();
-			Map<String , List<UserExercise>> userUserExerciseMap = new HashMap<>();
-			for (int i = 0; i < courseList.size() ; i++)
-			{
-				Student myAppUser = courseList.get( i ).getUserStudent();
-				studentList.add( myAppUser);
+			Map<String, List<UserExercise>> userUserExerciseMap = new HashMap<>();
+			for (int i = 0; i < courseList.size(); i++) {
+				Student myAppUser = courseList.get(i).getUserStudent();
+				studentList.add(myAppUser);
 				List<UserExercise> userExerciseList = userExerciseRepository.findByUserStudent(myAppUser);
-				//remove the Student field that is not necessary
-				for (int j = 0; j < userExerciseList.size(); j++)
-				{
-					userExerciseList.get(j).setUserStudent ( null );
+				// remove the Student field that is not necessary
+				for (int j = 0; j < userExerciseList.size(); j++) {
+					userExerciseList.get(j).setUserStudent(null);
 				}
-				userUserExerciseMap.put(myAppUser.getId() , userExerciseList);
+				userUserExerciseMap.put(myAppUser.getId(), userExerciseList);
 			}
-			JSONObject sendData = new JSONObject( userUserExerciseMap );
+			JSONObject sendData = new JSONObject(userUserExerciseMap);
 			return sendData;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			String exceptionMessage = e.getMessage();
 			JSONObject sendData = new JSONObject();
 			JSONObject message = new JSONObject();
-			message.put("type" , "error");
-			message.put("message" , exceptionMessage);
-			sendData.put("Message" , message);
+			message.put("type", "error");
+			message.put("message", exceptionMessage);
+			sendData.put("Message", message);
 			return sendData;
 		}
 	}
@@ -119,21 +103,15 @@ public class UserExerciseService
 				.orElseThrow(() -> new UserNotFoundException("Student not found: " + id)));
 	}
 
-	public boolean setUserExerciseStatusData(UserExercise userExercise) {
+	public boolean setUserExerciseStatusData(UserExercise userExercise, String id) {
 		System.out.println("UserExercise: " + userExercise.toString());
-		List <UserExercise> list = userExerciseRepository.findAll();
-		for (int i=0; i<list.size(); i++) {
-
-			if (list.get(i).getId() == userExercise.getId()) {
-				Date date = new Date();	
-				list.get(i).setDate_status(date);
-				list.get(i).setStatusExercise(userExercise.getStatusExercise());
-				userExerciseRepository.save(list.get(i));
-				return true;
-			}
+		if (id == userExercise.getUserStudent().getId()) {
+			Date date = new Date();
+			userExercise.setDate_status(date);
+			userExercise.setStatus(userExercise.getStatus());
+			userExerciseRepository.save(userExercise);
+			return true;
 		}
 		return false;
 	}
 }
-
-

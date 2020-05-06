@@ -1,7 +1,6 @@
 
 package com.it_academyproject.controllers;
 
-
 import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseFromStudentDTO;
 import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseListDTO;
@@ -30,10 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 @RestController
-public class UserExerciseController
-{
+public class UserExerciseController {
 	@Autowired
 	UserExerciseService userExerciseService;
 
@@ -43,29 +40,24 @@ public class UserExerciseController
 	@Autowired
 	MyAppUserService userService;
 
-	@GetMapping ("/api/exercises/{itineraryId}")
-	public ResponseEntity<String>  getExerciseStudentByItinerary (@PathVariable String itineraryId )
-	{
-		try
-		{
-			JSONObject sendData = userExerciseService.getExerciseStudentByItinerary( itineraryId );
-			return new ResponseEntity( sendData.toString() , HttpStatus.FOUND);
-		}
-		catch (Exception e)
-		{
+	@GetMapping("/api/exercises/{itineraryId}")
+	public ResponseEntity<String> getExerciseStudentByItinerary(@PathVariable String itineraryId) {
+		try {
+			JSONObject sendData = userExerciseService.getExerciseStudentByItinerary(itineraryId);
+			return new ResponseEntity(sendData.toString(), HttpStatus.FOUND);
+		} catch (Exception e) {
 			String exceptionMessage = e.getMessage();
 			JSONObject sendData = new JSONObject();
 			JSONObject message = new JSONObject();
-			message.put("type" , "error");
-			message.put("message" , exceptionMessage);
-			sendData.put("Message" , message);
-			return new ResponseEntity( sendData.toString() , HttpStatus.BAD_REQUEST);
+			message.put("type", "error");
+			message.put("message", exceptionMessage);
+			sendData.put("Message", message);
+			return new ResponseEntity(sendData.toString(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
-	@GetMapping ("/api/exercises")
-	public List<ExerciseListDTO> getAllExerciseswithStudents ( )
-	{
+	@GetMapping("/api/exercises")
+	public List<ExerciseListDTO> getAllExerciseswithStudents() {
 		List<Exercise> foundExercises = userExerciseService.getAllExercises();
 		List<ExerciseListDTO> allExerciseswithStudents = new ArrayList<ExerciseListDTO>();
 		
@@ -84,26 +76,23 @@ public class UserExerciseController
 		return allExerciseswithStudents;
 	}
 
-
-	@GetMapping ("/api/exercises/student-id/{id}")
-	public List<ExerciseFromStudentDTO> getExercisesByStudentIdNew (@PathVariable(name="id") String id){
+	@GetMapping("/api/exercises/student-id/{id}")
+	public List<ExerciseFromStudentDTO> getExercisesByStudentIdNew(@PathVariable(name = "id") String id) {
 		try {
 			return ExerciseFromStudentDTO.getList(userExerciseService.getExercisesByStudentId(id));
 		} catch (UserNotFoundException | BadRoleException e) {
-			throw new ResponseStatusException(
-					HttpStatus.NOT_FOUND, "User does not exist or it's not a student", e);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist or it's not a student", e);
 		}
 	}
 
 	/*
-	 * Modelo de llamada PUT: { "id": 1, "statusExercise":{"id":4} }
-	 * La fecha se actualiza automáticamente desde el back end, 
-	 * no hace falta incorporarla en el JSON
+	 * Modelo de llamada PUT: { "id": 1, "statusExercise":{"id":4} } La fecha se
+	 * actualiza automáticamente desde el back end, no hace falta incorporarla en el
+	 * JSON
 	 */
 	@JsonView(View.Summary.class)
-	@PutMapping("/api/exercises/exercice_id")
-	public boolean setUserExerciseStatusData(@RequestBody UserExercise userExercise) { 
-		return userExerciseService.setUserExerciseStatusData(userExercise);
+	@PutMapping("/api/exercises/student/{id}")
+	public boolean updateUserExerciseStatus(@RequestBody UserExercise userExercise, @PathVariable String id) {
+		return userExerciseService.setUserExerciseStatusData(userExercise, id);
 	}
 }
-
