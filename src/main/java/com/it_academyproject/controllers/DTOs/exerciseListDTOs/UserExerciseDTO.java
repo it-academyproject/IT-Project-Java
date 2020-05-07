@@ -8,7 +8,7 @@ import com.it_academyproject.domains.UserExercise;
 public class UserExerciseDTO {
 
 	
-	int id;
+	String id;
 	String studentName;
 	String studentLastName;
 	String statusExercise;
@@ -17,7 +17,7 @@ public class UserExerciseDTO {
 	
 	public UserExerciseDTO(UserExercise userExercise) {
 	
-		this.id=userExercise.getId();
+		this.id=userExercise.getUserStudent().getId();
 		this.studentName=userExercise.getUserStudent().getFirstName();
 		this.studentLastName=userExercise.getUserStudent().getLastName();
 		this.statusExercise=userExercise.getStatusExercise().getName();
@@ -28,13 +28,13 @@ public class UserExerciseDTO {
 	
 	
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
 
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
