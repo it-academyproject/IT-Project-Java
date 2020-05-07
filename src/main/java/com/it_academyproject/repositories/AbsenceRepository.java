@@ -20,5 +20,7 @@ public interface AbsenceRepository extends JpaRepository<Absence, Integer> {
 	
 	// by absence id
 	Absence findOneById(Integer id);
+	
+	
 
 }
