@@ -52,10 +52,17 @@ public class AbsencesController {
 
 	
 //	 Call absences by student id
+	//@JsonView(View.Summary.class)
+	//@GetMapping("api/absences/student/{student_id}")
+	//public List<Absence> getAbsenceByStudentId(@RequestBody Student userStudent, @PathVariable(name="student_id") String studentId) {
+		//return absencesService.findAbsenceByStudentId(userStudent, studentId);
+	//}
+	
+//	 Call absences by student id
 	@JsonView(View.Summary.class)
 	@GetMapping("api/absences/student/{student_id}")
-	public List<Absence> getAbsenceByStudentId(@RequestBody Student userStudent, @PathVariable(name="student_id") String studentId) {
-		return absencesService.findAbsenceByStudentId(userStudent, studentId);
+	public List<Absence>getAbsenceByStudentId (@PathVariable(value="student_id")String studentId ) {
+		return absencesService.getAllAbsencesByUserId(studentId);
 	}
 	
 

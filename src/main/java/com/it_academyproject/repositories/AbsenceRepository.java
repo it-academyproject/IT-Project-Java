@@ -18,7 +18,12 @@ public interface AbsenceRepository extends JpaRepository<Absence, Integer> {
 	// by student id 
 	List<Absence> findByUserStudentId(String userStudent);
 	
+	
 	// by absence id
 	Absence findOneById(Integer id);
+	
+	
+	
+
 
 }
