@@ -39,7 +39,7 @@ public class Absence {
 	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 	@JsonIdentityReference(alwaysAsId = true)
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JsonView(View.Summary.class)
+	@JsonView(View.ShortDetails.class)
 	@JoinColumn(name = "student_id", nullable = false)
 //	@JsonProperty(access = Access.READ_ONLY)
 	private Student userStudent;
