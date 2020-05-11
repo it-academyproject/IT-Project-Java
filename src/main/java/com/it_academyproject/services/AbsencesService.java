@@ -48,11 +48,6 @@ public class AbsencesService {
 	public List<Absence> getAbsenceByStudentId(Student userStudent) {
 		return myAbsenceRepository.findByUserStudentId(userStudent.getId());
 	}
-	
-	//get all absence by student id
-	public List<Absence> getAllAbsenceByStudentId(String userStudent){
-		return myAbsenceRepository.findByUserStudentId(userStudent);
-	}
 
 	// put absence by id
 	public Absence putAbsenceById(Absence absence) {

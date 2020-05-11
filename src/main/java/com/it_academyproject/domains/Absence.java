@@ -35,12 +35,10 @@ public class Absence {
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty(access = Access.READ_WRITE)
 	@JsonView(View.Summary.class)
-	
 	private String comment;
 	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 	@JsonIdentityReference(alwaysAsId = true)
 	@ManyToOne(fetch = FetchType.EAGER)
-	
 	@JsonView(View.ShortDetails.class)
 	@JoinColumn(name = "student_id", nullable = false)
 //	@JsonProperty(access = Access.READ_ONLY)
