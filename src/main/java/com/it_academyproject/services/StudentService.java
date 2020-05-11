@@ -31,7 +31,8 @@ public class StudentService {
 		}
 		return students;
 	}
-
+		
+	
 	//get by name
 	public List<Student> getByName(String firstName){
 		return (List<Student>) userRepository.findByFirstNameAndRole(firstName, MyAppUser.Role.STUDENT);
@@ -41,7 +42,10 @@ public class StudentService {
 	public List<Student> getBySurname(String lastName) {
 		return (List<Student>) userRepository.findByLastNameAndRole(lastName, MyAppUser.Role.STUDENT);
 	}
-
+//get all user with their id
+	public String getUserById(String id) {
+		return id;
+	}
 	//get by Id
 	public Student getById(String id) {
 		return (Student) userRepository.findOneByIdAndRole(id, MyAppUser.Role.STUDENT);
