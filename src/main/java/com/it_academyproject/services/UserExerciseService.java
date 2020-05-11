@@ -1,5 +1,6 @@
 package com.it_academyproject.services;
 
+import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseFromStudentDTO;
 import com.it_academyproject.domains.*;
 import com.it_academyproject.exceptions.UserNotFoundException;
 import com.it_academyproject.repositories.CourseRepository;
@@ -103,15 +104,13 @@ public class UserExerciseService {
 				.orElseThrow(() -> new UserNotFoundException("Student not found: " + id)));
 	}
 
-	public boolean setUserExerciseStatusData(UserExercise userExercise, String id) {
-		System.out.println("UserExercise: " + userExercise.toString());
-		if (id == userExercise.getUserStudent().getId()) {
-			Date date = new Date();
-			userExercise.setDate_status(date);
-			userExercise.setStatus(userExercise.getStatus());
-			userExerciseRepository.save(userExercise);
-			return true;
-		}
-		return false;
+	public UserExercise setUserExerciseStatusData(UserExercise userExercise) {
+		UserExercise us = userExerciseRepository.findByExerciseIdAndStatusId(userExercise.getId(),
+				userExercise.getStatus().getId());
+		Date date = new Date();
+		us.setDate_status(date);
+		us.setStatus(userExercise.getStatus());
+		return userExerciseRepository.save(us);
 	}
+
 }

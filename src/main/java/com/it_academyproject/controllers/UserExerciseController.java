@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,17 +61,12 @@ public class UserExerciseController {
 	public List<ExerciseListDTO> getAllExerciseswithStudents() {
 		List<Exercise> foundExercises = userExerciseService.getAllExercises();
 		List<ExerciseListDTO> allExerciseswithStudents = new ArrayList<ExerciseListDTO>();
-		
-		for (Exercise exercise : foundExercises)
-		{
-		
-			List<UserExercise> studentsforThatExercise= userExerciseService.getStudentsByExercise(exercise);
-			allExerciseswithStudents.add(
-					new ExerciseListDTO(
-							exercise.getId(),
-							exercise.getName(),
-							exercise.getItinerary(),
-							studentsforThatExercise));
+
+		for (Exercise exercise : foundExercises) {
+
+			List<UserExercise> studentsforThatExercise = userExerciseService.getStudentsByExercise(exercise);
+			allExerciseswithStudents.add(new ExerciseListDTO(exercise.getId(), exercise.getName(),
+					exercise.getItinerary(), studentsforThatExercise));
 		}
 
 		return allExerciseswithStudents;
@@ -90,9 +86,12 @@ public class UserExerciseController {
 	 * actualiza automáticamente desde el back end, no hace falta incorporarla en el
 	 * JSON
 	 */
-	@JsonView(View.Summary.class)
-	@PutMapping("/api/exercises/student/{id}")
-	public boolean updateUserExerciseStatus(@RequestBody UserExercise userExercise, @PathVariable String id) {
-		return userExerciseService.setUserExerciseStatusData(userExercise, id);
+//	@JsonView(View.Summary.class)
+	@PutMapping("/api/exercises")
+	@ResponseBody
+	public UserExercise updateUserExerciseStatus(@RequestBody UserExercise userExercise) {
+		return userExerciseService.setUserExerciseStatusData(userExercise);
 	}
+
+
 }
