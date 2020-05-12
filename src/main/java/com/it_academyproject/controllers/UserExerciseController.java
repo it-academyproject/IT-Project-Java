@@ -68,7 +68,7 @@ public class UserExerciseController {
 			allExerciseswithStudents.add(new ExerciseListDTO(exercise.getId(), exercise.getName(),
 					exercise.getItinerary(), studentsforThatExercise));
 		}
-
+		
 		return allExerciseswithStudents;
 	}
 
@@ -86,12 +86,10 @@ public class UserExerciseController {
 	 * actualiza automáticamente desde el back end, no hace falta incorporarla en el
 	 * JSON
 	 */
-//	@JsonView(View.Summary.class)
 	@PutMapping("/api/exercises")
 	@ResponseBody
 	public UserExercise updateUserExerciseStatus(@RequestBody UserExercise userExercise) {
 		return userExerciseService.setUserExerciseStatusData(userExercise);
 	}
-
 
 }

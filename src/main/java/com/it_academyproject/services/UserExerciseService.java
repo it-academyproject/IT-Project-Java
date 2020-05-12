@@ -104,9 +104,9 @@ public class UserExerciseService {
 				.orElseThrow(() -> new UserNotFoundException("Student not found: " + id)));
 	}
 
-	public UserExercise setUserExerciseStatusData(UserExercise userExercise) {
-		UserExercise us = userExerciseRepository.findByExerciseIdAndStatusId(userExercise.getId(),
-				userExercise.getStatus().getId());
+	public UserExercise setUserExerciseStatusData(UserExercise userExercise) { 
+		UserExercise us = userExerciseRepository.findById(userExercise.getId())
+				.orElseThrow(() -> new UserNotFoundException("UserExercise not found"));
 		Date date = new Date();
 		us.setDate_status(date);
 		us.setStatus(userExercise.getStatus());
