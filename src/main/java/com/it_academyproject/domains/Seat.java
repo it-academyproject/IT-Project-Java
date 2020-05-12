@@ -12,10 +12,13 @@ public class Seat
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
+    
     @JsonView(View.Summary.class)
     private int rowNumber;
+    
     @JsonView(View.Summary.class)
     private int colNumber;
+    
     @JsonView(View.Summary.class)
     private int classRoom;
 
@@ -23,52 +26,62 @@ public class Seat
     @OneToMany
     private List<Student> students;
 */
-
     
-    
-    public Seat() {
+    public Seat() 
+    {
         
     }
 
-    public int getId() {
+    public int getId() 
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id) 
+    {
         this.id = id;
     }
 
-    public int getRowNumber() {
+    public int getRowNumber() 
+    {
         return rowNumber;
     }
 
-    public void setRowNumber(int rowNumber) {
+    public void setRowNumber(int rowNumber) 
+    {
         this.rowNumber = rowNumber;
     }
 
-    public int getColNumber() {
+    public int getColNumber() 
+    {
         return colNumber;
     }
 
-    public void setColNumber(int colNumber) {
+    public void setColNumber(int colNumber) 
+    {
         this.colNumber = colNumber;
     }
 
-/*
-    public List<Student> getStudents() {
+    
+    /*
+    public List<Student> getStudents() 
+    {
         return students;
     }
 
-    public void setStudents(List<Student> students) {
+    public void setStudents(List<Student> students) 
+    {
         this.students = students;
     }
-*/
+    */
 
-    public int getClassRoom() {
+    public int getClassRoom() 
+    {
         return classRoom;
     }
 
-    public void setClassRoom(int classRoom) {
+    public void setClassRoom(int classRoom) 
+    {
         this.classRoom = classRoom;
     }
 

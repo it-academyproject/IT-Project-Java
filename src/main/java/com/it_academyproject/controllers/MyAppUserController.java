@@ -34,10 +34,10 @@ public class MyAppUserController {
 	IterationRepository iterationRepository;
 	
 	//Call for students
-	//@JsonView(View.Summary.class)
 	@JsonView(View.Summary.class)
 	@GetMapping("/api/students")
-	public List<Student> getAllStudents(){
+	public List<Student> getAllStudents()
+	{
 		return studentService.getAllStudents();
 	}
 	

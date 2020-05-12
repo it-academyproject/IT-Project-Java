@@ -2,6 +2,8 @@ package com.it_academyproject.repositories;
 
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.MyAppUser.Role;
+import com.it_academyproject.domains.Student;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -28,8 +30,6 @@ public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
 	public ArrayList<MyAppUser> findByLastName(String lastName);
 	public List<MyAppUser> findByGender(char gender);
 	//public ArrayList<MyAppUser> findByRoleId(int roleId);
-	
-
 
 	
 	MyAppUser findUserById(String id );

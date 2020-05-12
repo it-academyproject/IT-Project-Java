@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface SeatRepository extends JpaRepository <Seat, Integer>
 {
-    List<Seat> findByRowNumberAndColNumber (int row , int col );
+    List<Seat> findByRowNumberAndColNumber (int row, int col);
 }
