@@ -13,13 +13,13 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Emails {
 
-	@GeneratedValue(strategy=GenerationType.IDENTITY)	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	private int id;
 	private boolean sent;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn (name="student_id")
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "student_id")
 	private Student userStudent;
 
 	private EmailType emailType;
@@ -42,32 +42,15 @@ public class Emails {
 		case "DAYSLEFT30":
 			this.setEmailType(EmailType.DAYSLEFT30);
 			break;
-		}
-		Date today = new Date();	
-		this.setDate(today);
-	}
-
-	public Emails(int id, int type, boolean sent) {
-		super();
-		this.id = id;
-
-		switch (type) {
-		case 1:
-			this.setEmailType(EmailType.ABSENCES);
-			break;
-		case 2:
-			this.setEmailType(EmailType.DAYSLEFT15);
-			break;
-		case 3:
-			this.setEmailType(EmailType.DAYSLEFT30);
+		case "EXCEEDDELIVERYTIME": {
+			this.setEmailType(EmailType.EXCEEDDELIVERYTIME);
 			break;
 		}
-
-		this.sent = sent;
-		Date today = new Date();	
+		}
+		
+		Date today = new Date();
 		this.setDate(today);
 	}
-
 
 	public int getId() {
 		return id;
