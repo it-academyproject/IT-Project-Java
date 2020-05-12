@@ -3,10 +3,12 @@ package com.it_academyproject.domains;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseListDTO;
 import com.it_academyproject.exceptions.EmptyFieldException;
+import com.it_academyproject.repositories.UserExerciseRepository;
 import com.it_academyproject.tools.View;
 
 import javax.persistence.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
@@ -17,9 +19,12 @@ import java.util.List;
 @DiscriminatorValue("student")
 public class Student extends MyAppUser 
 {	
+	@Autowired
+	UserExerciseRepository userExerciseRepository;
+	
 	@JsonView(View.Summary.class)
 	@JoinColumn
-	private Date lastExerciseDelivered;
+	private String lastExerciseDelivered;
 
 	@JsonView(View.Summary.class)
 	@ManyToOne
@@ -56,19 +61,27 @@ public class Student extends MyAppUser
 		this.seat = seat;
 	}
 	
-	@GetMapping("/test")
-	public Date getLastExerciseDelivered(List<UserExercise> exerciseList) 
+	/////////////////////
+	
+	public String getLastExerciseDelivered(Student user, Exercise exercises) 
 	{
-		for (UserExercise exercise : exerciseList)
+		List<UserExercise> lastExerciseDeliveredList = userExerciseRepository.findAllByRecentExerciseDelivered(exercises);
+		
+		for (UserExercise exercise : lastExerciseDeliveredList)
 		{
-			exercise.getDate_status();
+			if (exercise.getUserStudent().equals(user.getId()))
+			{
+				lastExerciseDelivered = exercise.getDate_status().toString();
+			}
 		}
-		return lastExerciseDelivered;		
+		return lastExerciseDelivered;
 	}
 
-	public void setLastExerciseDelivered(Date lastExerciseDelivered) 
+	public void setLastExerciseDelivered(String lastExerciseDelivered) 
 	{
 		this.lastExerciseDelivered = lastExerciseDelivered;
 	}
 	
+	/////////////////////
+
 }
