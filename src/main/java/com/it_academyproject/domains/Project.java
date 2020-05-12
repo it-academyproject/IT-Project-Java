@@ -22,86 +22,111 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.tools.View;
 
 @Entity
-@Table(name="project")
-public class Project {
+@Table(name = "project")
+public class Project
+{
+	private @Id @GeneratedValue Long id;
 
-	
-	
-	@Id @GeneratedValue private Long id;
-	
-	
+	private Long idParent;
+
 	private String name;
-	
+
 	private String description;
-	
+
 	private Date initialDate;
-	
-	@OneToMany(mappedBy="project")
+
+	@OneToMany(mappedBy = "project")
 	@JsonIgnore
 	Set<ProjectItinerary> projectItineraries;
-	
-	public Project(String name, String description, Date initialDate) {
+
+	private Boolean active;
+
+	// -------------------- -------------------- //
+
+	public Project(String name, String description, Date initialDate, boolean active)
+	{
 		super();
 		this.name = name;
 		this.description = description;
 		this.initialDate = initialDate;
+		this.active = active;
 	}
-	
-	
 
-	public Project() {
+	public Project()
+	{
 		super();
 	}
 
+	// -------------------- -------------------- //
 
-
-	public Long getId() {
+	public Long getId()
+	{
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Long id)
+	{
 		this.id = id;
 	}
 
-	public String getName() {
+	public String getName()
+	{
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(String name)
+	{
 		this.name = name;
 	}
 
-	public String getDescription() {
+	public String getDescription()
+	{
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(String description)
+	{
 		this.description = description;
 	}
 
-	public Date getInitialDate() {
+	public Date getInitialDate()
+	{
 		return initialDate;
 	}
 
-	public void setInitialDate(Date initialDate) {
+	public void setInitialDate(Date initialDate)
+	{
 		this.initialDate = initialDate;
 	}
 
-
-
-	public Set<ProjectItinerary> getProjectItineraries() {
+	public Set<ProjectItinerary> getProjectItineraries()
+	{
 		return projectItineraries;
 	}
 
-
-
-	public void setProjectItineraries(Set<ProjectItinerary> projectItineraries) {
+	public void setProjectItineraries(Set<ProjectItinerary> projectItineraries)
+	{
 		this.projectItineraries = projectItineraries;
 	}
 
-	
+	public Long getIdParent()
+	{
+		return idParent;
+	}
 
-	
-	
-	
+	public void setIdParent(Long idParent)
+	{
+		this.idParent = idParent;
+	}
+
+	public Boolean isActive()
+	{
+		return active;
+	}
+
+	public void setActive(Boolean active)
+	{
+		this.active = active;
+	}
+
 }
