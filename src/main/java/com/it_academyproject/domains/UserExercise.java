@@ -27,7 +27,7 @@ public class UserExercise {
 	private Date date_status;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="statusExercise_id")
+	@JoinColumn(name="status_id")
 	private StatusExercise statusExercise;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
