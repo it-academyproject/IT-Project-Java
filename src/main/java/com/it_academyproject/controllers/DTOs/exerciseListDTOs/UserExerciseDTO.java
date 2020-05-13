@@ -11,7 +11,7 @@ public class UserExerciseDTO {
 	String id;
 	String studentName;
 	String studentLastName;
-	String statusExercise;
+	String status;
 	Date date;
 	
 	
@@ -20,7 +20,7 @@ public class UserExerciseDTO {
 		this.id=userExercise.getUserStudent().getId();
 		this.studentName=userExercise.getUserStudent().getFirstName();
 		this.studentLastName=userExercise.getUserStudent().getLastName();
-		this.statusExercise=userExercise.getStatusExercise().getName();
+		this.status=userExercise.getStatusExercise().getName();
 		this.date=userExercise.getDate_status();
 		
 		
@@ -60,13 +60,13 @@ public class UserExerciseDTO {
 	}
 
 
-	public String getStatusExercise() {
-		return statusExercise;
+	public String getStatus() {
+		return status;
 	}
 
 
-	public void setStatusExercise(String statusExercise) {
-		this.statusExercise = statusExercise;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 

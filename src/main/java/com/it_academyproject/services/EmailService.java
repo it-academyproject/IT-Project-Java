@@ -164,12 +164,15 @@ public class EmailService {
 		for (int i = 1; i < userExercise.size(); i++) {
 			int days = (int) ((Math.abs((
 					userExercise.get(i).getDate_status().getTime() - actualDate.getTime()) / (86400000))));
-			//days >= 8 because all the values from "Date_status" field are bigger than 8 , normal condition should be when "days==8"
-			//Status exercise 1 -> NONE (not delivered) , change to 5 in order to test the code
-			if (days >=8  && userExercise.get(i).getStatusExercise().getId()==1) {
+			//Remember, all Date_status fields referenced to user_exercise table are bigger than 8 days,in order to test the code you can modify "days=<8"
+			//The plan is the next: every day at 9:00 AM automate the task to find not delivered exercises
+			//If actual date - start date exercise = 8 days & not delivered(!=3 status) ->send the email
+			//Status exercise 3 is delivered, so in the other states the condition is false
+			if (days ==8  && userExercise.get(i).getStatusExercise().getId()!=3) {
 				Emails emailsListNotification = new Emails("EXCEEDDELIVERYTIME");
 				emailsListNotification.setUserStudent(userExercise.get(i).getUserStudent());
-				if(userExercise.get(i).getUserStudent()==null) {//There are several fields  with student_id=NULL ->Continue iterance
+			//There are several fields  with student_id=NULL ->Continue iterance	
+				if(userExercise.get(i).getUserStudent()==null) {
 					continue;
 				}
 				emailsListNotification.setSent(false);
