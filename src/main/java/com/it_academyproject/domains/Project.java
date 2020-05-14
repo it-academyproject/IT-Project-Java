@@ -1,13 +1,16 @@
 package com.it_academyproject.domains;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -32,22 +35,21 @@ public class Project
 	@JsonIgnore
 	Set<ProjectItinerary> projectItineraries;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name = "iteration")
-	private Iteration iteration;
+	@ManyToMany//(mappedBy = "project")
+	private List<Iteration> iterations;
 
 	private Boolean active;
 
 	// -------------------- -------------------- //
 
-	public Project(String name, String description, Date initialDate, Iteration iteration, boolean active)
+	public Project(String name, String description, Date initialDate, List<Iteration> iterations, boolean active)
 	{
 		super(); // Do we really need this?
 		this.name = name;
 		this.description = description;
 		this.initialDate = initialDate;
 		this.active = active;
-		this.iteration = iteration;
+		this.iterations = iterations;
 	}
 
 	public Project()
@@ -118,14 +120,14 @@ public class Project
 		this.idParent = idParent;
 	}
 
-	public Iteration getIteration()
+	public List<Iteration> getIterations()
 	{
-		return iteration;
+		return iterations;
 	}
 
-	public void setIteration(Iteration iteration)
+	public void setIterations(List<Iteration> iterations)
 	{
-		this.iteration = iteration;
+		this.iterations = iterations;
 	}
 
 	public Boolean isActive()

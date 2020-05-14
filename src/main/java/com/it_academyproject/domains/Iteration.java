@@ -1,13 +1,17 @@
 package com.it_academyproject.domains;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -22,10 +26,14 @@ public class Iteration
 
 	private String iterationName;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_parent")
-	private Project project;
-
+	@JoinTable(
+			name = "rel_iterations_projects",
+			joinColumns = @JoinColumn(name = "FK_ITERATION", nullable = false),
+			inverseJoinColumns = @JoinColumn(name="FK_PROJECT", nullable = false)
+			)
+	@ManyToMany(cascade = CascadeType.ALL)
+	private List<Project> projects;
+	
 	private Date initialDate;
 
 	private Date endDate;
@@ -53,17 +61,26 @@ public class Iteration
 		super();
 	}
 
-	public Iteration(Long id, String iterationName, Project project, Date initialDate, Date endDate, String description)
+	public Iteration(Long id, String iterationName, List<Project> projects, Date initialDate, Date endDate, String description)
 	{
 		super();
 		this.id = id;
 		this.iterationName = iterationName;
-		this.project = project;
+		this.projects = projects;
 		this.initialDate = initialDate;
 		this.endDate = endDate;
 		this.description = description;
 	}
 
+	public void addProject(Project project)
+	{
+        if(this.projects == null)
+        {
+            this.projects = new ArrayList<>();
+        }        
+        this.projects.add(project);
+    }
+	
 	
 	// -------------------- -------------------- //
 	
@@ -87,15 +104,15 @@ public class Iteration
 	{
 		this.iterationName = name;
 	}
-
-	public Project getProject()
+	
+	public List<Project> getProjects()
 	{
-		return project;
+		return projects;
 	}
 
-	public void setProject(Project project)
+	public void setProjects(List<Project> projects)
 	{
-		this.project = project;
+		this.projects = projects;
 	}
 
 	public Date getInitialDate()
