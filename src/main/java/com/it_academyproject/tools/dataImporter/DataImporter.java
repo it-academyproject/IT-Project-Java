@@ -488,7 +488,7 @@ public class DataImporter
 
 
                                     userExercise.setExercise(exercise);
-                                    userExercise.setStatusExercise( statusExerciseRepository.findOneById( 5 ) );
+                                    userExercise.setStatus( statusExerciseRepository.findOneById( 5 ) );
                                     userExercise.setUserStudent( (Student) student );
                                     userExercise.setUserTeacher( teacherUser );
                                     if ( userExercise.getDate_status() != null )
