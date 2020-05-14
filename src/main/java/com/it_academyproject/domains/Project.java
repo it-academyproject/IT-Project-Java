@@ -1,25 +1,18 @@
 package com.it_academyproject.domains;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.it_academyproject.tools.View;
 
 @Entity
 @Table(name = "project")
@@ -39,22 +32,28 @@ public class Project
 	@JsonIgnore
 	Set<ProjectItinerary> projectItineraries;
 
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "iteration")
+	private Iteration iteration;
+
 	private Boolean active;
 
 	// -------------------- -------------------- //
 
-	public Project(String name, String description, Date initialDate, boolean active)
+	public Project(String name, String description, Date initialDate, Iteration iteration, boolean active)
 	{
-		super();
+		super(); // Do we really need this?
 		this.name = name;
 		this.description = description;
 		this.initialDate = initialDate;
 		this.active = active;
+		this.iteration = iteration;
 	}
 
 	public Project()
 	{
-		super();
+		super(); // Do we really need it? this is a default field when you generate an empty
+					// constructor
 	}
 
 	// -------------------- -------------------- //
@@ -119,6 +118,16 @@ public class Project
 		this.idParent = idParent;
 	}
 
+	public Iteration getIteration()
+	{
+		return iteration;
+	}
+
+	public void setIteration(Iteration iteration)
+	{
+		this.iteration = iteration;
+	}
+
 	public Boolean isActive()
 	{
 		return active;
@@ -128,5 +137,5 @@ public class Project
 	{
 		this.active = active;
 	}
-
+	
 }
