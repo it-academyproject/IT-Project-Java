@@ -60,7 +60,7 @@ public class AbsencesController {
 	
 	
 	 //Call absences by student id
-		@JsonView(View.Summary.class)
+		@JsonView(View.ShortDetails.class)
 		@GetMapping("api/absences/student/{student_id}")
 		public List<Absence> getAbsenceByStudentId(@PathVariable(name="student_id") String studentId) {
 			return absencesService.getAllAbsenceByStudentId(studentId);
