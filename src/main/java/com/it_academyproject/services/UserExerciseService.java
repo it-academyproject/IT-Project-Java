@@ -143,19 +143,26 @@ public class UserExerciseService
 	public String getLastDeliveredExerciseDate(Student student)
 	{
 		List<UserExercise> studentExercises = userExerciseRepository.findByUserStudent(student);
-		//List<UserExercise> studentExerciseList = userExerciseRepository.findAll(); //.findByUserStudent(student);
-
 		List<String> lastDeliveredExerciseDate = new ArrayList<String>();
+		String result;
 		
-		for(UserExercise exercise : studentExercises)
+		if(studentExercises.size()==0)
 		{
-			if(exercise.getStatusExercise().getId()==5) //exercise.getUserStudent().getId()==student.getId()
+			for(UserExercise exercise : studentExercises)
 			{
-				lastDeliveredExerciseDate.add(exercise.getDate_status().toString());
+				if(exercise.getStatusExercise().getId()==5) 
+				{
+					lastDeliveredExerciseDate.add(exercise.getDate_status().toString());
+				}
 			}
+			Collections.sort(lastDeliveredExerciseDate, Collections.reverseOrder());
+			result = lastDeliveredExerciseDate.get(0);
 		}
-		Collections.sort(lastDeliveredExerciseDate, Collections.reverseOrder());
-		return lastDeliveredExerciseDate.get(0);
+		else
+		{
+			result = "L'Usuari no té exercisis";
+		}
+		return result;
 	} 
-
+	
 }
