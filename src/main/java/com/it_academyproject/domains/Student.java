@@ -19,12 +19,8 @@ import java.util.List;
 @DiscriminatorValue("student")
 public class Student extends MyAppUser 
 {	
-	@Autowired
-	UserExerciseRepository userExerciseRepository;
-	
 	@JsonView(View.Summary.class)
-	@JoinColumn
-	private String lastExerciseDelivered;
+	private String lastDeliveredExercise;
 
 	@JsonView(View.Summary.class)
 	@ManyToOne
@@ -60,28 +56,15 @@ public class Student extends MyAppUser
 	{
 		this.seat = seat;
 	}
-	
-	/////////////////////
-	
-	public String getLastExerciseDelivered(Student user, Exercise exercises) 
+
+	public String getLastDeliveredExercise()
 	{
-		List<UserExercise> lastExerciseDeliveredList = userExerciseRepository.findAllByRecentExerciseDelivered(exercises);
-		
-		for (UserExercise exercise : lastExerciseDeliveredList)
-		{
-			if (exercise.getUserStudent().equals(user.getId()))
-			{
-				lastExerciseDelivered = exercise.getDate_status().toString();
-			}
-		}
-		return lastExerciseDelivered;
+		return lastDeliveredExercise;
 	}
 
-	public void setLastExerciseDelivered(String lastExerciseDelivered) 
+	public void setLastDeliveredExercise(String lastDeliveredExercise)
 	{
-		this.lastExerciseDelivered = lastExerciseDelivered;
+		this.lastDeliveredExercise = lastDeliveredExercise;
 	}
 	
-	/////////////////////
-
 }

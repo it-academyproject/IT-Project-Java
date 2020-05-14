@@ -2,10 +2,15 @@ package com.it_academyproject.services;
 
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.Student;
+import com.it_academyproject.domains.UserExercise;
 import com.it_academyproject.exceptions.UserNotFoundException;
 import com.it_academyproject.repositories.MyAppUserRepository;
+import com.it_academyproject.repositories.UserExerciseRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -18,6 +23,9 @@ public class StudentService
 	@Autowired
 	CourseService courseService;
 
+	@Autowired
+	UserExerciseService userExerciseService;
+	
 	///////////////////////////////////////
 	
 	//getAll
@@ -31,10 +39,19 @@ public class StudentService
 		for(Student student : students)
 		{
 			student.setCourses(courseService.findByUserStudent(student));
+			student.setLastDeliveredExercise(userExerciseService.getLastDeliveredExerciseDate(student));
 		}
 		return students;
 	}
 
+	/*
+	@GetMapping("/test")
+	private String getLastExerciseDeliveredByDate(Student user)
+	{
+		UserExercise lastExerciseDeliveredByStudent = userExerciseRepository.findByUserStudentAndOrderedByDate(user);
+		return lastExerciseDeliveredByStudent.getDate_status().toString();
+	}
+	*/
 	
 	////////////////////////////////////////////////////////
 	
