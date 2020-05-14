@@ -4,13 +4,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -35,7 +31,7 @@ public class Project
 	@JsonIgnore
 	Set<ProjectItinerary> projectItineraries;
 
-	@ManyToMany//(mappedBy = "project")
+	@ManyToMany
 	private List<Iteration> iterations;
 
 	private Boolean active;
@@ -55,7 +51,7 @@ public class Project
 	public Project()
 	{
 		super(); // Do we really need it? this is a default field when you generate an empty
-					// constructor
+		// constructor
 	}
 
 	// -------------------- -------------------- //
@@ -139,5 +135,5 @@ public class Project
 	{
 		this.active = active;
 	}
-	
+
 }
