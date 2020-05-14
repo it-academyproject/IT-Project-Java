@@ -10,9 +10,11 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/api/public/")
+@RequestMapping("/api/public")
 public class DataImportController
 {
+
+    /********************** COMMENTED AFTER B-30 REFACTORING ********************
     @Autowired
     DataImporter dataImporter;
     private final String SLASH = "\\";
@@ -31,5 +33,6 @@ public class DataImportController
 
         return errorData.toString();
     }
+*/
 
 }

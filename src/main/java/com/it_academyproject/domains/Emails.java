@@ -20,7 +20,7 @@ public class Emails {
 
     @ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn (name="student_id")
-	private MyAppUser userStudent;
+	private Student userStudent;
 
 	private EmailType emailType;
 
@@ -85,11 +85,11 @@ public class Emails {
 		this.sent = sent;
 	}
 
-	public MyAppUser getUserStudent() {
+	public Student getUserStudent() {
 		return userStudent;
 	}
 
-	public void setUserStudent(MyAppUser userStudent) {
+	public void setUserStudent(Student userStudent) {
 		this.userStudent = userStudent;
 	}
 

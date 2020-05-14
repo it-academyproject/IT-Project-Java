@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.tools.View;
 
 import java.util.Date;
-import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,30 +22,24 @@ public class Course {
 	@Id
 	@JsonView(View.Summary.class)
 	private int id;
+	@JsonView(View.Summary.class)
 	private Date beginDate;
 	@JsonView(View.Summary.class)
 	private Date endDate;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="student_id")
-	private MyAppUser userStudent;
+	private Student userStudent;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="teacher_id")
-	private MyAppUser userTeacher;
+	private Teacher teacher;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="itinerary_id")
 	@JsonView(View.Summary.class)
 	private Itinerary itinerary;
 	
-	/*@ManyToOne (targetEntity = MyAppUser.class)
-	@JoinColumn (name="id", insertable=false, updatable=false)
-	private MyAppUser user;
-	@ManyToOne (targetEntity = Itinerary.class)
-	@JoinColumn (name="id", insertable=false, updatable=false)
-	private Itinerary itinerary;*/
-
 	public Course() {
 	}
 
@@ -85,18 +78,18 @@ public class Course {
 		return "Course [id=" + id + ", beginDate=" + beginDate + ", endDate=" + endDate + "]";
 	}
 
-	public MyAppUser getUserStudent() {
+	public Student getUserStudent() {
 		return userStudent;
 	}
 
-	public void setUserStudent(MyAppUser userStudent) { this.userStudent = userStudent; }
+	public void setUserStudent(Student userStudent) { this.userStudent = userStudent; }
 
-	public MyAppUser getUserTeacher() {
-		return userTeacher;
+	public Teacher getTeacher() {
+		return teacher;
 	}
 
-	public void setUserTeacher(MyAppUser userTeacher) {
-		this.userTeacher = userTeacher;
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
 	}
 
 	public Itinerary getItinerary() {
@@ -105,23 +98,5 @@ public class Course {
 
 	public void setItinerary(Itinerary itinerary) {
 		this.itinerary = itinerary;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof Course)) return false;
-		Course course = (Course) o;
-		return getId() == course.getId() &&
-				Objects.equals(getBeginDate(), course.getBeginDate()) &&
-				Objects.equals(getEndDate(), course.getEndDate()) &&
-				getUserStudent().equals(course.getUserStudent()) &&
-				Objects.equals(getUserTeacher(), course.getUserTeacher()) &&
-				Objects.equals(getItinerary(), course.getItinerary());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getId(), getBeginDate(), getEndDate(), getUserStudent(), getUserTeacher(), getItinerary());
 	}
 }

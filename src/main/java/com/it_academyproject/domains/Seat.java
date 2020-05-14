@@ -5,7 +5,6 @@ import com.it_academyproject.tools.View;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 public class Seat
@@ -20,8 +19,10 @@ public class Seat
     @JsonView(View.Summary.class)
     private int classRoom;
 
+/*
     @OneToMany
-    private List<MyAppUser> myAppUser;
+    private List<Student> students;
+*/
 
     
     
@@ -53,13 +54,15 @@ public class Seat
         this.colNumber = colNumber;
     }
 
-    public List<MyAppUser> getMyAppUser() {
-        return myAppUser;
+/*
+    public List<Student> getStudents() {
+        return students;
     }
 
-    public void setMyAppUser(List<MyAppUser> myAppUser) {
-        this.myAppUser = myAppUser;
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
+*/
 
     public int getClassRoom() {
         return classRoom;
@@ -69,18 +72,5 @@ public class Seat
         this.classRoom = classRoom;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Seat)) return false;
-        Seat seat = (Seat) o;
-        return getRowNumber() == seat.getRowNumber() &&
-                getColNumber() == seat.getColNumber() &&
-                getClassRoom() == seat.getClassRoom();
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getRowNumber(), getColNumber(), getClassRoom());
-    }
 }

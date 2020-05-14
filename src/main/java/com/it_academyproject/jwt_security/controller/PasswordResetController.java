@@ -35,7 +35,7 @@ public class PasswordResetController
     }
 
     //Save the new password
-    @PostMapping ( "/api/save-new-password/" )
+    @PostMapping ( "/api/save-new-password" )
     public ResponseEntity<String> savePassword(@RequestBody String body)
     {
         try {

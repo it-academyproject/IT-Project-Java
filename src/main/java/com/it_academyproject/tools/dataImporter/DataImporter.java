@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-@Service
+//@Service
 public class DataImporter
 {
     @Autowired
@@ -23,20 +23,23 @@ public class DataImporter
     CourseRepository courseRepository;
     @Autowired
     AbsenceRepository absenceRepository;
-    @Autowired
-    RoleRepository roleRepository;
+
+    /********************** COMMENTED AFTER B-30 REFACTORING ********************
+        @Autowired
+        OldRoleRepository oldRoleRepository;
+    */
     @Autowired
     ItineraryRepository itineraryRepository;
     @Autowired
-    ExerciceRepository exerciceRepository;
+    ExerciseRepository exerciseRepository;
     @Autowired
-    StatusExerciceRepository statusExerciceRepository;
+    StatusExerciseRepository statusExerciseRepository;
     @Autowired
-    UserExerciceRepository userExerciceRepository;
+    UserExerciseRepository userExerciseRepository;
     @Autowired
     SeatRepository seatRepository;
 
-
+    /********************** COMMENTED AFTER B-30 REFACTORING ********************
     public Map <Integer , String> manualCreation ()
     {
         //role
@@ -48,10 +51,10 @@ public class DataImporter
 
         for (int i = 1; i <= rolesList.size(); i++)
         {
-            Role role = new Role();
+            OldRole role = new OldRole();
             role.setId( i );
             role.setName( rolesList.get( i ) );
-            roleRepository.save( role );
+            oldRoleRepository.save( role );
         }
         //Itinerary
         Map<Integer , String >itineraryList = new HashMap<>();
@@ -66,7 +69,7 @@ public class DataImporter
             itinerary.setName( itineraryList.get( i ) );
             itineraryRepository.save( itinerary );
         }
-        //status_exercice
+        //status_exercise
         Map<Integer , String >exStatusList = new HashMap<>();
         exStatusList.put( 1 , "NONE");
         exStatusList.put( 2 , "TURNED IN");
@@ -76,16 +79,16 @@ public class DataImporter
 
         for (int i = 1; i <= exStatusList.size(); i++)
         {
-            StatusExercice statusExercice = new StatusExercice();
-            statusExercice.setId( i );
-            statusExercice.setName( exStatusList.get( i ) );
-            statusExerciceRepository.save( statusExercice );
+            StatusExercise statusExercise = new StatusExercise();
+            statusExercise.setId( i );
+            statusExercise.setName( exStatusList.get( i ) );
+            statusExerciseRepository.save(statusExercise);
         }
         //Adding teachers to MyAppUsers
         List<MyAppUser> users = new ArrayList<>();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        Role teachersRol = roleRepository.findOneById(2);
-        Role adminRol = roleRepository.findOneById(3);
+        OldRole teachersRol = oldRoleRepository.findOneById(2);
+        OldRole adminRol = oldRoleRepository.findOneById(3);
 
         users.add( new MyAppUser( "Testing", "IT - Department", "it@academy.com", 'M',
                 "", passwordEncoder.encode("123456"), true, teachersRol) );
@@ -107,6 +110,7 @@ public class DataImporter
 
         users.add( new MyAppUser( "Marc", "Vera", "", 'M',
                 "", passwordEncoder.encode(""), true, adminRol) );
+
 
         Map <Integer , String> teacherVSitinerary = new HashMap<>();
         MyAppUser myAppUser;
@@ -132,10 +136,10 @@ public class DataImporter
                 users.set(i , myAppUserRepository.save( users.get( i ) ) );
             }
             //return the the teacher and the itinerary for the exercises
-            /*itineraryList.put( 1 , "COMMON-BLOCK");
+            itineraryList.put( 1 , "COMMON-BLOCK");
             itineraryList.put( 2 , "FRONT-END");
             itineraryList.put( 3 , "BACK-END - JAVA");
-            itineraryList.put( 4 , "BACK-END - .NET");*/
+            itineraryList.put( 4 , "BACK-END - .NET");
             //System.out.println( users.get(i).getFirstName() );
             if ( users.get(i).getFirstName().equals("Ismael"))
             {
@@ -153,13 +157,14 @@ public class DataImporter
 
 
         return teacherVSitinerary;
-    }
+    }*/
 
+    /********************** COMMENTED AFTER B-30 REFACTORING ********************
     public boolean importAlumnesActius ()
     {
-        /* DummyContentUtil dummyContentUtil = new DummyContentUtil( myAppUserRepository );
-        dummyContentUtil.generateDummyUsers();*/
-        Role role = roleRepository.findOneById ( 1 );
+         DummyContentUtil dummyContentUtil = new DummyContentUtil( myAppUserRepository );
+        dummyContentUtil.generateDummyUsers();
+        OldRole role = oldRoleRepository.findOneById ( 1 );
         Itinerary itinerary = itineraryRepository.findOneById ( 1 );
         try {
             //System.out.println(Paths.get("").toAbsolutePath().toString());
@@ -192,7 +197,7 @@ public class DataImporter
                         }
                         else
                         {
-                            if ( j == 0) //name and last name this need to be separated by the coma
+                            if ( j == 0) //name and last name this need to be separeated by the coma
                             {
                                 int commaPos = currentCell.indexOf(",");
                                 String lastName = currentCell.substring(0 , commaPos);
@@ -200,20 +205,14 @@ public class DataImporter
                                 myAppUser.setFirstName( name );
                                 myAppUser.setLastName (lastName);
                             }
-                            // TODO: Remove "if" when verified correct B-38 branch working
-                            else if ( j == 1) //Núm. Document
-                            {
-                                System.out.println("Deprecated option: DNI removed from database.");
-                                //myAppUser.setIdDocument (currentCell);
-                            }
                             else if ( j == 2) //Núm. Document
                             {
-                                /*
+
                                 PREVIOUSLY USED TO ESTIMATE THE BIRTHDAY, REMOVED FOR AGE.
                                 Calendar cal = Calendar.getInstance();
                                 cal.set(2019-Integer.parseInt(currentCell), 1, 1);
 
-                                 */
+
                                 try
                                 {
                                     myAppUser.setAge ( Integer.parseInt(currentCell) );
@@ -339,14 +338,14 @@ public class DataImporter
             e.printStackTrace();
         }
         return true;
-    }
+    }*/
 
     public JSONObject importEjerciciosporalumno ( int sheetNumber , int itineraryNumber , String teacherId )
     {
         List <String> NotFoundUser = new ArrayList<>();
         Itinerary itinerary = itineraryRepository.findOneById ( 1 );
-        MyAppUser teacherUser = myAppUserRepository.findOneById( teacherId )
-        		.orElseThrow(() -> new ResourceNotFoundException("not found"));
+        Teacher teacherUser = (Teacher) myAppUserRepository.findOneById( teacherId )
+                .orElseThrow(() -> new ResourceNotFoundException("not found"));
         try
         {
             //System.out.println(Paths.get("").toAbsolutePath().toString());
@@ -354,7 +353,7 @@ public class DataImporter
             Excel excel = new Excel();
             excel.openFile(fileLocation);
             Map<Integer, List<String>> excelContent = excel.readJExcelContent(sheetNumber);
-            Map<Integer , Exercice> exerciceMap = new HashMap<>();
+            Map<Integer , Exercise> exerciseMap = new HashMap<>();
             //System.out.println( excelContent );
 
             // Get a set of the entries
@@ -365,7 +364,7 @@ public class DataImporter
             {
                 Course course = new Course();
                 currentRow = excelContent.get(i);
-                MyAppUser myAppUser = null;
+                MyAppUser student = null;
                 for (int j = 0; j < currentRow.size() ; j++)
                 {
 
@@ -386,22 +385,22 @@ public class DataImporter
                         {
                             //Nothing
                             //check if is on the DB
-                            List<Exercice> exercicesList = exerciceRepository.findAllByNameAndItinerary( currentCell , itineraryRepository.findOneById( itineraryNumber ) );
-                            if ( (exercicesList == null ) || ( exercicesList.size() == 0) )
+                            List<Exercise> exercisesList = exerciseRepository.findAllByNameAndItinerary( currentCell , itineraryRepository.findOneById( itineraryNumber ) );
+                            if ( (exercisesList == null ) || ( exercisesList.size() == 0) )
                             {
                                 //exists do nothing
 
-                                Exercice exercice = new Exercice();
-                                exercice.setItinerary( itineraryRepository.findOneById( itineraryNumber ) );
-                                exercice.setName( currentCell );
-                                exerciceMap.put( j , exercice );
-                                exercice  = exerciceRepository.save( exercice );
-                                keyList.put( j , exercice.getId());
+                                Exercise exercise = new Exercise();
+                                exercise.setItinerary( itineraryRepository.findOneById( itineraryNumber ) );
+                                exercise.setName( currentCell );
+                                exerciseMap.put( j , exercise);
+                                exercise = exerciseRepository.save(exercise);
+                                keyList.put( j , exercise.getId());
 
                             }
-                            else if ( exercicesList.size() > 0 )
+                            else if ( exercisesList.size() > 0 )
                             {
-                                keyList.put( j , exercicesList.get(0).getId());
+                                keyList.put( j , exercisesList.get(0).getId());
                             }
 
 
@@ -433,7 +432,7 @@ public class DataImporter
                                             if ( myAppUserList1.get(k).getLastName().indexOf( lastName ) > 0 )
                                             {
                                                 //keeper contains last name
-                                                myAppUser = myAppUserList1.get(k);
+                                                student = myAppUserList1.get(k);
                                             }
                                         }
                                     }
@@ -447,7 +446,7 @@ public class DataImporter
                                 else if (( myAppUserList != null ) && ( myAppUserList.size() == 1 ))
                                 {
                                     //ok only finding one
-                                    myAppUser = myAppUserList.get(0);
+                                    student = myAppUserList.get(0);
                                     //
                                 }
 
@@ -455,59 +454,59 @@ public class DataImporter
                         }
                         else if (( j > 1 ) && ( j < 16) && ( ! currentCell.equals("")))
                         {
-                            Integer exerciceKey = keyList.get(j);
+                            Integer exerciseKey = keyList.get(j);
                             //check if there is an excercise associated with this
-                            Exercice exercice = exerciceRepository.findOneById( exerciceKey );
-                            if ( exercice  == null  )
+                            Exercise exercise = exerciseRepository.findOneById( exerciseKey );
+                            if ( exercise == null  )
                             {
                                 throw (new Exception ("The exercise is not created. "));
                             }
                             else
                             {
-                                //check if is the user_exercice
-                                UserExercice userExercice = userExerciceRepository.findOneByUserStudentAndExercice( myAppUser , exercice );
-                                if ( userExercice == null )
+                                //check if is the user_exercise
+                                UserExercise userExercise = userExerciseRepository.findOneByUserStudentAndExercise( (Student) student , exercise);
+                                if ( userExercise == null )
                                 {
-                                    userExercice = new UserExercice();
-                                    userExercice.setComments("Imported Automatically");
-                                    userExercice.setUserTeacher( teacherUser );
+                                    userExercise = new UserExercise();
+                                    userExercise.setComments("Imported Automatically");
+                                    userExercise.setUserTeacher( teacherUser );
                                     Date javaDate = null;
                                     try
                                     {
                                         javaDate = DateUtil.getJavaDate( Double.parseDouble( currentCell ));
-                                        userExercice.setDate_status( javaDate );
+                                        userExercise.setDate_status( javaDate );
                                     }
                                     catch (NumberFormatException e)
                                     {
                                         //e.printStackTrace();
                                         if ( currentCell.length( ) == 5 )
                                         {
-                                            userExercice.setDate_status( stringToDate( currentCell + "/2019"));
+                                            userExercise.setDate_status( stringToDate( currentCell + "/2019"));
                                         }
                                     }
                                     //System.out.print(new SimpleDateFormat("dd/MM/yyyy").format(javaDate) + " - ");
 
 
-                                    userExercice.setExercice( exercice );
-                                    userExercice.setStatusExercice( statusExerciceRepository.findOneById( 5 ) );
-                                    userExercice.setUserStudent( myAppUser );
-                                    userExercice.setUserTeacher( teacherUser );
-                                    if ( userExercice.getDate_status() != null )
-                                        userExerciceRepository.save ( userExercice );
-                                        List<Course> thisUsersCourseList = courseRepository.findByUserStudent(myAppUser);
-                                        if ( itineraryNumber != 1 )
+                                    userExercise.setExercise(exercise);
+                                    userExercise.setStatus( statusExerciseRepository.findOneById( 5 ) );
+                                    userExercise.setUserStudent( (Student) student );
+                                    userExercise.setUserTeacher( teacherUser );
+                                    if ( userExercise.getDate_status() != null )
+                                        userExerciseRepository.save (userExercise);
+                                    List<Course> thisUsersCourseList = courseRepository.findByUserStudent((Student) student);
+                                    if ( itineraryNumber != 1 )
+                                    {
+                                        if (( thisUsersCourseList != null ) && ( thisUsersCourseList.size() > 0))
                                         {
-                                            if (( thisUsersCourseList != null ) && ( thisUsersCourseList.size() > 0))
+                                            if ( thisUsersCourseList.get(0).getItinerary() != null )
                                             {
-                                                if ( thisUsersCourseList.get(0).getItinerary() != null )
-                                                {
-                                                    Course thisCourse = thisUsersCourseList.get(0);
-                                                    thisCourse.setItinerary( itineraryRepository.findOneById( itineraryNumber ) );
-                                                    thisCourse.setUserTeacher( teacherUser );
-                                                    courseRepository.save( thisCourse );
-                                                }
+                                                Course thisCourse = thisUsersCourseList.get(0);
+                                                thisCourse.setItinerary( itineraryRepository.findOneById( itineraryNumber ) );
+                                                thisCourse.setTeacher( teacherUser );
+                                                courseRepository.save( thisCourse );
                                             }
                                         }
+                                    }
 
                                 }
                             }
@@ -524,10 +523,12 @@ public class DataImporter
         sendData.put( "NotInStudents" , NotFoundUser );
         return sendData;
     }
+
+    /********************** COMMENTED AFTER B-30 REFACTORING ********************
     public boolean importTaules ()
     {
         List <String> NotFoundUser = new ArrayList<>();
-        Role role = roleRepository.findOneById ( 1 );
+        OldRole role = oldRoleRepository.findOneById ( 1 );
         Itinerary itinerary = itineraryRepository.findOneById ( 1 );
         try {
             //System.out.println(Paths.get("").toAbsolutePath().toString());
@@ -535,7 +536,7 @@ public class DataImporter
             Excel excel = new Excel();
             excel.openFile(fileLocation);
             Map<Integer, List<String>> excelContent = excel.readJExcelContent(0);
-            Map<Integer, Exercice> exerciceMap = new HashMap<>();
+            Map<Integer, Exercise> exerciseMap = new HashMap<>();
             //System.out.println( excelContent );
 
             // Get a set of the entries
@@ -620,7 +621,8 @@ public class DataImporter
         }
 
         return true;
-    }
+    }*/
+
     private Date stringToDate (String stringDate )
     {
         String OriginalString = stringDate.toString();
