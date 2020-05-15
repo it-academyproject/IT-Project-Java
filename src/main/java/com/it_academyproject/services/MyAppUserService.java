@@ -1,5 +1,6 @@
 package com.it_academyproject.services;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,15 +16,26 @@ import org.springframework.stereotype.Service;
 import com.it_academyproject.domains.Course;
 import com.it_academyproject.domains.Iteration;
 import com.it_academyproject.domains.MyAppUser;
+import com.it_academyproject.domains.MyAppUser.Role;
+import com.it_academyproject.domains.Student;
+import com.it_academyproject.domains.Teacher;
 import com.it_academyproject.exceptions.ResourceNotFoundException;
+import com.it_academyproject.exceptions.UserNotFoundException;
 import com.it_academyproject.repositories.IterationRepository;
 import com.it_academyproject.repositories.MyAppUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MyAppUserService {
 
-	private static final int ROLE_ID = 1;
+
+	private static final Role ROLE_ID = Role.STUDENT;
 	
+
 	@Autowired
 	MyAppUserRepository myAppUserRepository;
 	
@@ -32,51 +44,80 @@ public class MyAppUserService {
 
 	@Autowired
 	CourseService courseService;
+
 	
+	@Autowired
+	AbsencesService absencesService;
+		
+
 	//getAll
-	public List<MyAppUser> getAllStudents(){
-		return updateStudentCourses(myAppUserRepository.findByRoleId(1));
+	public List<Student> getAllStudents(){
+		return updateStudentCourses((List<Student>) myAppUserRepository.findByRole(MyAppUser.Role.STUDENT));
 	}
-	private List<MyAppUser> updateStudentCourses(List<MyAppUser> students) {
-		for (MyAppUser student : students) {
+
+	private List<Student> updateStudentCourses(List<Student> students) {
+		for (Student student : students) {
 			student.setCourses(courseService.findByUserStudent(student));
 		}
 		return students;
 	}
 
+	/***** in dev branch when merging. Substituted by previous function in b-30
+
+	public List<MyAppUser> getAllStudents(){
+		return updateStudentCourses(myAppUserRepository.findByRoleId(1));
+	}
+
+	private List<MyAppUser> updateStudentCourses(List<MyAppUser> students) {
+		for (MyAppUser student : students) {
+			student.setCourses(courseService.findByUserStudent(student));
+		}
+		return students;
+	}*/
+
 	//get by name
-	public List<MyAppUser> getByName(String firstName){
+	/*public List<MyAppUser> getByName(String firstName){
 		return updateStudentCourses(myAppUserRepository.findByFirstName(firstName));
 	}
 
 	//get by surName
 	public List<MyAppUser> getBySurname(String lastName) {
 		return updateStudentCourses(myAppUserRepository.findByLastName(lastName));
+	}*/
+
+	//get by Id
+	public Student getById(String id) {
+		System.out.println(id);
+		Student myAppUser = null;
+		Optional<MyAppUser> studentOptional = myAppUserRepository.findById(id);
+		if(studentOptional.isPresent()) {
+<<<<<<< HEAD
+			student = updateStudentCourses(studentOptional.get());
+=======
+
+			myAppUser = (Student)studentOptional.get();
+
+			myAppUser.setCourses(courseService.findByUserStudent(myAppUser));
+			myAppUser.setTotalAbsences(absencesService.getAbsenceByStudentId(myAppUser).size());
+
+>>>>>>> a67427bc53d556b5121a327403091f38ea49f8eb
+		}else {
+			System.out.println("User not found 404");
+		}
+		// System.out.println(myAppUser.getFirstName());
+		return updateStudentCourses((Student) myAppUser);
 	}
 
-	private MyAppUser updateStudentCourses(MyAppUser student) {
+	private Student updateStudentCourses(Student student) {
 		student.setCourses(courseService.findByUserStudent(student));
 		return student;
 	}
 
-
-	//get by Id
-	public MyAppUser getById(String id) {
-		MyAppUser student = null;
-		Optional<MyAppUser> studentOptional = myAppUserRepository.findById(id);
-		if(studentOptional.isPresent()) {
-			student = updateStudentCourses(studentOptional.get());
-		}else {
-			System.out.println("Student not found 404");
-		}
-		return student;
-	}
-
 	// get student by Id
-	public Optional<MyAppUser> getStudentById (String id) {
-		MyAppUser student = getById(id);
+	public Optional<Student> getStudentById (String id) {
+		Student student = (Student)getById(id);
 		if (student!=null) {
-			if (student.getRole().getId() != ROLE_ID) throw new BadRoleException("User is not a student");
+			if (student.getRole() != ROLE_ID) throw new BadRoleException("User is not a student");
 		}
 		return Optional.ofNullable(student);
 	}
@@ -95,6 +136,19 @@ public class MyAppUserService {
 //			return student;
 //		}
 	
+
+	// Update user by id
+	public MyAppUser updateById(Student student) {
+
+		if(myAppUserRepository.existsById(student.getId())) {
+			MyAppUser user = myAppUserRepository.findOneById(student.getId())
+					.orElseThrow(()-> new UserNotFoundException("User not found"));
+			user.setFirstName(student.getFirstName());
+			user.setLastName(student.getLastName());
+			myAppUserRepository.save(user);
+			return user;
+		}else {return null;}
+	}
 
 	// Edit student
 	public MyAppUser editStudent(MyAppUser student) {
@@ -116,14 +170,9 @@ public class MyAppUserService {
 		}
 	}
 
-	// Find number of users given a gender (M for male, F for female)
-	public int usersByGender(char gender) {
-		return myAppUserRepository.findByGender(gender).size();
-	}
-
 	// Return full name given an id . Format "surname, name"
-	public String getFullnameById(String studentId) {
-		MyAppUser student = getById(studentId);
+	public String getFullNameById(String studentId) {
+		Student student = getById(studentId);
 		return student.getLastName() + ", " + student.getFirstName();
 	}
 
@@ -133,6 +182,12 @@ public class MyAppUserService {
 
 	public String getLastNameById(String studentId) {
 		return getById(studentId).getLastName();
+	}
+
+	public Teacher addTeacher(Teacher teacher) { return myAppUserRepository.save(teacher);}
+
+	public List<Student> getStudents() {
+		return (List<Student>) myAppUserRepository.findByRole(MyAppUser.Role.STUDENT);
 	}
 
 /*

@@ -51,6 +51,7 @@ public class PasswordResetService
             }
 
             String token = UUID.randomUUID().toString();
+
             PasswordResetToken passwordResetToken = new PasswordResetToken( token , myAppUser );
             passwordResetTokenRepository.save( passwordResetToken );
 
@@ -59,8 +60,12 @@ public class PasswordResetService
                 String email_to = email;
                 String email_from = "itacademy@virginiacampo.com";
                 String email_subject = "It-Academy Password Reset";
-                String email_content = "Hello User! you have requested the reser of your password. Please go to the following to do this: " +
-                        "http://localhost:8080/password-reset.html?email=\"" + email + "\"&token="+token;
+                String email_link= "http://itacademylabs.com/login/new-password?email=" + email + "&token="+token;
+                String email_content = "<h2>Hello User!</h2>"
+                		+ "				<h3>Someone asked for a password reset at the IT Academy for this email.</h3>"
+                		+ "				<p> If correct, please follow this link to do so: </p> " 
+                		+				 email_link
+                        ;
 
                 EmailObj emailObj = new EmailObj(email_to , email_from , email_subject , email_content );
                 EmailUtil emailUtil = new EmailUtil( emailObj );
@@ -71,7 +76,7 @@ public class PasswordResetService
                     JSONObject sendData = new JSONObject();
                     JSONObject message = new JSONObject();
                     message.put("type" , "success");
-                    message.put("message" , "The email was sent successfully.");
+                    message.put("message" , "Email sent successfully.");
                     sendData.put("message" , message);
                     System.out.println(sendData);
                     return sendData;
@@ -90,7 +95,7 @@ public class PasswordResetService
         }
         else if ( myAppUser == null )
         {
-            throw (new UserNotFoundException("The email does not belong to anyone."));
+            throw (new UserNotFoundException("The email provided was not found."));
         }
         else if ( ! myAppUser.isEnabled() )
         {
@@ -160,7 +165,7 @@ public class PasswordResetService
                                 JSONObject sendData = new JSONObject();
                                 JSONObject message = new JSONObject();
                                 message.put("type" , "success");
-                                message.put("message" , "The password was updated successfully.");
+                                message.put("message" , "Password was updated successfully.");
                                 sendData.put("message" , message);
                                 System.out.println(sendData);
                                 return sendData;

@@ -20,8 +20,10 @@ public class Seat
     @JsonView(View.Summary.class)
     private int classRoom;
 
+/*
     @OneToMany
-    private List<MyAppUser> myAppUser;
+    private List<Student> students;
+*/
 
     
     
@@ -53,13 +55,15 @@ public class Seat
         this.colNumber = colNumber;
     }
 
-    public List<MyAppUser> getMyAppUser() {
-        return myAppUser;
+/*
+    public List<Student> getStudents() {
+        return students;
     }
 
-    public void setMyAppUser(List<MyAppUser> myAppUser) {
-        this.myAppUser = myAppUser;
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
+*/
 
     public int getClassRoom() {
         return classRoom;

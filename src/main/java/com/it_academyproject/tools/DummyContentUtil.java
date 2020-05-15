@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.it_academyproject.domains.MyAppUser;
+import com.it_academyproject.domains.Student;
 import com.it_academyproject.exceptions.EmptyFieldException;
 import com.it_academyproject.repositories.MyAppUserRepository;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,7 +24,7 @@ public class DummyContentUtil
         List<MyAppUser> users = new ArrayList<>();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         try {
-            users.add(new MyAppUser("vickycampo@gmail.com", passwordEncoder.encode("123456")));
+            users.add(new Student("vickycampo@gmail.com", passwordEncoder.encode("123456")));
 
 
             MyAppUser myAppUser;
