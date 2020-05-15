@@ -3,6 +3,7 @@ package com.it_academyproject.domains;
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.util.*;
 
 import javax.persistence.CascadeType;
@@ -19,6 +20,9 @@ import javax.persistence.Table;
 =======
 import com.fasterxml.jackson.annotation.JsonFormat;
 >>>>>>> a67427bc53d556b5121a327403091f38ea49f8eb
+=======
+import com.fasterxml.jackson.annotation.JsonFormat;
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.exceptions.EmptyFieldException;
@@ -32,10 +36,13 @@ import java.util.*;
 @DiscriminatorColumn(name = "subclass", discriminatorType = DiscriminatorType.STRING)
 @Table(name="users")
 <<<<<<< HEAD
+<<<<<<< HEAD
 public class MyAppUser {
 
 	//@GeneratedValue(strategy=GenerationType.IDENTITY)	
 =======
+=======
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 public abstract class MyAppUser {
 
 	// Order according to former implementation
@@ -45,19 +52,26 @@ public abstract class MyAppUser {
 	}
 
 	
+<<<<<<< HEAD
 >>>>>>> a67427bc53d556b5121a327403091f38ea49f8eb
+=======
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 	@Id
 	// @GeneratedValue(strategy=GenerationType.IDENTITY)
 	@JsonView({View.Summary.class, View.ShortDetails.class})
 	private String id;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	
 >>>>>>> a67427bc53d556b5121a327403091f38ea49f8eb
+=======
+	
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 	@JsonView({View.Summary.class, View.ShortDetails.class})
 	private String firstName;
-
+	
 	@JsonView({View.Summary.class, View.ShortDetails.class})
 	private String lastName;
 
@@ -69,12 +83,18 @@ public abstract class MyAppUser {
 
 	@JsonView(View.SummaryWithOthers.class)
 <<<<<<< HEAD
+<<<<<<< HEAD
 	private int age;
 =======
 	@Temporal(TemporalType.DATE)
 	@JsonFormat(pattern="dd-MM-yyyy")
 	private Date birthdate;
 >>>>>>> a67427bc53d556b5121a327403091f38ea49f8eb
+=======
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(pattern="dd-MM-yyyy")
+	private Date birthdate;
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 
 	@JsonView(View.SummaryWithOthers.class)
 	private String portrait;
@@ -84,12 +104,15 @@ public abstract class MyAppUser {
 	private Date lastLogin;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 	@ManyToOne (fetch = FetchType.EAGER)
 	@JoinColumn (name="rol_id")
 	private Role role;
 
 =======
+=======
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 	private Role role;
 	
 	@JsonView(View.Summary.class)
@@ -98,7 +121,10 @@ public abstract class MyAppUser {
 	private Date lastClassAttendance;
 
 	
+<<<<<<< HEAD
 >>>>>>> a67427bc53d556b5121a327403091f38ea49f8eb
+=======
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 	@OneToMany (targetEntity = Absence.class, cascade = CascadeType.ALL)
 	private List <Absence> absences = new ArrayList <Absence>();
 	@JsonView(View.Summary.class)
@@ -119,19 +145,22 @@ public abstract class MyAppUser {
 //            inverseJoinColumns = { @JoinColumn(name = "iteration_id") })
 //	@JsonIgnore
 //	private Set<Iteration> iterations = new HashSet<>();
-
+	
 	@OneToMany(mappedBy="myAppUser")
 	@JsonIgnore
 	Set<UserIteration> userIterations;
-
-
+	
+	
 	public MyAppUser() {
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 =======
 >>>>>>> a67427bc53d556b5121a327403091f38ea49f8eb
+=======
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 	}
-
+	
 	public MyAppUser(String firstName, String lastName, String email, char gender,
 					 String portrait, String password, boolean enabled, Role role) {
 		
@@ -145,26 +174,25 @@ public abstract class MyAppUser {
 		this.role = role;
 		
 	}
-
-	public MyAppUser(String email, String password) throws EmptyFieldException
-	{
-		if ((email != "")&&(password!=""))
-		{
-			this.email = email;
-			this.password = password;
-			this.lastLogin = new Date();
-			this.enabled = true;
-		}
-		else if (email == "")
-		{
-			throw (new EmptyFieldException("email"));
-		}
-		else if ( password == "" )
-		{
-			throw (new EmptyFieldException("password"));
-		}
-	}
-
+	
+	 public MyAppUser(String email, String password) throws EmptyFieldException
+	    {
+	        if ((email != "")&&(password!=""))
+	        {
+	            this.email = email;
+	            this.password = password;
+	            this.lastLogin = new Date();
+	            this.enabled = true;
+	        }
+	        else if (email == "")
+	        {
+	            throw (new EmptyFieldException("email"));
+	        }
+	        else if ( password == "" )
+	        {
+	            throw (new EmptyFieldException("password"));
+	        }
+	    }
 
 	public String getId() {
 		return id;
@@ -178,11 +206,6 @@ public abstract class MyAppUser {
 	{
 		UUID uuid = UUID.randomUUID();
 		this.id = uuid.toString();
-	}
-
-	// Necessary for testing purposes
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getFirstName() {
@@ -265,7 +288,7 @@ public abstract class MyAppUser {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-
+	
 	public Date getLastLogin() {
 		return lastLogin;
 	}
@@ -297,10 +320,13 @@ public abstract class MyAppUser {
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	public List<Course> getCourses() {
 		return courses;
 	}
 =======
+=======
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 	@Override
 	public String toString() {
 		return "MyAppUser [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
@@ -312,7 +338,10 @@ public abstract class MyAppUser {
 	}
 	
 	
+<<<<<<< HEAD
 >>>>>>> a67427bc53d556b5121a327403091f38ea49f8eb
+=======
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 
 	//	public Set<Iteration> getIterations() {
 //		return iterations;
@@ -321,6 +350,7 @@ public abstract class MyAppUser {
 //	public void setIterations(Iteration iteration) {
 //		this.iterations.add(iteration) ;
 //	}
+<<<<<<< HEAD
 <<<<<<< HEAD
 //
 
@@ -378,6 +408,8 @@ public abstract class MyAppUser {
 	}
 
 =======
+=======
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 //	
 	
 	
@@ -386,7 +418,10 @@ public abstract class MyAppUser {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", gender=" + gender + ", portrait=" + portrait + ", password=" + password
 				+ ", enabled=" + enabled + "]";
 	}	*/
+<<<<<<< HEAD
 >>>>>>> a67427bc53d556b5121a327403091f38ea49f8eb
+=======
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 
 }
 // {"id":"030027e8-3bd2-431d-b57b-2f3b60aed01b"}

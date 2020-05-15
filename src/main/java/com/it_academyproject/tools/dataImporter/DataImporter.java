@@ -197,7 +197,7 @@ public class DataImporter
                         }
                         else
                         {
-                            if ( j == 0) //name and last name this need to be separated by the coma
+                            if ( j == 0) //name and last name this need to be separeated by the coma
                             {
                                 int commaPos = currentCell.indexOf(",");
                                 String lastName = currentCell.substring(0 , commaPos);

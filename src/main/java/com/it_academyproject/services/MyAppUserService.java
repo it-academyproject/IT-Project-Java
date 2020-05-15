@@ -92,15 +92,21 @@ public class MyAppUserService {
 		Optional<MyAppUser> studentOptional = myAppUserRepository.findById(id);
 		if(studentOptional.isPresent()) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 			student = updateStudentCourses(studentOptional.get());
 =======
+=======
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 
 			myAppUser = (Student)studentOptional.get();
 
 			myAppUser.setCourses(courseService.findByUserStudent(myAppUser));
 			myAppUser.setTotalAbsences(absencesService.getAbsenceByStudentId(myAppUser).size());
 
+<<<<<<< HEAD
 >>>>>>> a67427bc53d556b5121a327403091f38ea49f8eb
+=======
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 		}else {
 			System.out.println("User not found 404");
 		}
@@ -163,7 +169,7 @@ public class MyAppUserService {
 				user.setLastName(student.getLastName());
 			myAppUserRepository.save(user);
 
-			return updateStudentCourses(user);
+			return user;
 
 		} else {
 			return null;

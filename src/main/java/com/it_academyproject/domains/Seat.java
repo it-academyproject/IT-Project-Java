@@ -5,7 +5,6 @@ import com.it_academyproject.tools.View;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 public class Seat
@@ -73,18 +72,5 @@ public class Seat
         this.classRoom = classRoom;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Seat)) return false;
-        Seat seat = (Seat) o;
-        return getRowNumber() == seat.getRowNumber() &&
-                getColNumber() == seat.getColNumber() &&
-                getClassRoom() == seat.getClassRoom();
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getRowNumber(), getColNumber(), getClassRoom());
-    }
 }

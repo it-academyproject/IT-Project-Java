@@ -5,14 +5,20 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseFromStudentDTO;
 import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseListDTO;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import com.it_academyproject.domains.Exercice;
 import com.it_academyproject.domains.UserExercice;
 =======
+=======
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 import com.it_academyproject.domains.Exercise;
 import com.it_academyproject.domains.UserExercise;
 import com.it_academyproject.domains.Student;
 import com.it_academyproject.domains.MyAppUser;
+<<<<<<< HEAD
 >>>>>>> a67427bc53d556b5121a327403091f38ea49f8eb
+=======
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 import com.it_academyproject.exceptions.BadRoleException;
 import com.it_academyproject.exceptions.UserNotFoundException;
 import com.it_academyproject.repositories.UserExerciseRepository;
@@ -21,7 +27,9 @@ import com.it_academyproject.services.UserExerciseService;
 import com.it_academyproject.tools.View;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -76,12 +84,17 @@ public class UserExerciseController {
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@GetMapping ("/api/exercises/student-id/{id}")
 	public List<ExerciseFromStudentDTO> getExercisesByStudentId(@PathVariable(name="id") String id){
 =======
 	@GetMapping("/api/exercises/student-id/{id}")
 	public List<ExerciseFromStudentDTO> getExercisesByStudentIdNew(@PathVariable(name = "id") String id) {
 >>>>>>> a67427bc53d556b5121a327403091f38ea49f8eb
+=======
+	@GetMapping("/api/exercises/student-id/{id}")
+	public List<ExerciseFromStudentDTO> getExercisesByStudentIdNew(@PathVariable(name = "id") String id) {
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 		try {
 			return ExerciseFromStudentDTO.getList(userExerciseService.getExercisesByStudentId(id));
 		} catch (UserNotFoundException | BadRoleException e) {

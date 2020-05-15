@@ -34,6 +34,7 @@ public class MyAppUserController {
 	IterationRepository iterationRepository;
 	
 	//Call for students
+	//@JsonView(View.Summary.class)
 	@JsonView(View.Summary.class)
 	@GetMapping("/api/students")
 	public List<Student> getAllStudents(){
@@ -86,6 +87,7 @@ public class MyAppUserController {
 	// Edit Student by id
 	@JsonView(View.SummaryWithOthers.class)
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@PutMapping("api/students/id")
 	public MyAppUser putStudentById(@RequestBody MyAppUser student){
 		return myAppUserService.editStudent( student);
@@ -94,6 +96,11 @@ public class MyAppUserController {
 	public Student updateStudent(@RequestBody Student student){
 		return studentService.editStudent(student);
 >>>>>>> a67427bc53d556b5121a327403091f38ea49f8eb
+=======
+	@PutMapping("/api/students/id")
+	public Student updateStudent(@RequestBody Student student){
+		return studentService.editStudent(student);
+>>>>>>> 23d29a39df85afb9934302bc76d005636245cbb6
 	}
 		
 //	@PutMapping("/api/students/{userId}")
