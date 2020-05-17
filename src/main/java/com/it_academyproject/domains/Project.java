@@ -17,7 +17,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "project")
 public class Project
 {
-	private @Id @GeneratedValue Long id;
+	@Id @GeneratedValue
+	private Long id;
 
 	private Long idParent;
 
@@ -38,20 +39,18 @@ public class Project
 
 	// -------------------- -------------------- //
 
+	public Project()
+	{
+
+	}
+	
 	public Project(String name, String description, Date initialDate, List<Iteration> iterations, boolean active)
 	{
-		super(); // Do we really need this?
 		this.name = name;
 		this.description = description;
 		this.initialDate = initialDate;
 		this.active = active;
 		this.iterations = iterations;
-	}
-
-	public Project()
-	{
-		super(); // Do we really need it? this is a default field when you generate an empty
-		// constructor
 	}
 
 	// -------------------- -------------------- //

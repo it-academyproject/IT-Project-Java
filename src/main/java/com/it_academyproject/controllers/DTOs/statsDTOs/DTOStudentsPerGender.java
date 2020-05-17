@@ -1,20 +1,29 @@
 package com.it_academyproject.controllers.DTOs.statsDTOs;
 
-public class DTOStudentsPerGender {
+public class DTOStudentsPerGender
+{
 
-    private final int male;
-    private final int female;
+	private final int male;
+	private final int female;
 
-    public DTOStudentsPerGender(int male, int female) {
-        this.male = male;
-        this.female = female;
-    }
+	// -------------------- -------------------- //
+	
+	public DTOStudentsPerGender(int male, int female)
+	{
+		this.male = male;
+		this.female = female;
+	}
 
-    public int getMale() {
-        return male;
-    }
+	// -------------------- -------------------- //
+	
+	public int getMale()
+	{
+		return male;
+	}
 
-    public int getFemale() {
-        return female;
-    }
+	public int getFemale()
+	{
+		return female;
+	}
+
 }

@@ -3,8 +3,6 @@ package com.it_academyproject.controllers;
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentAbsence;
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsPerGender;
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsPerItinerary;
-import com.it_academyproject.repositories.MyAppUserRepository;
-import com.it_academyproject.services.MyAppUserService;
 import com.it_academyproject.services.StatisticsService;
 import com.it_academyproject.services.StudentService;
 import org.json.JSONObject;
@@ -19,52 +17,72 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class StatisticsController {
+public class StatisticsController
+{
 	@Autowired
 	StatisticsService statisticsService;
+	
 	@Autowired
 	StudentService studentService;
 
+	// -------------------- -------------------- //
+	
 	@GetMapping("/api/statistics/per-itinerary")
-	public List<DTOStudentsPerItinerary> perItinerary() {
-
+	public List<DTOStudentsPerItinerary> perItinerary()
+	{
 		Map<String, Integer> studentsPerItinerary = statisticsService.perItinerary();
 		List<DTOStudentsPerItinerary> result = new ArrayList<>();
-		for (Map.Entry<String, Integer> entry : studentsPerItinerary.entrySet()) {
+	
+		for (Map.Entry<String, Integer> entry : studentsPerItinerary.entrySet())
+		{
 			result.add(new DTOStudentsPerItinerary(entry.getKey(), entry.getValue()));
 		}
+		
 		return result;
 	}
 
 	@GetMapping("/api/statistics/per-gender")
-	public DTOStudentsPerGender perGender() {
+	public DTOStudentsPerGender perGender()
+	{
 		return new DTOStudentsPerGender(studentService.studentsByGender('M'), studentService.studentsByGender('F'));
 	}
 
 	@GetMapping("/api/statistics/per-absence")
-	public List<DTOStudentAbsence> perAbsence() {
+	public List<DTOStudentAbsence> perAbsence()
+	{
 		List<DTOStudentAbsence> absences = new ArrayList<>();
-		for (Map.Entry<String, Integer> entry : statisticsService.perAbsence().entrySet()) {
+		
+		for (Map.Entry<String, Integer> entry : statisticsService.perAbsence().entrySet())
+		{
 			absences.add(new DTOStudentAbsence(studentService.getUserById(entry.getKey()),
-					studentService.getFirstNameById(entry.getKey()), studentService.getLastNameById(entry.getKey()),entry.getValue()));
+					studentService.getFirstNameById(entry.getKey()), studentService.getLastNameById(entry.getKey()),
+					entry.getValue()));
 		}
+		
 		return absences;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/api/statistics/finish-in-x-days")
-	public ResponseEntity<String> finishInXdays() {
-		try {
+	public ResponseEntity<String> finishInXdays()
+	{
+		try
+		{
 			String sendData = statisticsService.finishInXdays();
+		
 			return new ResponseEntity(sendData.toString(), HttpStatus.FOUND);
-		} catch (Exception e) {
+		} 
+		catch (Exception e)
+		{
 			String exceptionMessage = e.getMessage();
 			JSONObject sendData = new JSONObject();
 			JSONObject message = new JSONObject();
 			message.put("type", "error");
 			message.put("message", exceptionMessage);
 			sendData.put("Message", message);
+			
 			return new ResponseEntity(sendData.toString(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
 }

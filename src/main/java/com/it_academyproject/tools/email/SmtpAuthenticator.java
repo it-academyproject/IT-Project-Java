@@ -5,32 +5,37 @@ import javax.mail.PasswordAuthentication;
 
 public class SmtpAuthenticator extends Authenticator
 {
-    private String username;
-    private String password;
-    public SmtpAuthenticator() {
+	private String username;
 
-        super();
-    }
+	private String password;
 
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-    public void setUsername(String username)
-    {
-        this.username = username;
-    }
+	// -------------------- -------------------- //
+	
+	public SmtpAuthenticator()
+	{
 
-    @Override
-    public PasswordAuthentication getPasswordAuthentication()
-    {
+	}
 
-        if ((username != null) && (username.length() > 0) && (password != null) && (password.length() > 0))
-        {
+	// -------------------- -------------------- //
+	
+	public void setPassword(String password)
+	{
+		this.password = password;
+	}
 
-            return new PasswordAuthentication(username, password);
-        }
+	public void setUsername(String username)
+	{
+		this.username = username;
+	}
 
-        return null;
-    }
+	@Override
+	public PasswordAuthentication getPasswordAuthentication()
+	{
+		if ((username != null) && (username.length() > 0) && (password != null) && (password.length() > 0))
+		{
+			return new PasswordAuthentication(username, password);
+		}
+		return null;
+	}
+
 }

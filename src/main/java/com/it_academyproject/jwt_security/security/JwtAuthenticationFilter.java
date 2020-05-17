@@ -1,7 +1,6 @@
 package com.it_academyproject.jwt_security.security;
 
 import com.it_academyproject.domains.MyAppUser;
-import com.it_academyproject.domains.Student;
 import com.it_academyproject.exceptions.EmptyFieldException;
 import com.it_academyproject.exceptions.ResourceNotFoundException;
 import com.it_academyproject.exceptions.UserNotEnabled;
@@ -36,188 +35,190 @@ import java.util.stream.Collectors;
 @Configurable
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter
 {
-    private MyAppUserRepository myAppUserRepository;
+	private MyAppUserRepository myAppUserRepository;
 
-    private AuthenticationManager authenticationManager;
+	private AuthenticationManager authenticationManager;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager , MyAppUserRepository myAppUserRepository)
-    {
-        this.authenticationManager = authenticationManager;
-        this.myAppUserRepository = myAppUserRepository;
-        setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
-    }
+	// -------------------- -------------------- //
+	
+	public JwtAuthenticationFilter(AuthenticationManager authenticationManager, MyAppUserRepository myAppUserRepository)
+	{
+		this.authenticationManager = authenticationManager;
+		this.myAppUserRepository = myAppUserRepository;
+		setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
+	}
 
-	//B-27 Task: Update last time an user do login.
-    public MyAppUser updateLastLogin(MyAppUser myAppUser) {
+	// B-27 Task: Update last time an user do login.
+	public MyAppUser updateLastLogin(MyAppUser myAppUser)
+	{
+		if (myAppUserRepository.existsById(myAppUser.getId()))
+		{
+			MyAppUser user = myAppUserRepository.findOneById(myAppUser.getId())
+					.orElseThrow(() -> new ResourceNotFoundException("not found"));
+			java.util.Date date = new java.util.Date();
+			java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
+			user.setLastLogin(timestamp);
+			myAppUserRepository.save(user);
+			return user;
+		} 
+		else
+		{
+			return null;
+		}
+	}
 
-        if (myAppUserRepository.existsById(myAppUser.getId())) {
-            MyAppUser user = myAppUserRepository.findOneById(myAppUser.getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("not found"));
-            java.util.Date date = new java.util.Date();
-            java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
-            user.setLastLogin(timestamp);
-            myAppUserRepository.save(user);
-            return user;
-        } else {
-            return null;
-        }
-    }
+	// B-27 Task: Update last time an user do login.
+	public MyAppUser editGetByDni(MyAppUser student)
+	{
+		if (myAppUserRepository.existsById(student.getId()))
+		{
+			MyAppUser user = myAppUserRepository.findOneById(student.getId())
+					.orElseThrow(() -> new ResourceNotFoundException("not found"));
+			java.util.Date date = new java.util.Date();
+			java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
+			user.setLastLogin(timestamp);
+			myAppUserRepository.save(user);
+			return user;
+		} 
+		else
+		{
+			return null;
+		}
+	}
 
-    //B-27 Task: Update last time an user do login.
-    public MyAppUser editGetByDni(MyAppUser student) {
-        
-        if(myAppUserRepository.existsById(student.getId())) {
-        MyAppUser user = myAppUserRepository.findOneById(student.getId())
-        .orElseThrow(() -> new ResourceNotFoundException("not found"));
-        java.util.Date date = new java.util.Date();
-        java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
-        user.setLastLogin(timestamp);
-        myAppUserRepository.save(user);
-         return user;
-         }else {return null;}
-    }
+	@Override
+	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+	{
+		LoginData loginData = new LoginData();
+		response.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+		try
+		{
+			String test = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+			JSONObject loginDataJson = new JSONObject(test);
+			if ((loginDataJson.has("email")) && (loginDataJson.has("password"))
+					&& (!loginDataJson.getString("email").equals(""))
+					&& (!loginDataJson.getString("password").equals("")))
+			{
+				loginData.setEmail(loginDataJson.getString("email"));
+				loginData.setPassword(loginDataJson.get("password").toString());
+				BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+				MyAppUser myAppUser = myAppUserRepository.findByEmail(loginData.getEmail());
+				if (myAppUser == null)
+				{
+					throw new UserNotEnabled(loginData.getEmail());
+				}
+				if (passwordEncoder.matches(loginData.getPassword(), myAppUser.getPassword()))
+				{
+					List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
+					Authentication authenticationToken = new UsernamePasswordAuthenticationToken(loginData.getEmail(),
+							loginData.getPassword(), grantedAuthorityList);
+					try
+					{
+						// B27 Task: When authentication is succeed, date of last login is updated
+						// calling:
+						updateLastLogin(myAppUser);
+						return authenticationManager.authenticate(authenticationToken);
+					} 
+					catch (AuthenticationException e)
+					{
+						e.printStackTrace();
+						throw (new UserNotEnabled(loginData.getEmail()));
+					}
+				} 
+				else
+				{
+					// double check on the user and password.
+					throw (new WrongEmailPassword());
+				}
+			} 
+			else if (!(loginDataJson.has("email")) || (loginDataJson.getString("email").equals("")))
+			{
+				throw (new EmptyFieldException("email"));
+			} 
+			else if (!(loginDataJson.has("password")) || (loginDataJson.getString("password").equals("")))
+			{
+				throw (new EmptyFieldException("password"));
+			}
+		} 
+		catch (WrongEmailPassword e)
+		{
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			try
+			{
+				JSONObject json = new JSONObject();
+				json.put("success", false);
+				json.write(response.getWriter());
+			} 
+			catch (IOException ex)
+			{
+				ex.printStackTrace();
+			}
+		} 
+		catch (UserNotEnabled e)
+		{
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			try
+			{
+				JSONObject json = new JSONObject();
+				json.put("success", false);
+				json.write(response.getWriter());
+			} 
+			catch (IOException ex)
+			{
+				ex.printStackTrace();
+			}
+		} 
+		catch (EmptyFieldException e)
+		{
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			try
+			{
+				JSONObject json = new JSONObject();
+				json.put("success", false);
+				json.write(response.getWriter());
 
-    @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-    {
-        LoginData loginData = new LoginData();
+			} 
+			catch (IOException ex)
+			{
+				ex.printStackTrace();
+			}
+		} 
+		catch (IOException e)
+		{
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}
+		return null;
+	}
 
-        response.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+	@Override
+	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+			FilterChain filterChain, Authentication authentication)
+	{
+		UserDetails userDetails = ((UserDetails) authentication.getPrincipal());
+		Object roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+				.collect(Collectors.toList());
+		byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();
+		String token = Jwts.builder().signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
+				.setHeaderParam("typ", SecurityConstants.TOKEN_TYPE).setIssuer(SecurityConstants.TOKEN_ISSUER)
+				.setAudience(SecurityConstants.TOKEN_AUDIENCE).setSubject(userDetails.getUsername())
+				.setExpiration(new Date(System.currentTimeMillis() + (8640000))).claim("rol", roles).compact();
+		System.out.println("The expiration date of the token is: "
+				+ (new Date(System.currentTimeMillis() + (8640000)).toString()));
+		response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
+		MyAppUser myAppUser = myAppUserRepository.findByEmail(userDetails.getUsername());
+		try
+		{
+			JSONObject json = new JSONObject();
+			json.put("success", true);
+			json.put("token", token);
+			json.put("firstName", myAppUser.getFirstName());
+			json.put("lastName", myAppUser.getLastName());
+			json.write(response.getWriter());
+		} 
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
 
-        try
-        {
-            String test = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-
-            JSONObject  loginDataJson = new JSONObject ( test );
-
-            if ( (loginDataJson.has("email")) &&
-                    (loginDataJson.has("password")) &&
-                    (! loginDataJson.getString("email").equals("") ) &&
-                    (! loginDataJson.getString("password").equals("") )
-            )
-            {
-                loginData.setEmail(loginDataJson.getString("email"));
-                loginData.setPassword(loginDataJson.get("password").toString());
-
-                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-                MyAppUser myAppUser = myAppUserRepository.findByEmail(loginData.getEmail());
-
-                if (myAppUser == null) throw new UserNotEnabled(loginData.getEmail());
-
-                if ( passwordEncoder.matches(loginData.getPassword() , myAppUser.getPassword() ))
-                {
-                    List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
-                    Authentication authenticationToken = new UsernamePasswordAuthenticationToken(loginData.getEmail(), loginData.getPassword(), grantedAuthorityList );
-
-                    try
-                    {
-						//B27 Task: When authentication is succeed, date of last login is updated calling:
-                    	updateLastLogin(myAppUser);
-                        return authenticationManager.authenticate(authenticationToken);
-                    }
-                    catch ( AuthenticationException e )
-                    {
-                        e.printStackTrace();
-                        throw ( new UserNotEnabled(loginData.getEmail()));
-                    }
-                }
-                else
-                {
-                    //double check on the user and password.
-                    throw ( new WrongEmailPassword() );
-                }
-            }
-            else if ( !(loginDataJson.has("email")) || (loginDataJson.getString("email").equals("")))
-            {
-                throw (new EmptyFieldException("email"));
-            }
-            else if ( !(loginDataJson.has("password")) || (loginDataJson.getString("password").equals("")))
-            {
-                throw (new EmptyFieldException("password"));
-            }
-
-        }
-        catch (WrongEmailPassword e)
-        {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            try {
-                JSONObject json = new JSONObject();
-                json.put("success", false);
-                json.write(response.getWriter());
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        catch (UserNotEnabled e )
-        {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            try {
-                JSONObject json = new JSONObject();
-                json.put("success", false);
-                json.write(response.getWriter());
-            }
-            catch (IOException ex)
-            {
-                ex.printStackTrace();
-            }
-        }
-        catch (EmptyFieldException e)
-        {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            try {
-                JSONObject json = new JSONObject();
-                json.put("success", false);
-                json.write(response.getWriter());
-
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        catch (IOException e)
-        {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        }
-        return null;
-
-    }
-
-    @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                            FilterChain filterChain, Authentication authentication) {
-
-        UserDetails userDetails = ((UserDetails) authentication.getPrincipal());
-
-        Object roles = userDetails.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
-
-        byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();
-
-        String token = Jwts.builder()
-                .signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
-                .setHeaderParam("typ", SecurityConstants.TOKEN_TYPE)
-                .setIssuer(SecurityConstants.TOKEN_ISSUER)
-                .setAudience(SecurityConstants.TOKEN_AUDIENCE)
-                .setSubject(userDetails.getUsername())
-                .setExpiration(new Date(System.currentTimeMillis() + (8640000)))
-                .claim("rol", roles)
-                .compact();
-        System.out.println("The expiration date of the token is: " + (new Date(System.currentTimeMillis() + (8640000)).toString()));
-
-        response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
-
-        MyAppUser myAppUser = myAppUserRepository.findByEmail(userDetails.getUsername());
-
-        try {
-            JSONObject json = new JSONObject();
-            json.put("success", true);
-            json.put("token", token);
-            json.put("firstName", myAppUser.getFirstName());
-            json.put("lastName", myAppUser.getLastName());
-            json.write(response.getWriter());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

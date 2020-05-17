@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StatusExerciseRepository extends JpaRepository<StatusExercise, Integer>
 {
-        StatusExercise findOneById(Integer id );
+	StatusExercise findOneById(Integer id);
 }

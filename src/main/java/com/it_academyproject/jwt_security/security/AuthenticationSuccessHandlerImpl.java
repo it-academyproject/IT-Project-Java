@@ -14,14 +14,14 @@ import java.util.Date;
 @Component
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler
 {
-    @Autowired
-    private MyAppUserRepository myAppUserRepository;
+	@Autowired
+	private MyAppUserRepository myAppUserRepository;
 
-    @Override
-    public void onAuthenticationSuccess (HttpServletRequest arg0 , HttpServletResponse arg1 , Authentication arg2) throws IOException
-    {
-        myAppUserRepository.updateLastLogin( new Date());
-    }
-
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest arg0, HttpServletResponse arg1, Authentication arg2)
+			throws IOException
+	{
+		myAppUserRepository.updateLastLogin(new Date());
+	}
 
 }

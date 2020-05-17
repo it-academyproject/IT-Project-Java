@@ -1,7 +1,6 @@
 package com.it_academyproject.services;
 
 import com.it_academyproject.domains.Course;
-import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.Student;
 import com.it_academyproject.domains.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +11,21 @@ import com.it_academyproject.repositories.CourseRepository;
 import java.util.List;
 
 @Service
-public class CourseService {
-	
+public class CourseService
+{
 	@Autowired
 	CourseRepository courseRepository;
 
-	public List<Course> findByUserStudent(Student student) {
+	// -------------------- -------------------- //
+	
+	public List<Course> findByUserStudent(Student student)
+	{
 		return courseRepository.findByUserStudent(student);
 	}
 
-	public List<Course> findByTeacher(Teacher teacher) {
+	public List<Course> findByTeacher(Teacher teacher)
+	{
 		return courseRepository.findByTeacher(teacher);
 	}
+
 }

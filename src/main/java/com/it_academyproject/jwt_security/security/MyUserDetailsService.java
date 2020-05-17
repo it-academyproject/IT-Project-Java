@@ -15,38 +15,45 @@ import javax.annotation.PostConstruct;
 
 @Service
 @Configurable
-public class MyUserDetailsService implements UserDetailsService {
+public class MyUserDetailsService implements UserDetailsService
+{
+	@Autowired
+	private WebApplicationContext applicationContext;
 
-    @Autowired
-    private WebApplicationContext applicationContext;
-    private MyAppUserRepository myAppUserRepository;
+	private MyAppUserRepository myAppUserRepository;
 
-    public MyUserDetailsService()
-    {
-        super();
-    }
-    @PostConstruct
-    public void completeSetup ()
-    {
-        try {
-            if (myAppUserRepository == null )
-            {
-                myAppUserRepository = applicationContext.getBean(MyAppUserRepository.class);
-            }
+	// -------------------- -------------------- //
+	
+	public MyUserDetailsService()
+	{
+	
+	}
 
-        } catch (BeansException e)
-        {
+	@PostConstruct
+	public void completeSetup()
+	{
+		try
+		{
+			if (myAppUserRepository == null)
+			{
+				myAppUserRepository = applicationContext.getBean(MyAppUserRepository.class);
+			}
+		} 
+		catch (BeansException e)
+		{
+			e.printStackTrace();
+		}
+	}
 
-            e.printStackTrace();
-        }
-    }
-    @Override
-    public UserDetails loadUserByUsername(String email)
-    {
-        MyAppUser myAppUser = myAppUserRepository.findByEmail(email);
-        if (myAppUser == null) {
-            throw new UsernameNotFoundException(email);
-        }
-        return new MyUserPrincipal(myAppUser);
-    }
+	@Override
+	public UserDetails loadUserByUsername(String email)
+	{
+		MyAppUser myAppUser = myAppUserRepository.findByEmail(email);
+		if (myAppUser == null)
+		{
+			throw new UsernameNotFoundException(email);
+		}
+		return new MyUserPrincipal(myAppUser);
+	}
+
 }

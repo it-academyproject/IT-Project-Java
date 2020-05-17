@@ -10,51 +10,59 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class DataImport {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+public class DataImport
+{
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	private Date importDate;
-	
+
 	@Enumerated(EnumType.STRING)
 	private DataImportType importType;
+
+	// -------------------- -------------------- //
 	
-	
-	public DataImport() {
-		
+	public DataImport()
+	{
+
 	}
 
-	public DataImport(Date importDate, DataImportType importType) {
+	public DataImport(Date importDate, DataImportType importType)
+	{
 		this.importDate = importDate;
 		this.importType = importType;
 	}
 
-	public int getId() {
+	// -------------------- -------------------- //
+	
+	public int getId()
+	{
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(int id)
+	{
 		this.id = id;
 	}
 
-	public Date getImportDate() {
+	public Date getImportDate()
+	{
 		return importDate;
 	}
 
-	public void setImportDate(Date importDate) {
+	public void setImportDate(Date importDate)
+	{
 		this.importDate = importDate;
 	}
 
-	public DataImportType getImportType() {
+	public DataImportType getImportType()
+	{
 		return importType;
 	}
 
-	public void setImportType(DataImportType importType) {
+	public void setImportType(DataImportType importType)
+	{
 		this.importType = importType;
 	}
-	
-	
 
 }

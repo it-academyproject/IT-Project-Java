@@ -6,18 +6,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/private")
-public class PrivateController {
+public class PrivateController
+{
+	@GetMapping
+	public String getMessage()
+	{
+		return "Hello from private API controller";
+	}
 
-    @GetMapping
-    public String getMessage()
-    {
-        return "Hello from private API controller";
-    }
+	@GetMapping("/LoadExcelFiles")
+	public String loadExcelFiles()
+	{
+		return "Hello from private API controller";
+	}
 
-    @GetMapping ("/LoadExcelFiles")
-    public String loadExcelFiles()
-    {
-
-        return "Hello from private API controller";
-    }
 }

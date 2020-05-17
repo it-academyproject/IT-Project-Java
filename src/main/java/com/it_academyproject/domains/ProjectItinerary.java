@@ -12,7 +12,8 @@ import javax.persistence.Table;
 @Table(name = "project_itinerary")
 public class ProjectItinerary
 {
-	@Id @GeneratedValue Long id;
+	@Id @GeneratedValue
+	Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "project_id")
@@ -22,26 +23,27 @@ public class ProjectItinerary
 	@JoinColumn(name = "itinerary_id")
 	private Itinerary itinerary;
 
+	// -------------------- -------------------- //
+	
+	public ProjectItinerary()
+	{
+
+	}
+	
 	public ProjectItinerary(ProjectItinerary PI)
 	{
-		super();
 		this.project = PI.getProject();
 		this.itinerary = PI.getItinerary();
 	}
 
 	public ProjectItinerary(Project project, Itinerary itinerary)
 	{
-		super();
-		this.id = id;
 		this.project = project;
 		this.itinerary = itinerary;
 	}
 
-	public ProjectItinerary()
-	{
-		super();
-	}
-
+	// -------------------- -------------------- //
+	
 	public Long getId()
 	{
 		return id;

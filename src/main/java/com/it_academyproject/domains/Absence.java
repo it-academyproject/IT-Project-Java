@@ -21,76 +21,91 @@ import com.it_academyproject.tools.View;
 import java.util.Date;
 
 @Entity
-public class Absence {
-
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Id
+public class Absence
+{
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonView(View.Summary.class)
 	private int id;
+
 	@JsonInclude(Include.NON_NULL)
 	@JsonView(View.Summary.class)
 	private Date dateMissing;
 
-//	@JsonInclude(value=Include.ALWAYS, content=Include.USE_DEFAULTS)
+	//@JsonInclude(value=Include.ALWAYS, content=Include.USE_DEFAULTS)
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty(access = Access.READ_WRITE)
 	@JsonView(View.Summary.class)
 	private String comment;
+	
 	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 	@JsonIdentityReference(alwaysAsId = true)
-	@ManyToOne(fetch = FetchType.EAGER)
+	//@JsonProperty(access = Access.READ_ONLY)
 	@JsonView(View.Summary.class)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "student_id", nullable = false)
-//	@JsonProperty(access = Access.READ_ONLY)
 	private Student userStudent;
 
-	public Absence() {
+	// -------------------- -------------------- //
+	
+	public Absence()
+	{
 
 	}
 
-	public Absence(Date dateMissing, String comment) {
-
+	public Absence(Date dateMissing, String comment)
+	{
 		this.comment = comment;
 		this.dateMissing = dateMissing;
 	}
 
-	public int getId() {
+	// -------------------- -------------------- //
+	
+	public int getId()
+	{
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(int id)
+	{
 		this.id = id;
 	}
 
-	public Date getDateMissing() {
+	public Date getDateMissing()
+	{
 		return dateMissing;
 	}
 
-	public void setDateMissing(Date dateMissing) {
+	public void setDateMissing(Date dateMissing)
+	{
 		this.dateMissing = dateMissing;
 	}
 
-	public String getComment() {
+	public String getComment()
+	{
 		return comment;
 	}
 
-	public void setComment(String comment) {
+	public void setComment(String comment)
+	{
 		this.comment = comment;
 	}
 
-	public Student getUserStudent() {
+	public Student getUserStudent()
+	{
 		return userStudent;
 	}
 
-	public void setUserStudent(Student userStudent) {
+	public void setUserStudent(Student userStudent)
+	{
 		this.userStudent = userStudent;
 	}
 
+	// -------------------- -------------------- //
+	
 	@Override
-	public String toString() {
-		return "Absence [id=" + id + ", dateMissing=" + dateMissing + ", comment=" + comment + ", user=" + userStudent
-				+ "]";
+	public String toString()
+	{
+		return "Absence [id=" + id + ", dateMissing=" + dateMissing + ", comment=" + comment + ", user=" + userStudent + "]";
 	}
+
 }
-
-

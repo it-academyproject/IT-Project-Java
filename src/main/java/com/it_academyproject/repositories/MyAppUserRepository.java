@@ -14,40 +14,46 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-
 @Repository
-public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
-
+public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>
+{
 	ArrayList<MyAppUser> findByFirstName(String firstName);
+
 	List<? extends MyAppUser> findByFirstNameAndRole(String firstName, Role role);
+
 	List<? extends MyAppUser> findByLastNameAndRole(String lastName, Role role);
+
 	List<? extends MyAppUser> findByRole(Role role);
 
-	Optional <MyAppUser> findOneById(String id );
+	Optional<MyAppUser> findOneById(String id);
+
 	MyAppUser findOneByIdAndRole(String id, Role role);
+
 	public ArrayList<MyAppUser> findByLastName(String lastName);
+
 	public List<MyAppUser> findByGender(char gender);
-	//public ArrayList<MyAppUser> findByRoleId(int roleId);
-	
+
+	// public ArrayList<MyAppUser> findByRoleId(int roleId);
+
 	public String getUserById(String id);
 
-	
-	MyAppUser findUserById(String id );
-
+	MyAppUser findUserById(String id);
 
 	MyAppUser findByEmail(String email);
 
-	List<MyAppUser> findByFirstNameAndLastName (String name , String lastName );
-	List<? extends MyAppUser> findByGenderAndRole (char gender, Role role);
+	List<MyAppUser> findByFirstNameAndLastName(String name, String lastName);
+
+	List<? extends MyAppUser> findByGenderAndRole(char gender, Role role);
+
 	boolean existsByIdAndRole(String id, Role role);
 
 	@Query("UPDATE MyAppUser u SET u.lastLogin=:lastLogin WHERE u.email = ?#{ principal?.email }")
 	@Modifying
 	@Transactional
-	void updateLastLogin (@Param("lastLogin") Date lastLogin);
+	void updateLastLogin(@Param("lastLogin") Date lastLogin);
 
-	@Query(value="SELECT u from MyAppUser u WHERE u.firstName like '%:name%'")
+	@Query(value = "SELECT u from MyAppUser u WHERE u.firstName like '%:name%'")
 	List<MyAppUser> findUserByNameLike(@Param("name") String name);
 
-	//List<MyAppUser> findByIterations_IterationName(String iterationName);
+	// List<MyAppUser> findByIterations_IterationName(String iterationName);
 }

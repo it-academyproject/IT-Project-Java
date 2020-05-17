@@ -4,73 +4,83 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.tools.View;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class Seat
 {
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int id;
-    @JsonView(View.Summary.class)
-    private int rowNumber;
-    @JsonView(View.Summary.class)
-    private int colNumber;
-    @JsonView(View.Summary.class)
-    private int classRoom;
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	
+	@JsonView(View.Summary.class)
+	private int rowNumber;
+	
+	@JsonView(View.Summary.class)
+	private int colNumber;
+	
+	@JsonView(View.Summary.class)
+	private int classRoom;
 
-/*
-    @OneToMany
-    private List<Student> students;
-*/
+	//@OneToMany private List<Student> students;
+	
+	// -------------------- -------------------- //
 
-    
-    
-    public Seat() {
-        
-    }
+	public Seat()
+	{
 
-    public int getId() {
-        return id;
-    }
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public int getId()
+	{
+		return id;
+	}
 
-    public int getRowNumber() {
-        return rowNumber;
-    }
+	// -------------------- -------------------- //
+	
+	public void setId(int id)
+	{
+		this.id = id;
+	}
 
-    public void setRowNumber(int rowNumber) {
-        this.rowNumber = rowNumber;
-    }
+	public int getRowNumber()
+	{
+		return rowNumber;
+	}
 
-    public int getColNumber() {
-        return colNumber;
-    }
+	public void setRowNumber(int rowNumber)
+	{
+		this.rowNumber = rowNumber;
+	}
 
-    public void setColNumber(int colNumber) {
-        this.colNumber = colNumber;
-    }
+	public int getColNumber()
+	{
+		return colNumber;
+	}
 
-/*
-    public List<Student> getStudents() {
-        return students;
-    }
+	public void setColNumber(int colNumber)
+	{
+		this.colNumber = colNumber;
+	}
 
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-*/
+	public int getClassRoom()
+	{
+		return classRoom;
+	}
 
-    public int getClassRoom() {
-        return classRoom;
-    }
+	public void setClassRoom(int classRoom)
+	{
+		this.classRoom = classRoom;
+	}
 
-    public void setClassRoom(int classRoom) {
-        this.classRoom = classRoom;
-    }
-
+	/*
+	public List<Student> getStudents() 
+	{ 
+		return students; 
+	}
+	 
+	public void setStudents(List<Student> students) 
+	{ 
+		this.students = students; 
+	}
+	*/
 
 }

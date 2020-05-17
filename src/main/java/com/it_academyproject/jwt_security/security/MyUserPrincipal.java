@@ -11,53 +11,65 @@ import java.util.List;
 
 public class MyUserPrincipal implements UserDetails
 {
-    private MyAppUser myAppUser;
+	private static final long serialVersionUID = 1L;
 
-    public MyUserPrincipal(MyAppUser user)
-    {
-        this.myAppUser = user;
-    }
-    @Override
-    public String getUsername()
-    {
-        return myAppUser.getEmail();
-    }
+	private MyAppUser myAppUser;
 
-    @Override
-    public String getPassword()
-    {
-        return myAppUser.getPassword();
-    }
+	// -------------------- -------------------- //
+	
+	public MyUserPrincipal(MyAppUser user)
+	{
+		this.myAppUser = user;
+	}
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities()
-    {
-        final List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("USER"));
-        return authorities;
-    }
+	// -------------------- -------------------- //
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+	@Override
+	public String getUsername()
+	{
+		return myAppUser.getEmail();
+	}
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+	@Override
+	public String getPassword()
+	{
+		return myAppUser.getPassword();
+	}
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities()
+	{
+		final List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("USER"));
+		return authorities;
+	}
 
-    @Override
-    public boolean isEnabled()
-    {
-        return myAppUser.isEnabled();
-    }
+	@Override
+	public boolean isAccountNonExpired()
+	{
+		return true;
+	}
 
-    public MyAppUser getUser() {
-        return myAppUser;
-    }
+	@Override
+	public boolean isAccountNonLocked()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled()
+	{
+		return myAppUser.isEnabled();
+	}
+
+	public MyAppUser getUser()
+	{
+		return myAppUser;
+	}
+
 }

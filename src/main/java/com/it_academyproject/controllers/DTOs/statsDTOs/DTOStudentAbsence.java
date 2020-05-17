@@ -1,13 +1,16 @@
 package com.it_academyproject.controllers.DTOs.statsDTOs;
 
-public class DTOStudentAbsence {
-
+public class DTOStudentAbsence
+{
 	private final String id;
 	private final String firstName;
 	private final String lastName;
 	private final int absences;
 
-	public DTOStudentAbsence(String id, String firstName, String lastName, int absences) {
+	// -------------------- -------------------- //
+	
+	public DTOStudentAbsence(String id, String firstName, String lastName, int absences)
+	{
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -15,19 +18,25 @@ public class DTOStudentAbsence {
 		this.absences = absences;
 	}
 
-	public String getId() {
+	// -------------------- -------------------- //
+	
+	public String getId()
+	{
 		return id;
 	}
 
-	public String getFirstName() {
+	public String getFirstName()
+	{
 		return firstName;
 	}
 
-	public String getLastName() {
+	public String getLastName()
+	{
 		return lastName;
 	}
 
-	public int getAbsences() {
+	public int getAbsences()
+	{
 		return absences;
 	}
 

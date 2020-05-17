@@ -21,7 +21,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "iteration")
 public class Iteration
 {
-	private @Id @GeneratedValue Long id;
+	@Id @GeneratedValue
+	private Long id;
 
 	private String iterationName;
 
@@ -37,28 +38,20 @@ public class Iteration
 
 	@OneToMany(mappedBy = "iteration")
 	@JsonIgnore
-	Set<UserIteration> userIterations;
-
-	/*
-	 * 
-	 * @ManyToMany(fetch = FetchType.LAZY, cascade =
-	 * {CascadeType.PERSIST,CascadeType.MERGE},mappedBy = "iterations")
-	 * 
-	 * @JsonIgnore private Set<MyAppUser> users = new HashSet<>();
-	 * 
-	 */
-
+	Set<UserIteration> userIterations; 
+	
+	//@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.MERGE},mappedBy = "iterations")
+	//@JsonIgnore private Set<MyAppUser> users = new HashSet<>();
+	 
 	// -------------------- -------------------- //
 
 	public Iteration()
 	{
-		super();
+	
 	}
 
-	public Iteration(Long id, String iterationName, List<Project> projects, Date initialDate, Date endDate,
-			String description)
+	public Iteration(Long id, String iterationName, List<Project> projects, Date initialDate, Date endDate, String description)
 	{
-		super();
 		this.id = id;
 		this.iterationName = iterationName;
 		this.projects = projects;
@@ -139,11 +132,15 @@ public class Iteration
 	}
 
 	/*
-	 * 
-	 * public Set<MyAppUser> getUsers() { return users; }
-	 * 
-	 * public void setUsers(MyAppUser user) { this.users.add(user); }
-	 * 
-	 */
+	public Set<MyAppUser> getUsers() 
+	{ 
+		return users; 
+	}
+	
+	public void setUsers(MyAppUser user) 
+	{ 
+		this.users.add(user); 
+	}
+	*/
 
 }

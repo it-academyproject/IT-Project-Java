@@ -2,30 +2,41 @@ package com.it_academyproject.exceptions;
 
 public class UserNotEnabled extends Exception
 {
-    private String username;
-    private String message;
+	private static final long serialVersionUID = 1L;
 
-    //Constructor
-    public UserNotEnabled( String username )
-    {
-        super( "The user " + username + " is not enabled." );
-        this.username = username;
-    }
+	private String username;
+	
+	private String message;
 
-    public String getUsername() {
-        return username;
-    }
+	// -------------------- -------------------- //
+	
+	public UserNotEnabled(String username)
+	{
+		super("The user " + username + " is not enabled.");
+		this.username = username;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	// -------------------- -------------------- //
+	
+	public String getUsername()
+	{
+		return username;
+	}
 
-    @Override
-    public String getMessage() {
-        return message;
-    }
+	public void setUsername(String username)
+	{
+		this.username = username;
+	}
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+	@Override
+	public String getMessage()
+	{
+		return message;
+	}
+
+	public void setMessage(String message)
+	{
+		this.message = message;
+	}
+
 }

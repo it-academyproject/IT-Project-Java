@@ -8,36 +8,35 @@ import java.util.List;
 import jxl.read.biff.BiffException;
 import java.io.File;
 import java.io.IOException;
-import jxl.write.*;
-import jxl.write.Number;
-import jxl.format.Colour;
 
 public class Excel
 {
-    private Workbook workbook;
-    //open the excel
-    public void openFile ( String fileLocation ) throws IOException, BiffException
-    {
-        WorkbookSettings ws = new WorkbookSettings();
-        ws.setEncoding("Cp1252");
-        workbook = Workbook.getWorkbook(new File(fileLocation) , ws);
-    }
-    public Map<Integer, List<String>> readJExcelContent(int sheetNumber ) throws IOException, BiffException
-    {
-        Map<Integer, List<String>> data = new HashMap<>();
-        Sheet sheet = workbook.getSheet(sheetNumber);
-        int rows = sheet.getRows();
-        int columns = sheet.getColumns();
-        for (int i = 0; i < rows; i++)
-        {
-            data.put(i, new ArrayList<String>());
-            for (int j = 0; j < columns; j++)
-            {
-                data.get(i).add(sheet.getCell(j, i).getContents());
-                //System.out.println( sheet.getCell(j , i ).);
-            }
-        }
-        return data;
+	private Workbook workbook;
 
-    }
+	// -------------------- -------------------- //
+	
+	public void openFile(String fileLocation) throws IOException, BiffException
+	{
+		WorkbookSettings ws = new WorkbookSettings();
+		ws.setEncoding("Cp1252");
+		workbook = Workbook.getWorkbook(new File(fileLocation), ws);
+	}
+
+	public Map<Integer, List<String>> readJExcelContent(int sheetNumber) throws IOException, BiffException
+	{
+		Map<Integer, List<String>> data = new HashMap<>();
+		Sheet sheet = workbook.getSheet(sheetNumber);
+		int rows = sheet.getRows();
+		int columns = sheet.getColumns();
+		for (int i = 0; i < rows; i++)
+		{
+			data.put(i, new ArrayList<String>());
+			for (int j = 0; j < columns; j++)
+			{
+				data.get(i).add(sheet.getCell(j, i).getContents());
+			}
+		}
+		return data;
+	}
+
 }
