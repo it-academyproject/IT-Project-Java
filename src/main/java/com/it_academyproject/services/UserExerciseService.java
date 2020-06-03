@@ -113,4 +113,24 @@ public class UserExerciseService {
 		return userExerciseRepository.save(us);
 	}
 
+	public String getLastDeliveredExerciseDate(Student student) {
+		List<UserExercise> studentExercises = userExerciseRepository.findByUserStudent(student);
+		List<String> lastDeliveredExerciseDate = new ArrayList<String>();
+		String result;
+		
+		if(studentExercises!=null) {
+			//result="test";
+			for(UserExercise exercise : studentExercises) {
+				if(exercise.getStatus().getId()==5) {
+					lastDeliveredExerciseDate.add(exercise.getDate_status().toString());
+				}
+			}
+			Collections.sort(lastDeliveredExerciseDate, Collections.reverseOrder());
+			result = lastDeliveredExerciseDate.get(0);
+		} else {
+			result = "L'Usuari no té exercisis";
+		}
+		return result;
+	}
+	
 }

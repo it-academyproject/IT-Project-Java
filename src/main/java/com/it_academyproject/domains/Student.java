@@ -11,7 +11,10 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("student")
 public class Student extends MyAppUser {
-
+	
+	@JsonView(View.Summary.class)
+	private String lastDeliveredExercise;
+	
     @JsonView(View.Summary.class)
     @ManyToOne
     private Seat seat;
@@ -38,4 +41,15 @@ public class Student extends MyAppUser {
         this.seat = seat;
     }
 
+	public String getLastDeliveredExercise()
+	{
+		return lastDeliveredExercise;
+	}
+
+	public void setLastDeliveredExercise(String lastDeliveredExercise)
+	{
+		this.lastDeliveredExercise = lastDeliveredExercise;
+	}
+
+    
 }
