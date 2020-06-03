@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.domains.Absence;
-import com.it_academyproject.domains.Student;
 import com.it_academyproject.repositories.AbsenceRepository;
 import com.it_academyproject.services.AbsencesService;
 import com.it_academyproject.tools.View;
@@ -26,9 +25,7 @@ public class AbsencesController
 	@Autowired
 	AbsencesService absencesService;
 
-	// -------------------- -------------------- //
-	
-	@PostMapping("api/absences") // --> Need to edit URI createAbsence & getAllAbsences have same URIs.
+	@PostMapping("api/absences")
 	public Absence createAbsence(@RequestBody Absence absence)
 	{
 		return absencesService.createAbsence(absence, absence.getUserStudent());
@@ -48,31 +45,22 @@ public class AbsencesController
 		return absencesService.getAbsenceById(absence);
 	}
 
-<<<<<<< HEAD
-	@JsonView(View.Summary.class)
+	/*
+	 @JsonView(View.Summary.class)
+	 @GetMapping("api/absences/student/{student_id}")
+	 public List<Absence> getAbsenceByStudentId(@RequestBody Student userStudent, 
+	 	@PathVariable(name="student_id") String studentId) 
+	 {
+	 	return absencesService.findAbsenceByStudentId(userStudent, studentId);
+	 }
+	*/
+	
+	@JsonView(View.ShortDetails.class)
 	@GetMapping("api/absences/student/{student_id}")
-	public List<Absence> getAbsenceByStudentId(@RequestBody Student userStudent,
-			@PathVariable(name = "student_id") String studentId)
+	public List<Absence> getAbsenceByStudentId(@PathVariable(name = "student_id") String studentId)
 	{
-		return absencesService.findAbsenceByStudentId(userStudent, studentId);
+		return absencesService.getAllAbsenceByStudentId(studentId);
 	}
-=======
-	
-//	 Call absences by student id
-//	@JsonView(View.Summary.class)
-	//@GetMapping("api/absences/student/{student_id}")
-	//public List<Absence> getAbsenceByStudentId(@RequestBody Student userStudent, @PathVariable(name="student_id") String studentId) {
-		//return absencesService.findAbsenceByStudentId(userStudent, studentId);
-	//}
-	
-	
-	 //Call absences by student id
-		@JsonView(View.ShortDetails.class)
-		@GetMapping("api/absences/student/{student_id}")
-		public List<Absence> getAbsenceByStudentId(@PathVariable(name="student_id") String studentId) {
-			return absencesService.getAllAbsenceByStudentId(studentId);
-		}
->>>>>>> 66828077c41e6a2ee61d164812ef001db6a6e283
 
 	@JsonView(View.SummaryWithOthers.class)
 	@PutMapping("api/absences")
