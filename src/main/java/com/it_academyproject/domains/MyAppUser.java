@@ -88,7 +88,7 @@ public abstract class MyAppUser
 	
 	public MyAppUser()
 	{
-		
+
 	}
 
 	public MyAppUser(String firstName, String lastName, String email, char gender, String portrait, String password,
