@@ -15,7 +15,7 @@ public class Teacher extends MyAppUser {
     }
 
     public Teacher(String firstName, String lastName, String email, char gender, String portrait, String password, boolean enabled) {
-        super(firstName, lastName, email, gender, portrait, password, enabled, Role.TEACHER);
+        super(firstName, lastName, email, gender, password, enabled, Role.TEACHER);
     }
 
     public Teacher(String email, String password) throws EmptyFieldException {
