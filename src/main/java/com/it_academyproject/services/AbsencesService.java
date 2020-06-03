@@ -47,6 +47,11 @@ public class AbsencesService
 	{
 		return myAbsenceRepository.findByUserStudentId(userStudent.getId());
 	}
+	
+	//get all absence by student id
+	public List<Absence> getAllAbsenceByStudentId(String userStudent){
+		return myAbsenceRepository.findByUserStudentId(userStudent);
+	}
 
 	public Absence putAbsenceById(Absence absence)
 	{

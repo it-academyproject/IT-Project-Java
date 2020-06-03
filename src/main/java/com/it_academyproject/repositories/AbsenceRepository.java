@@ -14,6 +14,14 @@ public interface AbsenceRepository extends JpaRepository<Absence, Integer>
 	List<Absence> findByUserStudentAndDateMissing(Student userStudent, Date dateMissing);
 
 	List<Absence> findByUserStudentId(String userStudent);
+<<<<<<< HEAD
+=======
+	
+	// by absence id
+	Absence findOneById(Integer id);
+	
+	
+>>>>>>> 66828077c41e6a2ee61d164812ef001db6a6e283
 
 	Absence findOneById(Integer id);
 }

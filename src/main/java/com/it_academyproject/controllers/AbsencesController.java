@@ -48,6 +48,7 @@ public class AbsencesController
 		return absencesService.getAbsenceById(absence);
 	}
 
+<<<<<<< HEAD
 	@JsonView(View.Summary.class)
 	@GetMapping("api/absences/student/{student_id}")
 	public List<Absence> getAbsenceByStudentId(@RequestBody Student userStudent,
@@ -55,6 +56,23 @@ public class AbsencesController
 	{
 		return absencesService.findAbsenceByStudentId(userStudent, studentId);
 	}
+=======
+	
+//	 Call absences by student id
+//	@JsonView(View.Summary.class)
+	//@GetMapping("api/absences/student/{student_id}")
+	//public List<Absence> getAbsenceByStudentId(@RequestBody Student userStudent, @PathVariable(name="student_id") String studentId) {
+		//return absencesService.findAbsenceByStudentId(userStudent, studentId);
+	//}
+	
+	
+	 //Call absences by student id
+		@JsonView(View.ShortDetails.class)
+		@GetMapping("api/absences/student/{student_id}")
+		public List<Absence> getAbsenceByStudentId(@PathVariable(name="student_id") String studentId) {
+			return absencesService.getAllAbsenceByStudentId(studentId);
+		}
+>>>>>>> 66828077c41e6a2ee61d164812ef001db6a6e283
 
 	@JsonView(View.SummaryWithOthers.class)
 	@PutMapping("api/absences")

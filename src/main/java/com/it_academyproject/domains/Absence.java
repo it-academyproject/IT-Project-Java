@@ -21,25 +21,39 @@ import com.it_academyproject.tools.View;
 import java.util.Date;
 
 @Entity
+<<<<<<< HEAD
 public class Absence
 {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonView(View.Summary.class)
+=======
+public class Absence {
+
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@JsonView({View.Summary.class , View.ShortDetails.class})
+>>>>>>> 66828077c41e6a2ee61d164812ef001db6a6e283
 	private int id;
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonView(View.Summary.class)
+	@JsonView({View.Summary.class , View.ShortDetails.class})
 	private Date dateMissing;
 
 	//@JsonInclude(value=Include.ALWAYS, content=Include.USE_DEFAULTS)
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty(access = Access.READ_WRITE)
 	@JsonView(View.Summary.class)
+	
 	private String comment;
 	
 	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 	@JsonIdentityReference(alwaysAsId = true)
+<<<<<<< HEAD
 	//@JsonProperty(access = Access.READ_ONLY)
+=======
+	@ManyToOne(fetch = FetchType.EAGER)
+	
+>>>>>>> 66828077c41e6a2ee61d164812ef001db6a6e283
 	@JsonView(View.Summary.class)
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "student_id", nullable = false)
