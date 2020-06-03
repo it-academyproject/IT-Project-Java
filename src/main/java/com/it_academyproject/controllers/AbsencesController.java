@@ -52,12 +52,16 @@ public class AbsencesController {
 
 	
 //	 Call absences by student id
-	@JsonView(View.Summary.class)
+	@JsonView(View.ShortDetails.class)
 	@GetMapping("api/absences/student/{student_id}")
 	public List<Absence> getAbsenceByStudentId(@RequestBody Student userStudent, @PathVariable(name="student_id") String studentId) {
 		return absencesService.findAbsenceByStudentId(userStudent, studentId);
 	}
 	
+
+
+	
+
 
 	// Edit Absence by id
 	@JsonView(View.SummaryWithOthers.class)

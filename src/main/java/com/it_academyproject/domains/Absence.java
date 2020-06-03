@@ -25,10 +25,10 @@ public class Absence {
 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
-	@JsonView(View.Summary.class)
+	@JsonView({View.Summary.class , View.ShortDetails.class})
 	private int id;
 	@JsonInclude(Include.NON_NULL)
-	@JsonView(View.Summary.class)
+	@JsonView({View.Summary.class , View.ShortDetails.class})
 	private Date dateMissing;
 
 //	@JsonInclude(value=Include.ALWAYS, content=Include.USE_DEFAULTS)
@@ -39,7 +39,8 @@ public class Absence {
 	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 	@JsonIdentityReference(alwaysAsId = true)
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JsonView(View.ShortDetails.class)
+
+	@JsonView({View.Summary.class , View.ShortDetails.class})
 	@JoinColumn(name = "student_id", nullable = false)
 //	@JsonProperty(access = Access.READ_ONLY)
 	private Student userStudent;
