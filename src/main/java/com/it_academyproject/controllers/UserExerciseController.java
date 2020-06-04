@@ -86,6 +86,7 @@ public class UserExerciseController {
 	 * actualiza automáticamente desde el back end, no hace falta incorporarla en el
 	 * JSON
 	 */
+	
 	@PutMapping("/api/exercises")
 	@ResponseBody
 	public UserExercise updateUserExerciseStatus(@RequestBody UserExercise userExercise) {

@@ -105,12 +105,17 @@ public class UserExerciseService {
 	}
 
 	public UserExercise setUserExerciseStatusData(UserExercise userExercise) { 
-		UserExercise us = userExerciseRepository.findById(userExercise.getId())
+		UserExercise one = userExerciseRepository.findById(userExercise.getId())
 				.orElseThrow(() -> new UserNotFoundException("UserExercise not found"));
-		Date date = new Date();
-		us.setDate_status(date);
-		us.setStatus(userExercise.getStatus());
-		return userExerciseRepository.save(us);
+		if(userExercise.getDate_status()==null) {
+			Date date = new Date();
+			one.setDate_status(date);
+		}
+		else {
+			one.setDate_status(userExercise.getDate_status());
+		}
+		one.setStatus(userExercise.getStatus());
+		return userExerciseRepository.save(one);
 	}
 
 	public String getLastDeliveredExerciseDate(Student student) {
