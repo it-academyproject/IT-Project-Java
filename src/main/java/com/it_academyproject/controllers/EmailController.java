@@ -28,7 +28,7 @@ public class EmailController {
 	//end-point to test the feature , once tested, include the next path : 
 	//"emailService.notificationEmailExceedDeliveryTime();" inside the above loop
 	@GetMapping("/api/test/email")
-	public void miCorreoDeVoyTarde() {
+	public void exceedDeliveryTimeNotification() {
 		emailService.notificationEmailExceedDeliveryTime();
 	}
 

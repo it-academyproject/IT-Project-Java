@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.mail.internet.MimeMessage;
+import javax.validation.constraints.Email;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -161,26 +162,48 @@ public class EmailService {
 		userExerciseRepository.findAll().forEach(userExercise::add);
 		Date actualDate = new Date();
 
-		for (int i = 1; i < userExercise.size(); i++) {
+		for (int i = 0; i < userExercise.size(); i++) {
 			int days = (int) ((Math.abs((
 					userExercise.get(i).getDate_status().getTime() - actualDate.getTime()) / (86400000))));
+			
 			//Remember, all Date_status fields referenced to user_exercise table are bigger than 8 days,in order to test the code you can modify "days=<8"
 			//The plan is the next: every day at 9:00 AM automate the task to find not delivered exercises
 			//If actual date - start date exercise = 8 days & not delivered(!=3 status) ->send the email
 			//Status exercise 3 is delivered, so in the other states the condition is false
+			
 			if (days ==8  && userExercise.get(i).getStatusExercise().getId()!=3) {
+				
+				
+				List<Emails> emailsSent = new ArrayList<>();
+				
+				emailsRepository.findByUserStudent(userExercise.get(i).getUserStudent()).forEach(emailsSent::add);
+				boolean hasBeenNotified = false;
+
+				for (int j = 0; j < emailsSent.size(); j++) {
+					if ((emailsSent.get(j).isSent() == true) && (emailsSent.get(j).getEmailType().ordinal()==3)) {
+
+						hasBeenNotified = true;
+					}
+				}
+				
+				
+				if (hasBeenNotified == false) {
+				
 				Emails emailsListNotification = new Emails("EXCEEDDELIVERYTIME");
 				emailsListNotification.setUserStudent(userExercise.get(i).getUserStudent());
+				
 			//There are several fields  with student_id=NULL ->Continue iterance	
 				if(userExercise.get(i).getUserStudent()==null) {
 					continue;
 				}
+				
 				emailsListNotification.setSent(false);
 				emailsRepository.save(emailsListNotification);
 				String email = userExercise.get(i).getUserStudent().getEmail();
 				String name = userExercise.get(i).getUserStudent().getFirstName();
 				String messageBody = "                                            I hope this e-mail finds you well. This message is to inform you, that you have "
 						+ "not delivered a new exercise on the last 8 days";
+				
 				if (email != null && name != null) {
 					try {
 						emailsListNotification.setSent(true);
@@ -190,7 +213,7 @@ public class EmailService {
 						e.printStackTrace();
 					}
 				}
-
+				}
 			}
 
 		}

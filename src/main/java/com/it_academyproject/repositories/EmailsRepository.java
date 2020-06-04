@@ -16,5 +16,6 @@ import com.it_academyproject.domains.MyAppUser;
 @Repository
 public interface EmailsRepository extends CrudRepository<Emails, Integer> {
 	public List<Emails> findByUserStudent(Student user);
+	
 
 }
