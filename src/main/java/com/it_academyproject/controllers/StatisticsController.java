@@ -3,8 +3,6 @@ package com.it_academyproject.controllers;
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentAbsence;
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsPerGender;
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsPerItinerary;
-import com.it_academyproject.repositories.MyAppUserRepository;
-import com.it_academyproject.services.MyAppUserService;
 import com.it_academyproject.services.StatisticsService;
 import com.it_academyproject.services.StudentService;
 import org.json.JSONObject;
@@ -12,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -19,13 +18,14 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping(value="/api/stats")
 public class StatisticsController {
 	@Autowired
 	StatisticsService statisticsService;
 	@Autowired
 	StudentService studentService;
 
-	@GetMapping("/api/statistics/per-itinerary")
+	@GetMapping("/per-itinerary")
 	public List<DTOStudentsPerItinerary> perItinerary() {
 
 		Map<String, Integer> studentsPerItinerary = statisticsService.perItinerary();
@@ -36,12 +36,12 @@ public class StatisticsController {
 		return result;
 	}
 
-	@GetMapping("/api/statistics/per-gender")
+	@GetMapping("/per-gender")
 	public DTOStudentsPerGender perGender() {
 		return new DTOStudentsPerGender(studentService.studentsByGender('M'), studentService.studentsByGender('F'));
 	}
 
-	@GetMapping("/api/statistics/per-absence")
+	@GetMapping("/per-absence")
 	public List<DTOStudentAbsence> perAbsence() {
 		List<DTOStudentAbsence> absences = new ArrayList<>();
 		for (Map.Entry<String, Integer> entry : statisticsService.perAbsence().entrySet()) {
@@ -52,7 +52,7 @@ public class StatisticsController {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@GetMapping("/api/statistics/finish-in-x-days")
+	@GetMapping("/finish-in-x-days")
 	public ResponseEntity<String> finishInXdays() {
 		try {
 			String sendData = statisticsService.finishInXdays();
