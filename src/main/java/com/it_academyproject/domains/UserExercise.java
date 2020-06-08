@@ -22,7 +22,7 @@ public class UserExercise {
 	//--------------------------Properties--------------------------------------------------------------
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int Id;
+	private int id;
 	private String comments;
 	private Date date_status;
 	
@@ -49,7 +49,8 @@ public class UserExercise {
 	public UserExercise() {
 	}
 	
-	public UserExercise(String comments, Date date_status) {
+	public UserExercise(int id, String comments, Date date_status) {
+		this.id=id;
 		this.comments = comments;
 		this.date_status = new Date();
 	}
@@ -57,10 +58,10 @@ public class UserExercise {
 	//--------------------------Setters/Getters--------------------------------------------------------------------
 	
 	public int getId() {
-		return Id;
+		return id;
 	}
 	public void setId(int id) {
-		Id = id;
+		this.id = id;
 	}
 	public String getComments() {
 		return comments;
@@ -108,15 +109,16 @@ public class UserExercise {
 	}
 
 	@Override
-	public String toString() {
-		return "UserExercise{" +
-				"Id=" + Id +
-				", comments='" + comments + '\'' +
-				", date_status=" + date_status +
-				", status=" + status +
-				", exercise=" + exercise +
-				", userStudent=" + userStudent +
-				", userTeacher=" + userTeacher +
-				'}';
+	public String toString()
+	{
+		return "UserExercise {" + 
+					"id=" + id + 
+					", comments=" + comments + 
+					", date_status=" + date_status + 
+					", status=" + status + 
+					", exercise=" + exercise + 
+					", userStudent=" + userStudent + 
+					", userTeacher=" + userTeacher + "}";
 	}
+
 }
