@@ -1,6 +1,7 @@
 package com.it_academyproject.services;
 
 import com.google.gson.Gson;
+import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsFinishXDays;
 import com.it_academyproject.domains.Absence;
 import com.it_academyproject.domains.Course;
 import com.it_academyproject.domains.Itinerary;
@@ -66,37 +67,28 @@ public class StatisticsService {
         return absencesPerStudent;
     }
 
-    public String finishInXdays() throws Exception {
-        List<Course> finishInXDays = new ArrayList<>();
-        courseRepository.findAll().forEach(finishInXDays::add);
+    public List<DTOStudentsFinishXDays> finishInXdays(int xDays){
+
         Date currentDate = Calendar.getInstance().getTime();
-        List<Course> endListOfUsersEndingInLessThanXDays = new ArrayList<>();
+        List<DTOStudentsFinishXDays> dtos = new ArrayList<DTOStudentsFinishXDays>();
+        List<Course> finishInXDays = courseRepository.findAll();
+
         for (int i = 0; i < finishInXDays.size(); i++) {
             if (finishInXDays.get(i).getEndDate() != null) {
                 Long days = (Long) ((finishInXDays.get(i).getEndDate().getTime() - currentDate.getTime()) / 86400000);
-                if (days <= 15) {
-                    endListOfUsersEndingInLessThanXDays.add(finishInXDays.get(i));
+                if (days <= xDays) {
+                    DTOStudentsFinishXDays dto = new DTOStudentsFinishXDays();
+                    dto.setId( finishInXDays.get(i).getUserStudent().getId() );
+                    dto.setFirstName( finishInXDays.get(i).getUserStudent().getFirstName() );
+                    dto.setLastName( finishInXDays.get(i).getUserStudent().getLastName() );
+                    dto.setDays( days );
+                    dtos.add(dto);
                 }
             }
         }
-        ArrayList<ArrayList<String>> endListNameAndDaysLeft = new ArrayList<ArrayList<String>>();
-        for (int i = 0; i < endListOfUsersEndingInLessThanXDays.size(); i++) {
-            Long day = (Long) ((endListOfUsersEndingInLessThanXDays.get(i).getEndDate().getTime() - currentDate.getTime()) / 86400000);
-            endListNameAndDaysLeft.add(endDayMethod("Nombre: " + endListOfUsersEndingInLessThanXDays.get(i).getUserStudent().getFirstName() + " " +
-                    endListOfUsersEndingInLessThanXDays.get(i).getUserStudent().getLastName(), "Dias restantes: " + day.toString()));
-        }
-
-        Gson Json = new Gson();
-        String sendData = Json.toJson(endListNameAndDaysLeft);
-        return sendData;
+        return dtos;
     }
 
-    public static ArrayList<String> endDayMethod(String name, String daysLeft) {
-        ArrayList<String> endDayList = new ArrayList<String>();
-        endDayList.add(name);
-        endDayList.add(daysLeft);
-        return endDayList;
-    }
 }
 
 
