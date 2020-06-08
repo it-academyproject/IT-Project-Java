@@ -19,15 +19,13 @@ public class UserExerciseService {
 	@Autowired
 	UserExerciseRepository userExerciseRepository;
 	@Autowired
-	MyAppUserService myAppUserService;
+	MyAppUserService userService;
 	@Autowired
 	CourseRepository courseRepository;
 	@Autowired
 	ItineraryRepository itineraryRepository;
 	@Autowired
 	ExerciseRepository exerciseRepository;
-	@Autowired
-	StudentService studentService;
 
 	public JSONObject getExerciseStudentByItinerary(String itineraryIdString) {
 		try {
@@ -64,11 +62,6 @@ public class UserExerciseService {
 	public List<Exercise> getAllExercises() {
 		List<Exercise> allExercises = exerciseRepository.findAll();
 		return allExercises;
-	}
-	
-	public List<UserExercise> getAllUserExercises() {
-		List<UserExercise> allUserExercises = userExerciseRepository.findAll();
-		return allUserExercises;
 	}
 
 	public JSONObject getExerciseStudentByStudent(Student student) {
@@ -107,12 +100,8 @@ public class UserExerciseService {
 	}
 
 	public List<UserExercise> getExercisesByStudentId(String id) {
-		if(id==studentService.getUserById(id)) {
-			return userExerciseRepository.findByUserStudent(studentService.findOneById(id));
-		}
-		else {
-			return null;
-		}
+		return userExerciseRepository.findByUserStudent(userService.getStudentById(id)
+				.orElseThrow(() -> new UserNotFoundException("Student not found: " + id)));
 	}
 
 	public UserExercise setUserExerciseStatusData(UserExercise userExercise) { 

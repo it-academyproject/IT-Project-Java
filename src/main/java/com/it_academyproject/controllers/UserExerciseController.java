@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -59,34 +58,28 @@ public class UserExerciseController {
 	}
 
 	@GetMapping("/api/exercises")
-	public List<UserExercise> getAllUserExercises() {
-		return userExerciseService.getAllUserExercises();
+	public List<ExerciseListDTO> getAllExerciseswithStudents() {
+		List<Exercise> foundExercises = userExerciseService.getAllExercises();
+		List<ExerciseListDTO> allExerciseswithStudents = new ArrayList<ExerciseListDTO>();
+
+		for (Exercise exercise : foundExercises) {
+
+			List<UserExercise> studentsforThatExercise = userExerciseService.getStudentsByExercise(exercise);
+			allExerciseswithStudents.add(new ExerciseListDTO(exercise.getId(), exercise.getName(),
+					exercise.getItinerary(), studentsforThatExercise));
+		}
+		
+		return allExerciseswithStudents;
 	}
-	
-//	public List<ExerciseListDTO> getAllExerciseswithStudents() {
-//		List<Exercise> foundExercises = userExerciseService.getAllExercises();
-//		List<ExerciseListDTO> allExerciseswithStudents = new ArrayList<ExerciseListDTO>();
-//
-//		for (Exercise exercise : foundExercises) {
-//			List<UserExercise> studentsforThatExercise = userExerciseService.getStudentsByExercise(exercise);
-//			allExerciseswithStudents.add(new ExerciseListDTO(exercise.getId(), exercise.getName(),
-//					exercise.getItinerary(), studentsforThatExercise));
-//		}
-//		return allExerciseswithStudents;
-//	}
 
 	@GetMapping("/api/exercises/student-id/{id}")
-	public List<UserExercise> getExercisesByStudentId(@PathVariable(name = "id") String id) {
-			return userExerciseService.getExercisesByStudentId(id);
+	public List<ExerciseFromStudentDTO> getExercisesByStudentIdNew(@PathVariable(name = "id") String id) {
+		try {
+			return ExerciseFromStudentDTO.getList(userExerciseService.getExercisesByStudentId(id));
+		} catch (UserNotFoundException | BadRoleException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist or it's not a student", e);
+		}
 	}
-	
-//	public List<UserExercise> getExercisesByStudentId(@PathVariable(name = "id") String id) {
-//		try {
-//			return userExerciseService.getExercisesByStudentId(id);
-//		} catch (UserNotFoundException | BadRoleException e) {
-//			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist or it's not a student", e);
-//		}
-//	}
 
 	/*
 	 * Modelo de llamada PUT: { "id": 1, "status":{"id":4} } La fecha se

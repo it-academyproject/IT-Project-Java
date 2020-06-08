@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class ExerciseFromStudentDTO {
 
 	private String name;
@@ -17,7 +19,7 @@ public class ExerciseFromStudentDTO {
 
 	ExerciseFromStudentDTO(UserExercise exercise) {
 		name = exercise.getExercise().getName();
-		id = exercise.getExercise().getId();
+		id = exercise.getId(); 
 		status = new StatusDTO(exercise.getStatus().getName(), exercise.getStatus().getId(), exercise.getDate_status());
 		itinerary = new ItineraryDTO(exercise.getExercise().getItinerary().getName(),
 				exercise.getExercise().getItinerary().getId());
