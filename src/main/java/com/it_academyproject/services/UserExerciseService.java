@@ -113,4 +113,25 @@ public class UserExerciseService {
 		return userExerciseRepository.save(us);
 	}
 
+	public String getLastDeliveredExerciseDate(Student student) {
+		List<UserExercise> studentExercises = userExerciseRepository.findByUserStudent(student);
+		List<String> lastDeliveredExerciseDate = new ArrayList<String>();
+		
+		if(studentExercises.size()!=0) {
+			for(UserExercise exercise : studentExercises) {
+				if(exercise.getUserStudent()!=null && exercise.getStatus().getId()!=3) {
+					lastDeliveredExerciseDate.add(exercise.getDate_status().toString());
+				}
+				else {
+					lastDeliveredExerciseDate.add(exercise.getDate_status().toString() + " Pendent de revisió.");
+				}
+			}
+			Collections.sort(lastDeliveredExerciseDate, Collections.reverseOrder());
+			return lastDeliveredExerciseDate.get(0);
+		}
+		else {
+			return "L'Usuari no té exercisis.";
+		}
+	}
+
 }

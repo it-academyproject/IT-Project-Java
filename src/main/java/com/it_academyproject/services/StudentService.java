@@ -15,7 +15,9 @@ public class StudentService {
 
 	@Autowired
 	MyAppUserRepository userRepository;
-
+	
+	@Autowired
+	UserExerciseService userExerciseService;
 	
 	@Autowired
 	CourseService courseService;
@@ -28,6 +30,7 @@ public class StudentService {
 	private List<Student> updateStudentCourses(List<Student> students) {
 		for (Student student : students) {
 			student.setCourses(courseService.findByUserStudent(student));
+			student.setLastDeliveredExercise(userExerciseService.getLastDeliveredExerciseDate(student));
 		}
 		return students;
 	}
@@ -98,6 +101,7 @@ public class StudentService {
 			return null;
 		}
 	}
+	
 
 /*
 	// find the user by the email passed to the repository
