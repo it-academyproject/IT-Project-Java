@@ -5,11 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.it_academyproject.domains.Itinerary;
 import com.it_academyproject.domains.UserExercise;
 
 public class ExerciseListDTO {
 	
+	@Autowired
+	UserExercise userExercise;
 	
 	int id;
 	String name;
