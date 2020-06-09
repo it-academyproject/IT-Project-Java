@@ -82,10 +82,11 @@ public class UserExerciseController {
 	}
 
 	/*
-	 * Modelo de llamada PUT: { "id": 1, "statusExercise":{"id":4} } La fecha se
+	 * Modelo de llamada PUT: { "id": 1, "status":{"id":4} } La fecha se
 	 * actualiza automáticamente desde el back end, no hace falta incorporarla en el
 	 * JSON
 	 */
+	
 	@PutMapping("/api/exercises")
 	@ResponseBody
 	public UserExercise updateUserExerciseStatus(@RequestBody UserExercise userExercise) {
