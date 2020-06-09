@@ -1,6 +1,7 @@
 package com.it_academyproject.controllers;
 
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentAbsence;
+import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsFinishXDays;
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsPerGender;
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsPerItinerary;
 import com.it_academyproject.services.StatisticsService;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,20 +53,9 @@ public class StatisticsController {
 		return absences;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@GetMapping("/finish-in-x-days")
-	public ResponseEntity<String> finishInXdays() {
-		try {
-			String sendData = statisticsService.finishInXdays();
-			return new ResponseEntity(sendData.toString(), HttpStatus.FOUND);
-		} catch (Exception e) {
-			String exceptionMessage = e.getMessage();
-			JSONObject sendData = new JSONObject();
-			JSONObject message = new JSONObject();
-			message.put("type", "error");
-			message.put("message", exceptionMessage);
-			sendData.put("Message", message);
-			return new ResponseEntity(sendData.toString(), HttpStatus.BAD_REQUEST);
-		}
+	@GetMapping("/finish-in-x-days/{xDays}")
+	public List<DTOStudentsFinishXDays> finishInXdays(@PathVariable int xDays){
+		return statisticsService.finishInXdays(xDays);
 	}
+
 }
