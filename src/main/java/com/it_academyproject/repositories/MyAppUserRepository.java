@@ -2,6 +2,7 @@ package com.it_academyproject.repositories;
 
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.MyAppUser.Role;
+import com.it_academyproject.domains.StatusExercise;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -50,4 +51,12 @@ public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
 	List<MyAppUser> findUserByNameLike(@Param("name") String name);
 
 	//List<MyAppUser> findByIterations_IterationName(String iterationName);
+
+	@Query(value = "SELECT u.* FROM user_exercise ue " +
+			"JOIN status_exercise se ON ue.status_id = se.id " +
+			"JOIN users u ON ue.student_id = u.id " +
+			"WHERE se.name=:statusName AND TIMEDIFF(:datte, ue.date_status) < 30", nativeQuery = true )
+	List<MyAppUser> bla(String statusName, String datte);
+
+
 }

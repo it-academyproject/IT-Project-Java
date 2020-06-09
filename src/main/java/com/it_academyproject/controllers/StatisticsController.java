@@ -3,6 +3,11 @@ package com.it_academyproject.controllers;
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentAbsence;
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsPerGender;
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsPerItinerary;
+import com.it_academyproject.domains.MyAppUser;
+import com.it_academyproject.domains.StatusExercise;
+import com.it_academyproject.domains.Student;
+import com.it_academyproject.repositories.MyAppUserRepository;
+import com.it_academyproject.repositories.StatusExerciseRepository;
 import com.it_academyproject.services.StatisticsService;
 import com.it_academyproject.services.StudentService;
 import org.json.JSONObject;
@@ -67,4 +72,13 @@ public class StatisticsController {
 			return new ResponseEntity(sendData.toString(), HttpStatus.BAD_REQUEST);
 		}
 	}
+
+	@Autowired
+	MyAppUserRepository repo;
+
+	@GetMapping("/students-deliveries")
+	public List<MyAppUser> students_deliveries() {
+		return repo.bla("FINISHED", "2019-12-01 00:00:00");
+	}
+
 }
