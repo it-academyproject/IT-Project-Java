@@ -1,5 +1,6 @@
 package com.it_academyproject.services;
 
+import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsLastDelivery;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.Student;
 import com.it_academyproject.exceptions.UserNotFoundException;
@@ -7,6 +8,7 @@ import com.it_academyproject.repositories.MyAppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,6 +99,10 @@ public class StudentService {
 		} else {
 			return null;
 		}
+	}
+
+	public List<DTOStudentsLastDelivery> students_deliveries(Integer statusId, LocalDateTime destDate){
+		return userRepository.students_deliveries(statusId,destDate);
 	}
 
 /*

@@ -1,8 +1,7 @@
 package com.it_academyproject.controllers;
 
-import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentAbsence;
-import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsPerGender;
-import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsPerItinerary;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.it_academyproject.controllers.DTOs.statsDTOs.*;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.StatusExercise;
 import com.it_academyproject.domains.Student;
@@ -10,6 +9,7 @@ import com.it_academyproject.repositories.MyAppUserRepository;
 import com.it_academyproject.repositories.StatusExerciseRepository;
 import com.it_academyproject.services.StatisticsService;
 import com.it_academyproject.services.StudentService;
+import com.it_academyproject.tools.View;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -73,12 +78,10 @@ public class StatisticsController {
 		}
 	}
 
-	@Autowired
-	MyAppUserRepository repo;
-
 	@GetMapping("/students-deliveries")
-	public List<MyAppUser> students_deliveries() {
-		return repo.bla("FINISHED", "2019-12-01 00:00:00");
+	public List<DTOStudentsLastDelivery> students_deliveries() {
+		//return repo.bla("FINISHED", LocalDateTime.of(2019, Month.NOVEMBER, 30, 01, 00, 00));
+		return studentService.students_deliveries(3, LocalDateTime.now() );
 	}
 
 }
