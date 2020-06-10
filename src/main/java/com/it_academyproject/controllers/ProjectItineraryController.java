@@ -46,7 +46,6 @@ public class ProjectItineraryController {
 	public ProjectItinerary createPI(@RequestBody ProjectItinerary PI) {
 		//UI only contains project_id and itinerary_id from Postman
 		
-		
 		Project project = PI.getProject();
 		Itinerary itinerary = PI.getItinerary();
 		Project trueProject = projectRepository.findById(project.getId())
