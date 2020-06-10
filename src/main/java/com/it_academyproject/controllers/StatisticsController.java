@@ -1,10 +1,12 @@
 package com.it_academyproject.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.it_academyproject.controllers.DTOs.itineraryDTOs.DTOItinerariesLastDelivery;
 import com.it_academyproject.controllers.DTOs.statsDTOs.*;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.StatusExercise;
 import com.it_academyproject.domains.Student;
+import com.it_academyproject.repositories.ItineraryRepository;
 import com.it_academyproject.repositories.MyAppUserRepository;
 import com.it_academyproject.repositories.StatusExerciseRepository;
 import com.it_academyproject.services.StatisticsService;
@@ -34,6 +36,8 @@ public class StatisticsController {
 	StatisticsService statisticsService;
 	@Autowired
 	StudentService studentService;
+	@Autowired
+	ItineraryRepository itineraryRepository;
 
 	@GetMapping("/per-itinerary")
 	public List<DTOStudentsPerItinerary> perItinerary() {
@@ -82,6 +86,11 @@ public class StatisticsController {
 	public List<DTOStudentsLastDelivery> students_deliveries() {
 		//return repo.bla("FINISHED", LocalDateTime.of(2019, Month.NOVEMBER, 30, 01, 00, 00));
 		return studentService.students_deliveries(3, LocalDateTime.now() );
+	}
+
+	@GetMapping("/itineraries-deliveries")
+	public List<DTOItinerariesLastDelivery> itinerarys_deliveries() {
+		return itineraryRepository.itinerarys_deliveries(3, LocalDateTime.now());
 	}
 
 }
