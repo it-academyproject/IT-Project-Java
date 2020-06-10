@@ -54,7 +54,7 @@ public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
 	@Query(value = "SELECT u.first_name, u.last_name, ue.date_status FROM user_exercise ue " +
 			"JOIN status_exercise se ON ue.status_id = se.id " +
 			"JOIN users u ON ue.student_id = u.id " +
-			"WHERE se.id!=:statusId AND TIMESTAMPDIFF( DAY, ue.date_status,:destDate) > 8", nativeQuery = true )
+			"WHERE se.id!=:statusId AND TIMESTAMPDIFF( DAY, ue.date_status, :destDate) > 8", nativeQuery = true )
 	List<DTOStudentsLastDelivery> students_deliveries(Integer statusId, LocalDateTime destDate);
 
 }

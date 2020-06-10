@@ -86,6 +86,8 @@ public class StatisticsController {
 	public List<DTOStudentsLastDelivery> students_deliveries() {
 		//return repo.bla("FINISHED", LocalDateTime.of(2019, Month.NOVEMBER, 30, 01, 00, 00));
 		return studentService.students_deliveries(3, LocalDateTime.now() );
+		// LocalDateTime.of(2019, Month.OCTOBER, 27, 0,0,0)
+		// LocalDateTime.now()
 	}
 
 	@GetMapping("/itineraries-deliveries")
