@@ -104,13 +104,40 @@ public class UserExerciseService {
 				.orElseThrow(() -> new UserNotFoundException("Student not found: " + id)));
 	}
 
-	public UserExercise setUserExerciseStatusData(UserExercise userExercise) {
-		UserExercise us = userExerciseRepository.findById(userExercise.getId())
+
+	public UserExercise setUserExerciseStatusData(UserExercise userExercise) { 
+		UserExercise one = userExerciseRepository.findById(userExercise.getId())
 				.orElseThrow(() -> new UserNotFoundException("UserExercise not found"));
-		Date date = new Date();
-		us.setDate_status(date);
-		us.setStatus(userExercise.getStatus());
-		return userExerciseRepository.save(us);
+		if(userExercise.getDate_status()==null) {
+			Date date = new Date();
+			one.setDate_status(date);
+		}
+		else {
+			one.setDate_status(userExercise.getDate_status());
+		}
+		one.setStatus(userExercise.getStatus());
+		return userExerciseRepository.save(one);
+	}
+
+	public String getLastDeliveredExerciseDate(Student student) {
+		List<UserExercise> studentExercises = userExerciseRepository.findByUserStudent(student);
+		List<String> lastDeliveredExerciseDate = new ArrayList<String>();
+		
+		if(studentExercises.size()!=0) {
+			for(UserExercise exercise : studentExercises) {
+				if(exercise.getUserStudent()!=null && exercise.getStatus().getId()!=3) {
+					lastDeliveredExerciseDate.add(exercise.getDate_status().toString());
+				}
+				else {
+					lastDeliveredExerciseDate.add(exercise.getDate_status().toString() + " Pendent de revisió.");
+				}
+			}
+			Collections.sort(lastDeliveredExerciseDate, Collections.reverseOrder());
+			return lastDeliveredExerciseDate.get(0);
+		}
+		else {
+			return "L'Usuari no té exercisis.";
+		}
 	}
 
 }

@@ -7,26 +7,23 @@ import com.it_academyproject.domains.UserExercise;
 
 public class UserExerciseDTO {
 
-	
 	String id;
 	String studentName;
 	String studentLastName;
+	int userExerciseId;
 	String status;
-	Date date;
-	
+	Date date;	
 	
 	public UserExerciseDTO(UserExercise userExercise) {
 	
 		this.id=userExercise.getUserStudent().getId();
 		this.studentName=userExercise.getUserStudent().getFirstName();
 		this.studentLastName=userExercise.getUserStudent().getLastName();
+		this.userExerciseId=userExercise.getId();
 		this.status=userExercise.getStatus().getName();
-		this.date=userExercise.getDate_status();
-		
-		
+		this.date=userExercise.getDate_status();		
 	}
-	
-	
+
 
 	public String getId() {
 		return id;
@@ -77,6 +74,18 @@ public class UserExerciseDTO {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+
+	public int getUserExerciseId()
+	{
+		return userExerciseId;
+	}
+
+
+	public void setUserExerciseId(int userExerciseId)
+	{
+		this.userExerciseId = userExerciseId;
 	}
 	
 	

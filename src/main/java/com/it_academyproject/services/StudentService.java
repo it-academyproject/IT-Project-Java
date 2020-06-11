@@ -17,7 +17,9 @@ public class StudentService {
 
 	@Autowired
 	MyAppUserRepository userRepository;
-
+	
+	@Autowired
+	UserExerciseService userExerciseService;
 	
 	@Autowired
 	CourseService courseService;
@@ -30,6 +32,7 @@ public class StudentService {
 	private List<Student> updateStudentCourses(List<Student> students) {
 		for (Student student : students) {
 			student.setCourses(courseService.findByUserStudent(student));
+			student.setLastDeliveredExercise(userExerciseService.getLastDeliveredExerciseDate(student));
 		}
 		return students;
 	}
@@ -100,6 +103,7 @@ public class StudentService {
 			return null;
 		}
 	}
+	
 
 	public List<DTOStudentsLastDelivery> students_deliveries(Integer statusId, LocalDateTime destDate){
 		return userRepository.students_deliveries(statusId,destDate);
