@@ -48,6 +48,7 @@ public class ProjectItineraryController {
 		
 		Project project = PI.getProject();
 		Itinerary itinerary = PI.getItinerary();
+		
 		Project trueProject = projectRepository.findById(project.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("project not found"));
 		
@@ -59,6 +60,7 @@ public class ProjectItineraryController {
 		//Set the project and itinerary with all their data into UI:
 		PI.setItinerary(trueItinerary);
 		PI.setProject(trueProject);
+		
 		ProjectItinerary projectItinerary = new ProjectItinerary(PI);
 		
 		

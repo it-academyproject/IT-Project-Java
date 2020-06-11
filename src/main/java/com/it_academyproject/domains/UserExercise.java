@@ -54,6 +54,14 @@ public class UserExercise {
 		this.date_status = new Date();
 	}
 	
+	public UserExercise(UserExercise UE) {
+		super();
+		//this.status = UE.getStatus();
+		this.exercise = UE.getExercise();
+		this.userStudent = UE.getUserStudent();
+		this.userTeacher = UE.getUserTeacher();
+	}
+	
 	//--------------------------Setters/Getters--------------------------------------------------------------------
 	
 	public int getId() {

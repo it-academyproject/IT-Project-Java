@@ -43,4 +43,11 @@ public class StatusExercise {
 		this.name = name;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "StatusExercise [id=" + id + ", name=" + name + "]";
+	}
+
+	
 }

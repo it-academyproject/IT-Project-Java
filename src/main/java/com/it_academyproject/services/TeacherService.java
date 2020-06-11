@@ -1,7 +1,9 @@
 package com.it_academyproject.services;
 
 import com.it_academyproject.domains.MyAppUser;
+import com.it_academyproject.domains.Student;
 import com.it_academyproject.domains.Teacher;
+import com.it_academyproject.exceptions.UserNotFoundException;
 import com.it_academyproject.repositories.MyAppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,6 +82,10 @@ public class TeacherService {
 		return null;
 	}
 
+	public Teacher findOneById(String id) {
+		return (Teacher) userRepository.findOneById(id)
+				.orElseThrow(() -> new UserNotFoundException("User not found"));
+	}
 /*
 	// find the user by the email passed to the repository
 	static public MyAppUser findUserByEmail(final String email){

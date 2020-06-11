@@ -20,6 +20,8 @@ import com.it_academyproject.repositories.MyAppUserRepository;
 import com.it_academyproject.repositories.StatusExerciseRepository;
 import com.it_academyproject.repositories.UserExerciseRepository;
 import com.it_academyproject.services.MyAppUserService;
+import com.it_academyproject.services.StudentService;
+import com.it_academyproject.services.TeacherService;
 import com.it_academyproject.services.UserExerciseService;
 import com.it_academyproject.tools.View;
 import org.json.JSONObject;
@@ -57,34 +59,49 @@ public class UserExerciseController {
 	MyAppUserRepository myAppUserRepository;
 	
 	@Autowired
+	StudentService studentService;
+	
+	@Autowired
+	TeacherService teacherService;
+	
+	@Autowired
 	MyAppUserService userService;
 
-	@PostMapping("/api/exercise")
-	public UserExercise createNewUserExercise(@RequestBody UserExercise userExercise) {
-		StatusExercise statusExercise = userExercise.getStatus();
-		Exercise exercise = userExercise.getExercise();
-		Student student = userExercise.getUserStudent();
-		Teacher teacher = userExercise.getUserTeacher();
+	@PostMapping("/api/exercises")
+	public UserExercise newUserExercise(@RequestBody UserExercise UE) {
+		
+		StatusExercise statusExercise = UE.getStatus();
+		Exercise exercise = UE.getExercise();
+		Student student = UE.getUserStudent();
+		Teacher teacher = UE.getUserTeacher();
 		
 		StatusExercise trueStatusExercise = statusExerciseRepository.findById(statusExercise.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("status exercise not found"));
-		
 		Exercise trueExercise = exerciseRepository.findById(exercise.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("exercise not found"));
+		Student trueStudent = studentService.findOneById(student.getId());
+		Teacher trueTeacher = teacherService.findOneById(teacher.getId());
 		
-		Student trueStudent = (Student) myAppUserRepository.findById(student.getId())
-				.orElseThrow(() -> new ResourceNotFoundException("student not found"));
+		System.out.println(trueStatusExercise);
+		System.out.println(trueExercise);
+		System.out.println(trueStudent);
+		System.out.println(trueTeacher);
 		
-		Teacher trueTeacher = (Teacher) myAppUserRepository.findById(teacher.getId())
-				.orElseThrow(() -> new ResourceNotFoundException("teacher not found"));
-
-		userExercise.setStatus(trueStatusExercise);
-		userExercise.setExercise(trueExercise);
-		userExercise.setUserStudent(trueStudent);
-		userExercise.setUserTeacher(trueTeacher);
-
-		UserExercise newUserExercise = new UserExercise();
-
+		UserExercise newUserExercise = new UserExercise(UE);
+		UE.setUserStudent(trueStudent);
+		
+//		newUserExercise.setStatus(trueStatusExercise);
+//		newUserExercise.setExercise(trueExercise);
+//		newUserExercise.setUserStudent(trueStudent);
+//		newUserExercise.setUserTeacher(trueTeacher);
+//			
+//		UE.setStatus(trueStatusExercise);
+//		UE.setExercise(trueExercise);
+//		UE.setUserStudent(trueStudent);
+//		UE.setUserTeacher(trueTeacher);
+		
+//		UserExercise newUserExercise = new UserExercise(UE);
+		
 		return userExerciseRepository.save(newUserExercise);		
 	}
 

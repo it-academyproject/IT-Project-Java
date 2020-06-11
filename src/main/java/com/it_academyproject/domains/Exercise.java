@@ -57,6 +57,13 @@ public class Exercise {
 	public void setItinerary(Itinerary itinerary) {
 		this.itinerary = itinerary;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "Exercise [id=" + id + ", name=" + name + ", itinerary=" + itinerary + "]";
+	}
+	
 	
 
 }
