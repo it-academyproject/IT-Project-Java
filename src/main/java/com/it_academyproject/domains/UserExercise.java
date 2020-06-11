@@ -56,10 +56,9 @@ public class UserExercise {
 	
 	public UserExercise(UserExercise UE) {
 		super();
-		//this.status = UE.getStatus();
+		this.status = UE.getStatus();
 		this.exercise = UE.getExercise();
 		this.userStudent = UE.getUserStudent();
-		this.userTeacher = UE.getUserTeacher();
 	}
 	
 	//--------------------------Setters/Getters--------------------------------------------------------------------
@@ -115,16 +114,4 @@ public class UserExercise {
 		this.userTeacher = userTeacher;
 	}
 
-	@Override
-	public String toString() {
-		return "UserExercise{" +
-				"Id=" + Id +
-				", comments='" + comments + '\'' +
-				", date_status=" + date_status +
-				", status=" + status +
-				", exercise=" + exercise +
-				", userStudent=" + userStudent +
-				", userTeacher=" + userTeacher +
-				'}';
-	}
 }

@@ -69,38 +69,21 @@ public class UserExerciseController {
 
 	@PostMapping("/api/exercises")
 	public UserExercise newUserExercise(@RequestBody UserExercise UE) {
-		
 		StatusExercise statusExercise = UE.getStatus();
 		Exercise exercise = UE.getExercise();
 		Student student = UE.getUserStudent();
-		Teacher teacher = UE.getUserTeacher();
 		
 		StatusExercise trueStatusExercise = statusExerciseRepository.findById(statusExercise.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("status exercise not found"));
 		Exercise trueExercise = exerciseRepository.findById(exercise.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("exercise not found"));
 		Student trueStudent = studentService.findOneById(student.getId());
-		Teacher trueTeacher = teacherService.findOneById(teacher.getId());
 		
-		System.out.println(trueStatusExercise);
-		System.out.println(trueExercise);
-		System.out.println(trueStudent);
-		System.out.println(trueTeacher);
-		
-		UserExercise newUserExercise = new UserExercise(UE);
+		UE.setUserStudent(trueStudent);
+		UE.setExercise(trueExercise);
 		UE.setUserStudent(trueStudent);
 		
-//		newUserExercise.setStatus(trueStatusExercise);
-//		newUserExercise.setExercise(trueExercise);
-//		newUserExercise.setUserStudent(trueStudent);
-//		newUserExercise.setUserTeacher(trueTeacher);
-//			
-//		UE.setStatus(trueStatusExercise);
-//		UE.setExercise(trueExercise);
-//		UE.setUserStudent(trueStudent);
-//		UE.setUserTeacher(trueTeacher);
-		
-//		UserExercise newUserExercise = new UserExercise(UE);
+		UserExercise newUserExercise = new UserExercise(UE);
 		
 		return userExerciseRepository.save(newUserExercise);		
 	}

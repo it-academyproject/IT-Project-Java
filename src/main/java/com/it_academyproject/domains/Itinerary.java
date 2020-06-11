@@ -62,11 +62,4 @@ public class Itinerary {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	@Override
-	public String toString()
-	{
-		return "Itinerary [id=" + id + ", name=" + name + ", projectItineraries=" + projectItineraries + "]";
-	}
-	
 }

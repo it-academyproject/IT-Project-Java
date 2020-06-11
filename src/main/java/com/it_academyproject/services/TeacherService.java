@@ -82,10 +82,6 @@ public class TeacherService {
 		return null;
 	}
 
-	public Teacher findOneById(String id) {
-		return (Teacher) userRepository.findOneById(id)
-				.orElseThrow(() -> new UserNotFoundException("User not found"));
-	}
 /*
 	// find the user by the email passed to the repository
 	static public MyAppUser findUserByEmail(final String email){
