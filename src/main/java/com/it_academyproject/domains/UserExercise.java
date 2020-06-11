@@ -54,12 +54,12 @@ public class UserExercise {
 		this.date_status = new Date();
 	}
 	
-	public UserExercise(UserExercise UE) {
+	public UserExercise(UserExercise userExercise) {
 		this.comments = "Lorem ipsum";
 		this.date_status = new Date();
-		this.status = UE.getStatus();
-		this.exercise = UE.getExercise();
-		this.userStudent = UE.getUserStudent();
+		this.status = userExercise.getStatus();
+		this.exercise = userExercise.getExercise();
+		this.userStudent = userExercise.getUserStudent();
 	}
 	
 	//--------------------------Setters/Getters--------------------------------------------------------------------

@@ -1,16 +1,10 @@
 package com.it_academyproject.controllers;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseFromStudentDTO;
 import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseListDTO;
 import com.it_academyproject.domains.Exercise;
-import com.it_academyproject.domains.Itinerary;
 import com.it_academyproject.domains.UserExercise;
 import com.it_academyproject.domains.Student;
-import com.it_academyproject.domains.Teacher;
-import com.it_academyproject.domains.MyAppUser;
-import com.it_academyproject.domains.Project;
-import com.it_academyproject.domains.ProjectItinerary;
 import com.it_academyproject.domains.StatusExercise;
 import com.it_academyproject.exceptions.BadRoleException;
 import com.it_academyproject.exceptions.ResourceNotFoundException;
@@ -23,23 +17,17 @@ import com.it_academyproject.services.MyAppUserService;
 import com.it_academyproject.services.StudentService;
 import com.it_academyproject.services.TeacherService;
 import com.it_academyproject.services.UserExerciseService;
-import com.it_academyproject.tools.View;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 public class UserExerciseController {
@@ -68,31 +56,25 @@ public class UserExerciseController {
 	MyAppUserService userService;
 
 	@PostMapping("/api/exercises")
-	public UserExercise newUserExercise(@RequestBody UserExercise UE) {
-		StatusExercise statusExercise = UE.getStatus();
-		Exercise exercise = UE.getExercise();
-		Student student = UE.getUserStudent();
+	public UserExercise newUserExercise(@RequestBody UserExercise userExercise) {
+
+		StatusExercise statusExercise = userExercise.getStatus();
+		Exercise exercise = userExercise.getExercise();
+		Student student = userExercise.getUserStudent();
 
 		StatusExercise trueStatusExercise = statusExerciseRepository.findById(statusExercise.getId())
-				.orElseThrow(() -> new ResourceNotFoundException("status exercise not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Status_exercise not found"));
 		Exercise trueExercise = exerciseRepository.findById(exercise.getId())
-				.orElseThrow(() -> new ResourceNotFoundException("exercise not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Exercise not found"));
 		Student trueStudent = studentService.findOneById(student.getId());
-		
-		UserExercise findUserExercise = userExerciseRepository.findOneByUserStudentAndExercise(trueStudent, trueExercise);
-		
-		if(findUserExercise!=null) {
-			UE.setStatus(trueStatusExercise);
-			UE.setExercise(trueExercise);
-			UE.setUserStudent(trueStudent);
-			UserExercise newUserExercise = new UserExercise(UE);
-			return userExerciseRepository.save(newUserExercise);
-		} else {
-			return null;
-		}
+
+		userExercise.setStatus(trueStatusExercise);
+		userExercise.setExercise(trueExercise);
+		userExercise.setUserStudent(trueStudent);
+
+		UserExercise newUserExercise = new UserExercise(userExercise);
+		return userExerciseRepository.save(newUserExercise);
 	}
-
-
 
 	@GetMapping("/api/exercises/{itineraryId}")
 	public ResponseEntity<String> getExerciseStudentByItinerary(@PathVariable String itineraryId) {
