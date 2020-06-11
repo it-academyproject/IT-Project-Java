@@ -48,22 +48,22 @@ public class UserExerciseController {
 
 	@Autowired
 	UserExerciseRepository userExerciseRepository;
-	
+
 	@Autowired
 	ExerciseRepository exerciseRepository;
 
 	@Autowired
 	StatusExerciseRepository statusExerciseRepository;
-	
+
 	@Autowired
 	MyAppUserRepository myAppUserRepository;
-	
+
 	@Autowired
 	StudentService studentService;
-	
+
 	@Autowired
 	TeacherService teacherService;
-	
+
 	@Autowired
 	MyAppUserService userService;
 
@@ -72,20 +72,24 @@ public class UserExerciseController {
 		StatusExercise statusExercise = UE.getStatus();
 		Exercise exercise = UE.getExercise();
 		Student student = UE.getUserStudent();
-		
+
 		StatusExercise trueStatusExercise = statusExerciseRepository.findById(statusExercise.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("status exercise not found"));
 		Exercise trueExercise = exerciseRepository.findById(exercise.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("exercise not found"));
 		Student trueStudent = studentService.findOneById(student.getId());
 		
-		UE.setUserStudent(trueStudent);
-		UE.setExercise(trueExercise);
-		UE.setUserStudent(trueStudent);
+		UserExercise findUserExercise = userExerciseRepository.findOneByUserStudentAndExercise(trueStudent, trueExercise);
 		
-		UserExercise newUserExercise = new UserExercise(UE);
-		
-		return userExerciseRepository.save(newUserExercise);		
+		if(findUserExercise!=null) {
+			UE.setStatus(trueStatusExercise);
+			UE.setExercise(trueExercise);
+			UE.setUserStudent(trueStudent);
+			UserExercise newUserExercise = new UserExercise(UE);
+			return userExerciseRepository.save(newUserExercise);
+		} else {
+			return null;
+		}
 	}
 
 

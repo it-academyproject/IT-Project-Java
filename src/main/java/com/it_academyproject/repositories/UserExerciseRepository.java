@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface UserExerciseRepository extends JpaRepository <UserExercise, Integer>
 {
-    UserExercise findOneByUserStudentAndExercise(Student user , Exercise exercise);
+    UserExercise findOneByUserStudentAndExercise(Student user, Exercise exercise);
     List<UserExercise> findByUserStudent(Student user );
     List<UserExercise> findAllByExercise(Exercise exercise);
 	List<UserExercise> findByExerciseId(int id); 

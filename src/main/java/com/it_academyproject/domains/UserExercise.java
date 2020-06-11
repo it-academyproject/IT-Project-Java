@@ -55,7 +55,8 @@ public class UserExercise {
 	}
 	
 	public UserExercise(UserExercise UE) {
-		super();
+		this.comments = "Lorem ipsum";
+		this.date_status = new Date();
 		this.status = UE.getStatus();
 		this.exercise = UE.getExercise();
 		this.userStudent = UE.getUserStudent();
