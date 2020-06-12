@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 
 public interface DTOItinerariesLastDelivery {
-    String getName();
+
+    String getItinerary_name();
 
     Integer getNumStudents();
+
 }

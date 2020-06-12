@@ -15,12 +15,15 @@ public interface ItineraryRepository extends JpaRepository<Itinerary, Integer>
 {
     Itinerary findOneById(Integer id );
 
-    @Query(value = "SELECT i.*, COUNT(ue.status_id) AS numStudents " +
+    @Query(value = "SELECT i.name AS itinerary_name, COUNT(f.student_id) as numStudents " +
                     "FROM itinerary i " +
-                    "JOIN exercise e ON i.id=e.itinerary_id " +
-                    "JOIN user_exercise ue ON ue.exercise_id=e.id " +
-                    "JOIN status_exercise se ON se.id=ue.status_id " +
-                    "WHERE se.id!=:statusId AND TIMESTAMPDIFF( DAY, ue.date_status,:destDate) > 8", nativeQuery = true )
+                    "JOIN (SELECT i.id AS inner_id, ue.student_id AS student_id, u.last_name AS last_name " +
+                            "FROM user_exercise ue " +
+                            "JOIN exercise e ON ue.exercise_id=e.id " +
+                            "JOIN itinerary i ON e.itinerary_id=i.id " +
+                            "JOIN users u ON ue.student_id=u.id " +
+                            "WHERE ue.status_id!=:statusId AND TIMESTAMPDIFF( DAY, ue.date_status,:destDate) > 8 " +
+                            "GROUP BY i.id, student_id) f ON i.id=f.inner_id " +
+                    "GROUP BY i.name", nativeQuery = true )
     List<DTOItinerariesLastDelivery> itinerarys_deliveries(Integer statusId, LocalDateTime destDate);
-
 }

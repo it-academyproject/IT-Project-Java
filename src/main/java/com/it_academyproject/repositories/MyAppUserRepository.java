@@ -51,10 +51,10 @@ public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
 	//List<MyAppUser> findByIterations_IterationName(String iterationName);
 
 
-	@Query(value = "SELECT u.first_name, u.last_name, ue.date_status FROM user_exercise ue " +
-			"JOIN status_exercise se ON ue.status_id = se.id " +
-			"JOIN users u ON ue.student_id = u.id " +
-			"WHERE se.id!=:statusId AND TIMESTAMPDIFF( DAY, ue.date_status, :destDate) > 8", nativeQuery = true )
+	@Query(value = "SELECT u.first_name, u.last_name, ue.date_status " +
+			"FROM user_exercise ue " +
+			"JOIN users u ON ue.student_id = u.id " + // This will automatically kick out all rows in ue that have student_id=null !!!
+			"WHERE ue.status_id!=:statusId AND TIMESTAMPDIFF( DAY, ue.date_status, :destDate) > 8", nativeQuery = true )
 	List<DTOStudentsLastDelivery> students_deliveries(Integer statusId, LocalDateTime destDate);
 
 }
