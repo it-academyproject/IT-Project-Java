@@ -42,14 +42,6 @@ public abstract class MyAppUser {
 	@JsonView(View.SummaryWithOthers.class)
 	private char gender;
 
-	@JsonView(View.SummaryWithOthers.class)
-	@Temporal(TemporalType.DATE)
-	@JsonFormat(pattern="dd-MM-yyyy")
-	private Date birthdate;
-
-	@JsonView(View.SummaryWithOthers.class)
-	private String portrait;
-
 	private String password;
 	private boolean enabled;
 	private Date lastLogin;
@@ -92,13 +84,12 @@ public abstract class MyAppUser {
 	}
 	
 	public MyAppUser(String firstName, String lastName, String email, char gender,
-					 String portrait, String password, boolean enabled, Role role) {
+					 String password, boolean enabled, Role role) {
 		
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.gender = gender;
-		this.portrait = portrait;
 		this.password = password;
 		this.enabled = enabled;
 		this.role = role;
@@ -166,21 +157,8 @@ public abstract class MyAppUser {
 		return gender;
 	}
 
-	public Date getBirthdate() {
-		return birthdate;
-	}
-
-
-	public void setBirthdate(Date birthdate) {
-		this.birthdate = birthdate;
-	}
-
 	public void setGender(char gender) {
 		this.gender = gender;
-	}
-
-	public String getPortrait() {
-		return portrait;
 	}
 
 	public Date getLastClassAttendance() {
@@ -189,10 +167,6 @@ public abstract class MyAppUser {
 
 	public void setLastClassAttendance(Date lastClassAttendance) {
 		this.lastClassAttendance = lastClassAttendance;
-	}
-
-	public void setPortrait(String portrait) {
-		this.portrait = portrait;
 	}
 
 	public String getPassword() {
@@ -252,7 +226,7 @@ public abstract class MyAppUser {
 	@Override
 	public String toString() {
 		return "MyAppUser [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", gender=" + gender + ", birthdate=" + birthdate + ", portrait=" + portrait + ", password="
+				+ ", gender=" + gender + ", password="
 				+ password + ", enabled=" + enabled + ", lastLogin=" + lastLogin + ", role=" + role
 				+ ", lastClassAttendance=" + lastClassAttendance + ", absences=" + absences + ", totalAbsences="
 				+ totalAbsences + ", courses=" + courses + ", emails=" + emails + ", userIterations=" + userIterations
@@ -273,7 +247,7 @@ public abstract class MyAppUser {
 	
 
 	/*	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", gender=" + gender + ", portrait=" + portrait + ", password=" + password
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", gender=" + gender + ", password=" + password
 				+ ", enabled=" + enabled + "]";
 	}	*/
 

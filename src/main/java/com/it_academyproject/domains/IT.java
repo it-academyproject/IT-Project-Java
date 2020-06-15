@@ -15,7 +15,7 @@ public class IT extends MyAppUser {
     }
 
     public IT(String firstName, String lastName, String email, char gender, String portrait, String password, boolean enabled) {
-        super(firstName, lastName, email, gender, portrait, password, enabled, Role.IT);
+        super(firstName, lastName, email, gender, password, enabled, Role.IT);
     }
 
     public IT(String email, String password) throws EmptyFieldException {
