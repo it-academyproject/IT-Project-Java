@@ -15,7 +15,7 @@ public class Admin extends MyAppUser {
     }
 
     public Admin(String firstName, String lastName, String email, char gender, String portrait, String password, boolean enabled) {
-        super(firstName, lastName, email, gender, portrait, password, enabled, Role.ADMIN);
+        super(firstName, lastName, email, gender, password, enabled, Role.ADMIN);
     }
 
     public Admin(String email, String password) throws EmptyFieldException {
