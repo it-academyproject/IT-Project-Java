@@ -2,12 +2,14 @@ package com.it_academyproject.controllers;
 
 import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseFromStudentDTO;
 import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseListDTO;
+import com.it_academyproject.controllers.DTOs.exerciseListDTOs.UE_DTO;
 import com.it_academyproject.domains.Exercise;
 import com.it_academyproject.domains.UserExercise;
 import com.it_academyproject.domains.Student;
 import com.it_academyproject.domains.StatusExercise;
 import com.it_academyproject.exceptions.BadRoleException;
 import com.it_academyproject.exceptions.ResourceNotFoundException;
+import com.it_academyproject.exceptions.UserAlreadyExistException;
 import com.it_academyproject.exceptions.UserNotFoundException;
 import com.it_academyproject.repositories.ExerciseRepository;
 import com.it_academyproject.repositories.MyAppUserRepository;
@@ -55,25 +57,12 @@ public class UserExerciseController {
 	@Autowired
 	MyAppUserService userService;
 
+
+
 	@PostMapping("/api/exercises")
-	public UserExercise newUserExercise(@RequestBody UserExercise userExercise) {
+	public UE_DTO newUserExercise(@RequestBody UE_DTO ue_DTO) {
+		return userExerciseService.save(ue_DTO);
 
-		StatusExercise statusExercise = userExercise.getStatus();
-		Exercise exercise = userExercise.getExercise();
-		Student student = userExercise.getUserStudent();
-
-		StatusExercise trueStatusExercise = statusExerciseRepository.findById(statusExercise.getId())
-				.orElseThrow(() -> new ResourceNotFoundException("Status_exercise not found"));
-		Exercise trueExercise = exerciseRepository.findById(exercise.getId())
-				.orElseThrow(() -> new ResourceNotFoundException("Exercise not found"));
-		Student trueStudent = studentService.findOneById(student.getId());
-
-		userExercise.setStatus(trueStatusExercise);
-		userExercise.setExercise(trueExercise);
-		userExercise.setUserStudent(trueStudent);
-
-		UserExercise newUserExercise = new UserExercise(userExercise);
-		return userExerciseRepository.save(newUserExercise);
 	}
 
 	@GetMapping("/api/exercises/{itineraryId}")

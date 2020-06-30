@@ -1,13 +1,12 @@
 package com.it_academyproject.services;
 
 import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseFromStudentDTO;
+import com.it_academyproject.controllers.DTOs.exerciseListDTOs.UE_DTO;
 import com.it_academyproject.domains.*;
+import com.it_academyproject.exceptions.ResourceNotFoundException;
+import com.it_academyproject.exceptions.UserAlreadyExistException;
 import com.it_academyproject.exceptions.UserNotFoundException;
-import com.it_academyproject.repositories.CourseRepository;
-import com.it_academyproject.repositories.ItineraryRepository;
-import com.it_academyproject.repositories.MyAppUserRepository;
-import com.it_academyproject.repositories.UserExerciseRepository;
-import com.it_academyproject.repositories.ExerciseRepository;
+import com.it_academyproject.repositories.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +25,30 @@ public class UserExerciseService {
 	ItineraryRepository itineraryRepository;
 	@Autowired
 	ExerciseRepository exerciseRepository;
+	@Autowired
+	StudentService studentService;
+	@Autowired
+	StatusExerciseRepository statusRepo;
+
+	public UE_DTO save( UE_DTO ue_DTO) throws UserAlreadyExistException{
+
+		Exercise exercise = exerciseRepository.findById( ue_DTO.getExerciseId() )
+				.orElseThrow(() -> new ResourceNotFoundException("Exercise not found"));
+		Student student = studentService.findOneById( ue_DTO.getStudentId() );
+
+		UserExercise userExercise = userExerciseRepository.findOneByUserStudentAndExercise( student , exercise);
+		if(userExercise!=null){
+			throw new UserAlreadyExistException("This UserExercise with Exercise_id: " + exercise.getId() +
+					" and the Student_id: " + student.getId() + " already exists.");
+		}else{
+			UserExercise newUserExercise = new UserExercise();
+			newUserExercise.setStatus( statusRepo.findByName(ue_DTO.getStatus()) );
+			newUserExercise.setExercise(exercise);
+			newUserExercise.setUserStudent(student);
+
+			return new UE_DTO( userExerciseRepository.save(newUserExercise) );
+		}
+	}
 
 	public JSONObject getExerciseStudentByItinerary(String itineraryIdString) {
 		try {
