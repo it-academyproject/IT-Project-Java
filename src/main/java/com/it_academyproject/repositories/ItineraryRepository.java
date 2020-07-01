@@ -15,7 +15,7 @@ public interface ItineraryRepository extends JpaRepository<Itinerary, Integer>
 {
     Itinerary findOneById(Integer id );
 
-    @Query(value = "SELECT i.name AS itinerary_name, COUNT(f.student_id) as numStudents " +
+    @Query(value = "SELECT i.name AS itinerary_name, COUNT(f.student_id) as num_students " +
                     "FROM itinerary i " +
                     "JOIN (SELECT i.id AS inner_id, ue.student_id AS student_id, u.last_name AS last_name " +
                             "FROM user_exercise ue " +

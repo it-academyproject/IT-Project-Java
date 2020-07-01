@@ -8,6 +8,6 @@ public interface DTOItinerariesLastDelivery {
 
     String getItinerary_name();
 
-    Integer getNumStudents();
+    Integer getNum_students();
 
 }

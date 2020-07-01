@@ -32,12 +32,12 @@ public class StatisticsService {
         Map<String, Integer> result = new HashMap<>();
 
         for (Itinerary itinerary : itineraryRepository.findAll())
-            result.put(itinerary.getName(), getNumStudents(itinerary));
+            result.put(itinerary.getName(), getNum_students(itinerary));
 
         return result;
     }
 
-    private int getNumStudents(Itinerary itinerary) {
+    private int getNum_students(Itinerary itinerary) {
         return courseRepository.findByItinerary(itinerary).size();
     }
 
