@@ -26,13 +26,22 @@ public class ProjectController {
 	
 	@Autowired
 	ProjectRepository projectRepository;
-	
+
+	/** Modify by B-79 **/
+	/*
 	@GetMapping("/api/projects")
 	public List<Project> getAllProjects() {
 		List<Project> pr = projectRepository.findAll();
 		return pr;
 	}
-	
+	*/
+
+	@GetMapping("/api/projects")
+	public int getCountProjects() {
+		int countProjects = projectRepository.findAll().size();
+		return countProjects;
+	}
+
 	@GetMapping("api/projects/{id}")
 	Project one(@PathVariable Long id) {
 	//
