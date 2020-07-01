@@ -37,6 +37,7 @@ public class UserExerciseService {
 				.orElseThrow(() -> new ResourceNotFoundException("Exercise not found"));
 		Student student = studentService.findOneById( ue_DTO.getStudentId() );
 
+		// The following line proves that th pair studentId/exerciseId already exists in the database or not.
 		UserExercise userExercise = userExerciseRepository.findOneByUserStudentAndExercise( student , exercise);
 		if(userExercise!=null){
 			throw new UserAlreadyExistException("This UserExercise with Exercise_id: " + exercise.getId() +
