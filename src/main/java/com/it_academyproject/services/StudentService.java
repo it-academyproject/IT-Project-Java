@@ -1,5 +1,7 @@
 package com.it_academyproject.services;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentLastClass;
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsLastDelivery;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.Student;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -107,6 +110,10 @@ public class StudentService {
 
 	public List<DTOStudentsLastDelivery> students_deliveries(Integer statusId, LocalDateTime destDate){
 		return userRepository.students_deliveries(statusId,destDate);
+	}
+
+	public List<DTOStudentLastClass> getUsersLastClass() {
+		return userRepository.getUsersLastClass();
 	}
 
 /*

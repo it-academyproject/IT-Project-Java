@@ -53,6 +53,8 @@ public abstract class MyAppUser {
 	@JsonFormat(pattern="dd-MM-yyyy")
 	private Date lastClassAttendance;
 
+	@Transient
+	private int daysLastClass;
 	
 	@OneToMany (targetEntity = Absence.class, cascade = CascadeType.ALL)
 	private List <Absence> absences = new ArrayList <Absence>();
@@ -167,6 +169,14 @@ public abstract class MyAppUser {
 
 	public void setLastClassAttendance(Date lastClassAttendance) {
 		this.lastClassAttendance = lastClassAttendance;
+	}
+
+	public int getDaysLastClass() {
+		return daysLastClass;
+	}
+
+	public void setDaysLastClass(int daysLastClass) {
+		this.daysLastClass = daysLastClass;
 	}
 
 	public String getPassword() {
