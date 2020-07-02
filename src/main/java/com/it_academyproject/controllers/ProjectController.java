@@ -1,6 +1,7 @@
 package com.it_academyproject.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import com.it_academyproject.domains.Iteration;
 import com.it_academyproject.domains.Project;
 import com.it_academyproject.exceptions.ResourceNotFoundException;
 import com.it_academyproject.repositories.IterationRepository;
@@ -26,13 +26,13 @@ public class ProjectController {
 	
 	@Autowired
 	ProjectRepository projectRepository;
-	
+
 	@GetMapping("/api/projects")
-	public List<Project> getAllProjects() {
-		List<Project> pr = projectRepository.findAll();
-		return pr;
+	public List<Map<String, Object>> getAllProjectsByIterations() {
+		List<Map<String, Object>> projects = projectRepository.findAllByIterations();
+		return projects;
 	}
-	
+
 	@GetMapping("api/projects/{id}")
 	Project one(@PathVariable Long id) {
 	//
