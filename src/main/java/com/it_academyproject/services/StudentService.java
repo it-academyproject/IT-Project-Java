@@ -7,10 +7,17 @@ import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.Student;
 import com.it_academyproject.exceptions.UserNotFoundException;
 import com.it_academyproject.repositories.MyAppUserRepository;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -113,7 +120,55 @@ public class StudentService {
 	}
 
 	public List<DTOStudentLastClass> getUsersLastClass() {
-		return userRepository.getUsersLastClass();
+
+		List<MyAppUser> students = userRepository.findAll();
+		//List<MyAppUser> students = userRepository.getUsersLastClass();
+		//List<DTOStudentLastClass> students = userRepository.getUsersLastClass();
+		List<DTOStudentLastClass> dtos = new ArrayList<>();
+
+
+		for(int i = 0; i < students.size(); i++) {
+			DTOStudentLastClass student = new DTOStudentLastClass();
+
+			student.setFirst_name(initCap(students.get(i).getFirstName()));
+			student.setLast_name(initCap(students.get(i).getLastName()));
+			student.setDaysLastClass(getDays(students.get(i).getLastClassAttendance().toString()));
+
+			dtos.add(student);
+		}
+
+		return dtos;
+	}
+
+	public static String initCap(String stringValue) {
+
+		String[] words = stringValue.toLowerCase().split(" ");
+
+		StringBuilder strBuild = new StringBuilder();
+
+		for(int i = 0; i < words.length; i++) {
+			strBuild.append(Character.toUpperCase(words[i].charAt(0)));
+			strBuild.append(words[i].substring(1));
+			if(i < words.length - 1) {
+				strBuild.append(' ');
+			}
+		}
+
+		return strBuild.toString();
+
+	}
+
+	public static int getDays(CharSequence pDateIni) {
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate dateIni = LocalDate.parse(pDateIni, formatter);
+		LocalDate dateNow = LocalDate.now();
+
+		int daysLastClass;
+
+		daysLastClass = (int)ChronoUnit.DAYS.between(dateIni, dateNow);
+
+		return daysLastClass;
 	}
 
 /*
