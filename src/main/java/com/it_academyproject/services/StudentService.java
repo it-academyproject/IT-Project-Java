@@ -122,10 +122,7 @@ public class StudentService {
 	public List<DTOStudentLastClass> getUsersLastClass() {
 
 		List<MyAppUser> students = userRepository.findAll();
-		//List<MyAppUser> students = userRepository.getUsersLastClass();
-		//List<DTOStudentLastClass> students = userRepository.getUsersLastClass();
 		List<DTOStudentLastClass> dtos = new ArrayList<>();
-
 
 		for(int i = 0; i < students.size(); i++) {
 			DTOStudentLastClass student = new DTOStudentLastClass();
