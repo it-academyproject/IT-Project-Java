@@ -2,6 +2,7 @@ package com.it_academyproject.services;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentLastClass;
+import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentLastClassI;
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsLastDelivery;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.Student;
@@ -17,10 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class StudentService {
@@ -121,15 +119,16 @@ public class StudentService {
 
 	public List<DTOStudentLastClass> getUsersLastClass() {
 
-		List<MyAppUser> students = userRepository.findAll();
+		List<DTOStudentLastClassI> students = userRepository.getUsersLastClass();
 		List<DTOStudentLastClass> dtos = new ArrayList<>();
 
 		for(int i = 0; i < students.size(); i++) {
 			DTOStudentLastClass student = new DTOStudentLastClass();
 
-			student.setFirst_name(initCap(students.get(i).getFirstName()));
-			student.setLast_name(initCap(students.get(i).getLastName()));
-			student.setDaysLastClass(getDays(students.get(i).getLastClassAttendance().toString()));
+			student.setFirst_name(initCap(students.get(i).getFirst_Name()));
+			student.setLast_name(initCap(students.get(i).getLast_Name()));
+			//student.setDaysLastClass(getDaysBeetwenDates());
+			student.setDaysLastClass(students.get(i).getDaysLastClass());
 
 			dtos.add(student);
 		}
@@ -155,7 +154,7 @@ public class StudentService {
 
 	}
 
-	public static int getDays(CharSequence pDateIni) {
+	public static int getDaysBeetwenDates(CharSequence pDateIni) {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate dateIni = LocalDate.parse(pDateIni, formatter);

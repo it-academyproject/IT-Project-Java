@@ -93,7 +93,7 @@ public class StatisticsController {
 	}
 
 	@GetMapping("/students-attendance")
-	public List<DTOStudentLastClass> getUsersLastClass() {
+	public List<DTOStudentLastClass>  getUsersLastClass() {
 		return studentService.getUsersLastClass();
 	}
 

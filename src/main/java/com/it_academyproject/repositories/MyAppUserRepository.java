@@ -1,6 +1,7 @@
 package com.it_academyproject.repositories;
 
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentLastClass;
+import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentLastClassI;
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsLastDelivery;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.MyAppUser.Role;
@@ -63,13 +64,13 @@ public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
 			"		initCap(u.last_name) AS last_name, " +
 			"		TIMESTAMPDIFF(DAY, u.last_class_attendance, NOW()) AS daysLastClass " +
 			"		FROM users u" , nativeQuery = true)
-	List<DTOStudentLastClass> getUsersLastClass();
+	List<DTOStudentLastClassI> getUsersLastClass();
 	*/
 
 	@Query(value = "SELECT u.first_name AS first_name, " +
 			"		u.last_name AS last_name, " +
 			"		TIMESTAMPDIFF(DAY, u.last_class_attendance, NOW()) AS daysLastClass " +
 			"		FROM users u" , nativeQuery = true)
-	List<DTOStudentLastClass> getUsersLastClass();
+	List<DTOStudentLastClassI> getUsersLastClass();
 
 }
