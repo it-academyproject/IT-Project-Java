@@ -162,18 +162,17 @@ public class EmailService {
 
 		for(int i = 0; i < studentsExerciseNotTurnedIn.size(); i++) {
 
-			Emails emailNotificationLog = new Emails("ABSENCES");
+			Emails studentEmailNotificationLog = new Emails("ABSENCES");
 
 			Student student = (Student) userRepository.findUserById(studentsExerciseNotTurnedIn.get(i).getId());
 			Teacher teacher = (Teacher) userRepository.findUserById(studentsExerciseNotTurnedIn.get(i).getTeacher_id());
 
-			emailNotificationLog.setUserStudent(student);
-			emailNotificationLog.setSent(false);
-			emailsRepository.save(emailNotificationLog);
+			studentEmailNotificationLog.setUserStudent(student);
+			studentEmailNotificationLog.setSent(false);
+			emailsRepository.save(studentEmailNotificationLog);
 
-			String studentName = studentsExerciseNotTurnedIn.get(i).getFirst_Name() + " " +
-					studentsExerciseNotTurnedIn.get(i).getLast_Name();
-			String studentEmail = studentsExerciseNotTurnedIn.get(i).getEmail();
+			String studentName = student.getFirstName() + " " + student.getLastName();
+			String studentEmail = student.getEmail();
 			String studentMessageBody = " I hope this e-mail finds you well.\n " +
 					"This message is to inform you, " +
 					"that it has been " +
@@ -182,13 +181,35 @@ public class EmailService {
 
 			if(studentName != null && studentEmail != null) {
 				try {
-					emailNotificationLog.setSent(true);
-					emailsRepository.save(emailNotificationLog);
+					studentEmailNotificationLog.setSent(true);
+					emailsRepository.save(studentEmailNotificationLog);
 					emailNotification(studentEmail, studentName, studentMessageBody);
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
 			}
+
+			Emails teacherEmailNotificationLog = new Emails("ABSENCES");
+
+			//teacherEmailNotificationLog.setUserStudent(teacher);
+			teacherEmailNotificationLog.setSent(false);
+			emailsRepository.save(teacherEmailNotificationLog);
+
+			String teacherName = teacher.getFirstName() + " " + teacher.getLastName();
+			String teacherEmail = teacher.getEmail();
+			String teacherMessageBody = "The student " + student.getFirstName() + " " + student.getLastName() + "\n" +
+					"has not delivered exercises for " + studentsExerciseNotTurnedIn.get(i).getDaysLastTurnedIn() + " days.";
+
+			if(teacherName != null && teacherEmail != null) {
+				try {
+					teacherEmailNotificationLog.setSent(true);
+					emailsRepository.save(teacherEmailNotificationLog);
+					emailNotification(teacherEmail, teacherName, teacherMessageBody);
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+
 
 		}
 
