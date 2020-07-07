@@ -5,6 +5,7 @@ import com.it_academyproject.domains.Student;
 public interface DTOStudentsExerciseNotTurnedInI {
 
     String getId();
+    String getTeacher_id();
 
     String getFirst_Name();
     String getLast_Name();

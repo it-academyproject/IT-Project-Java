@@ -21,7 +21,7 @@ public interface UserExerciseRepository extends JpaRepository <UserExercise, Int
 	List<UserExercise> findByExerciseId(int id);
 
     @JsonPropertyOrder({"first_name", "last_name", "email", "daysLastTurnedIn"})
-    @Query(value = "SELECT u.id, u.first_name, u.last_name, u.email, ue.exercise_id, ue.status_id, ue.date_status, " +
+    @Query(value = "SELECT u.id, u.first_name, u.last_name, u.email, ue.teacher_id, ue.exercise_id, ue.status_id, ue.date_status, " +
             "			timestampdiff(DAY, ue.date_status, NOW()) AS daysLastTurnedIn " +
             "		FROM user_exercise ue, users u " +
             "		WHERE ue.student_id = u.id " +

@@ -154,8 +154,8 @@ public class EmailService {
 
 	public void notificationEmailExercisesNotTurnedIn() {
 
-		Integer notTurnedInDays = ApplicationConfig.EXERCISE_NOT_TURNED_IN_DAYS;
-		List<Integer> exerciseStatusExclude = ApplicationConfig.EXERCISE_STATUS_EXCLUDE;
+		Integer notTurnedInDays = ApplicationConfig.STUDENT_EXERCISE_NOT_TURNED_IN_DAYS;
+		List<Integer> exerciseStatusExclude = ApplicationConfig.STUDENT_EXERCISE_STATUS_EXCLUDE;
 
 		List<DTOStudentsExerciseNotTurnedInI> studentsExerciseNotTurnedIn = new ArrayList<>();
 		userExerciseRepository.getNotifyNotTurnedInExercises(notTurnedInDays, exerciseStatusExclude).forEach(studentsExerciseNotTurnedIn::add);
@@ -165,25 +165,26 @@ public class EmailService {
 			Emails emailNotificationLog = new Emails("ABSENCES");
 
 			Student student = (Student) userRepository.findUserById(studentsExerciseNotTurnedIn.get(i).getId());
+			Teacher teacher = (Teacher) userRepository.findUserById(studentsExerciseNotTurnedIn.get(i).getTeacher_id());
 
 			emailNotificationLog.setUserStudent(student);
 			emailNotificationLog.setSent(false);
 			emailsRepository.save(emailNotificationLog);
 
-			String name = studentsExerciseNotTurnedIn.get(i).getFirst_Name() + " " +
+			String studentName = studentsExerciseNotTurnedIn.get(i).getFirst_Name() + " " +
 					studentsExerciseNotTurnedIn.get(i).getLast_Name();
-			String email = studentsExerciseNotTurnedIn.get(i).getEmail();
-			String messageBody = " I hope this e-mail finds you well.\n " +
+			String studentEmail = studentsExerciseNotTurnedIn.get(i).getEmail();
+			String studentMessageBody = " I hope this e-mail finds you well.\n " +
 					"This message is to inform you, " +
 					"that it has been " +
 					studentsExerciseNotTurnedIn.get(i).getDaysLastTurnedIn() +
 					" days since you delivered any exercise";
 
-			if(name != null && email != null) {
+			if(studentName != null && studentEmail != null) {
 				try {
 					emailNotificationLog.setSent(true);
 					emailsRepository.save(emailNotificationLog);
-					emailNotification(email, name, messageBody);
+					emailNotification(studentEmail, studentName, studentMessageBody);
 				} catch(Exception e) {
 					e.printStackTrace();
 				}

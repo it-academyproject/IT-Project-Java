@@ -141,8 +141,8 @@ public class UserExerciseService {
 	}
 
 	public List<DTOStudentsExerciseNotTurnedInI> getNotifyNotTurnedInExercises() {
-		Integer notTurnedInDays = ApplicationConfig.EXERCISE_NOT_TURNED_IN_DAYS;
-		List<Integer> exerciseStatusExclude = ApplicationConfig.EXERCISE_STATUS_EXCLUDE;
+		Integer notTurnedInDays = ApplicationConfig.STUDENT_EXERCISE_NOT_TURNED_IN_DAYS;
+		List<Integer> exerciseStatusExclude = ApplicationConfig.STUDENT_EXERCISE_STATUS_EXCLUDE;
 		return userExerciseRepository.getNotifyNotTurnedInExercises(notTurnedInDays, exerciseStatusExclude);
 	}
 
