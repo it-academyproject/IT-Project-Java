@@ -9,6 +9,7 @@ import com.it_academyproject.domains.Student;
 import com.it_academyproject.exceptions.UserNotFoundException;
 import com.it_academyproject.repositories.MyAppUserRepository;
 import org.apache.tomcat.jni.Local;
+import org.springframework.aop.AopInvocationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -125,12 +126,20 @@ public class StudentService {
 		for(int i = 0; i < students.size(); i++) {
 			DTOStudentLastClass student = new DTOStudentLastClass();
 
-			student.setFirst_name(initCap(students.get(i).getFirst_Name()));
-			student.setLast_name(initCap(students.get(i).getLast_Name()));
-			//student.setDaysLastClass(getDaysBeetwenDates());
-			student.setDaysLastClass(students.get(i).getDaysLastClass());
+			try {
+				student.setFirst_name(initCap(students.get(i).getFirst_Name()));
+				student.setLast_name(initCap(students.get(i).getLast_Name()));
+				//student.setDaysLastClass(getDaysBeetwenDates());
+				student.setDaysLastClass(students.get(i).getDaysLastClass());
 
-			dtos.add(student);
+				dtos.add(student);
+
+			} catch (StringIndexOutOfBoundsException e) {
+				e.printStackTrace();
+			} catch (AopInvocationException e) {
+				e.printStackTrace();
+			}
+
 		}
 
 		return dtos;
