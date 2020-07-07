@@ -1,13 +1,13 @@
 package com.it_academyproject.services;
 
-import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseFromStudentDTO;
+import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsExerciseNotTurnedInI;
 import com.it_academyproject.domains.*;
 import com.it_academyproject.exceptions.UserNotFoundException;
 import com.it_academyproject.repositories.CourseRepository;
 import com.it_academyproject.repositories.ItineraryRepository;
-import com.it_academyproject.repositories.MyAppUserRepository;
 import com.it_academyproject.repositories.UserExerciseRepository;
 import com.it_academyproject.repositories.ExerciseRepository;
+import com.it_academyproject.ApplicationConfig;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -138,6 +138,12 @@ public class UserExerciseService {
 		else {
 			return "L'Usuari no té exercisis.";
 		}
+	}
+
+	public List<DTOStudentsExerciseNotTurnedInI> getNotifyNotTurnedInExercises() {
+		Integer notTurnedInDays = ApplicationConfig.EXERCISE_NOT_TURNED_IN_DAYS;
+		List<Integer> exerciseStatusExclude = ApplicationConfig.EXERCISE_STATUS_EXCLUDE;
+		return userExerciseRepository.getNotifyNotTurnedInExercises(notTurnedInDays, exerciseStatusExclude);
 	}
 
 }

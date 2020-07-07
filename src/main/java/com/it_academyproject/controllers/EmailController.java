@@ -16,11 +16,13 @@ public class EmailController {
 	@Autowired
 	public EmailService emailService;
 
-	@Scheduled(cron = "0 0 9 * * ?")
-	public void sendMail() throws Exception {		
+	//@Scheduled(cron = "0 0 9 * * ?")
+	@Scheduled(cron = "0 * * * * *") // Every minute
+	public void sendMail() throws Exception {
 
-		emailService.notificationEmailAbsence();
-		emailService.notificationEmailDaysLeft();
+		//emailService.notificationEmailAbsence();
+		//emailService.notificationEmailDaysLeft();
+		emailService.notificationEmailExercisesNotTurnedIn();
 
 	}
 
