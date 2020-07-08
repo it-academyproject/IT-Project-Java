@@ -1,23 +1,17 @@
 package com.it_academyproject.services;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import javax.mail.internet.MimeMessage;
 
+import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsExerciseNotTurnedInI;
+import com.it_academyproject.domains.*;
+import com.it_academyproject.repositories.*;
+import com.it_academyproject.ApplicationConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
-import com.it_academyproject.domains.Absence;
-import com.it_academyproject.domains.Course;
-import com.it_academyproject.domains.Emails;
-import com.it_academyproject.repositories.AbsenceRepository;
-import com.it_academyproject.repositories.CourseRepository;
-import com.it_academyproject.repositories.EmailsRepository;
 
 @Service
 public class EmailService {
@@ -34,6 +28,11 @@ public class EmailService {
 	@Autowired
 	public EmailsRepository emailsRepository;
 
+	@Autowired
+	public UserExerciseRepository userExerciseRepository;
+
+	@Autowired
+	public MyAppUserRepository userRepository;
 
 	///////////////////////////////////////////////    8 ABSENCE NOTIFICATION    ///////////////////////////////////////////////////////////////
 
@@ -153,7 +152,77 @@ public class EmailService {
 		}
 	}
 
+	public void notificationEmailExercisesNotTurnedIn() throws Exception {
 
+		Integer notTurnedInDays = ApplicationConfig.STUDENT_EXERCISE_NOT_TURNED_IN_DAYS;
+		List<Integer> exerciseStatusExclude = ApplicationConfig.STUDENT_EXERCISE_STATUS_EXCLUDE;
+
+		List<DTOStudentsExerciseNotTurnedInI> studentsExerciseNotTurnedIn = new ArrayList<>();
+		userExerciseRepository.getNotifyNotTurnedInExercises(notTurnedInDays, exerciseStatusExclude).forEach(studentsExerciseNotTurnedIn::add);
+
+		for (int i = 0; i < studentsExerciseNotTurnedIn.size(); i++) {
+
+			Student student = (Student) userRepository.findUserById(studentsExerciseNotTurnedIn.get(i).getId());
+			Teacher teacher = (Teacher) userRepository.findUserById(studentsExerciseNotTurnedIn.get(i).getTeacher_id());
+
+			if (student.getFirstName().isEmpty() || student.getFirstName().equals(null))
+				throw new Exception();
+
+			if (student.getEmail().isEmpty() || student.getEmail().equals(null))
+				throw new Exception();
+
+				Emails studentEmailNotificationLog = new Emails("ABSENCES");
+
+				studentEmailNotificationLog.setUserStudent(student);
+				studentEmailNotificationLog.setSent(false);
+				emailsRepository.save(studentEmailNotificationLog);
+
+				String studentName = student.getFirstName() + " " + student.getLastName();
+				String studentEmail = student.getEmail();
+				String studentMessageBody = " I hope this e-mail finds you well.\n " +
+						"This message is to inform you, " +
+						"that it has been " +
+						studentsExerciseNotTurnedIn.get(i).getDaysLastTurnedIn() +
+						" days since you delivered any exercise";
+
+				try {
+					studentEmailNotificationLog.setSent(true);
+					emailsRepository.save(studentEmailNotificationLog);
+					emailNotification(studentEmail, studentName, studentMessageBody);
+
+					if (teacher.getFirstName().isEmpty() || teacher.getFirstName().equals(null))
+						throw new Exception();
+
+					if (teacher.getEmail().isEmpty() || teacher.getEmail().equals(null))
+						throw new Exception();
+
+						Emails teacherEmailNotificationLog = new Emails("ABSENCES");
+
+						//teacherEmailNotificationLog.setUserStudent(teacher);
+						teacherEmailNotificationLog.setSent(false);
+						emailsRepository.save(teacherEmailNotificationLog);
+
+						String teacherName = teacher.getFirstName() + " " + teacher.getLastName();
+						String teacherEmail = teacher.getEmail();
+						String teacherMessageBody = "The student " + student.getFirstName() + " " + student.getLastName() + "\n" +
+								"has not delivered exercises for " + studentsExerciseNotTurnedIn.get(i).getDaysLastTurnedIn() + " days.";
+
+						try {
+							teacherEmailNotificationLog.setSent(true);
+							emailsRepository.save(teacherEmailNotificationLog);
+							emailNotification(teacherEmail, teacherName, teacherMessageBody);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+
+		}
+
+	}
 
 
 	/////////////////////////////////////////////   EMAIL NOTIFICATION METHOD    ///////////////////////////////////////////////////////////////
