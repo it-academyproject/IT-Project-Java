@@ -5,21 +5,21 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.Date;
 
-@JsonPropertyOrder({ "first_name", "last_name", "daysLastClass"})
+@JsonPropertyOrder({ "first_name", "last_name", "days_last_class"})
 public class DTOStudentLastClass {
 
     public String first_name;
     public String last_name;
 
-    public int daysLastClass;
+    public int days_last_class;
 
     public DTOStudentLastClass() {
     }
 
-    public DTOStudentLastClass(String first_name, String last_name, int daysLastClass) {
+    public DTOStudentLastClass(String first_name, String last_name, int days_last_class) {
         this.first_name = first_name;
         this.last_name = last_name;
-        this.daysLastClass = daysLastClass;
+        this.days_last_class = days_last_class;
     }
 
     public String getFirst_name() {
@@ -38,12 +38,12 @@ public class DTOStudentLastClass {
         this.last_name = last_name;
     }
 
-    public int getDaysLastClass() {
-        return daysLastClass;
+    public int getDays_last_class() {
+        return days_last_class;
     }
 
-    public void setDaysLastClass(int daysLastClass) {
-        this.daysLastClass = daysLastClass;
+    public void setDays_last_class(int days_last_class) {
+        this.days_last_class = days_last_class;
     }
 
 }

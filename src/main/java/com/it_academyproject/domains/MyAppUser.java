@@ -54,7 +54,7 @@ public abstract class MyAppUser {
 	private Date lastClassAttendance;
 
 	@Transient
-	private int daysLastClass;
+	private int days_last_class;
 	
 	@OneToMany (targetEntity = Absence.class, cascade = CascadeType.ALL)
 	private List <Absence> absences = new ArrayList <Absence>();
@@ -171,12 +171,12 @@ public abstract class MyAppUser {
 		this.lastClassAttendance = lastClassAttendance;
 	}
 
-	public int getDaysLastClass() {
-		return daysLastClass;
+	public int getDays_Last_Class() {
+		return days_last_class;
 	}
 
-	public void setDaysLastClass(int daysLastClass) {
-		this.daysLastClass = daysLastClass;
+	public void setDays_Last_Class(int days_last_class) {
+		this.days_last_class = days_last_class;
 	}
 
 	public String getPassword() {

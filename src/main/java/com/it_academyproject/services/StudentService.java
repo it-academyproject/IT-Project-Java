@@ -128,16 +128,29 @@ public class StudentService {
 
 			try {
 				student.setFirst_name(initCap(students.get(i).getFirst_Name()));
-				student.setLast_name(initCap(students.get(i).getLast_Name()));
-				//student.setDaysLastClass(getDaysBeetwenDates());
-				student.setDaysLastClass(students.get(i).getDaysLastClass());
-
-				dtos.add(student);
-
 			} catch (StringIndexOutOfBoundsException e) {
 				e.printStackTrace();
 			} catch (AopInvocationException e) {
 				e.printStackTrace();
+			} finally {
+				try {
+					student.setLast_name(initCap(students.get(i).getLast_Name()));
+				} catch (StringIndexOutOfBoundsException e) {
+					e.printStackTrace();
+				} catch (AopInvocationException e) {
+					e.printStackTrace();
+				} finally {
+					try {
+						//student.setDaysLastClass(getDaysBeetwenDates()); // Use getDaysBeetwenDates function if T-SQL initCap function is not defined
+						student.setDays_last_class(students.get(i).getDays_Last_Class());
+					} catch (StringIndexOutOfBoundsException e) {
+						e.printStackTrace();
+					} catch (AopInvocationException e) {
+						e.printStackTrace();
+					} finally {
+						dtos.add(student);
+					}
+				}
 			}
 
 		}

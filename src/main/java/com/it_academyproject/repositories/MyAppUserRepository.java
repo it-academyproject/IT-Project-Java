@@ -69,7 +69,7 @@ public interface MyAppUserRepository extends JpaRepository<MyAppUser, String>{
 
 	@Query(value = "SELECT u.first_name AS first_name, " +
 			"		u.last_name AS last_name, " +
-			"		TIMESTAMPDIFF(DAY, u.last_class_attendance, NOW()) AS daysLastClass " +
+			"		TIMESTAMPDIFF(DAY, u.last_class_attendance, NOW()) AS days_last_class " +
 			"		FROM users u" , nativeQuery = true)
 	List<DTOStudentLastClassI> getUsersLastClass();
 
