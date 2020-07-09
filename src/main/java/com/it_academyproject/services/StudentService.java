@@ -145,9 +145,11 @@ public class StudentService {
 						student.setDays_last_class(students.get(i).getDays_Last_Class());
 					} catch (StringIndexOutOfBoundsException e) {
 						e.printStackTrace();
-					} catch (AopInvocationException e) {
+					} catch (NullPointerException e) {
 						e.printStackTrace();
 					} finally {
+						if (students.get(i).getDays_Last_Class() == null)
+							student.setDays_last_class("N/D");
 						dtos.add(student);
 					}
 				}

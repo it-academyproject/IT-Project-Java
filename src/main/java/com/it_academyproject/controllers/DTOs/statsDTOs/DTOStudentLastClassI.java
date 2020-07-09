@@ -5,6 +5,6 @@ public interface DTOStudentLastClassI {
     String getFirst_Name();
     String getLast_Name();
 
-    int getDays_Last_Class();
+    String getDays_Last_Class();
 
 }
