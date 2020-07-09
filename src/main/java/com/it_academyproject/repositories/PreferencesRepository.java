@@ -14,14 +14,14 @@ public interface PreferencesRepository extends JpaRepository<Preferences, Long> 
 
     List<Preferences> findAll();
 
-    @Query(value = "SELECT preference_id, preference_name, preference_value, active " +
+    @Query(value = "SELECT id, name, value, active " +
             "       FROM preferences", nativeQuery = true)
     List<DTOPreferencesI> getPreferencesParameters();
 
-    @Query(value = "SELECT preference_id FROM preferences WHERE preference_name = ?1", nativeQuery = true)
+    @Query(value = "SELECT id FROM preferences WHERE name = ?1", nativeQuery = true)
     Long findPreferenceByName(@Param("name") String name);
 
-    @Query(value = "SELECT preference_id FROM preferences WHERE preference_id = ?1", nativeQuery = true)
+    @Query(value = "SELECT id FROM preferences WHERE id = ?1", nativeQuery = true)
     Long findPreferenceById(@Param("id") Long id);
 
 }

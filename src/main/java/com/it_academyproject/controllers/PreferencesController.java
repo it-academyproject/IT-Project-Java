@@ -12,7 +12,6 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class PreferencesController {
 
     @Autowired
@@ -21,18 +20,18 @@ public class PreferencesController {
     @Autowired
     PreferencesRepository preferencesRepository;
 
-    @GetMapping("/api/projects/preferences")
+    @GetMapping("/api/preferences")
     public List<DTOPreferencesI> getAll() {
         List<DTOPreferencesI> preferences = preferencesService.getAll();
         return preferences;
     }
 
-    @PostMapping("/api/projects/preferences")
+    @PostMapping("/api/preferences")
     public Preferences createPreference(@RequestBody Preferences preferences) {
 
         System.out.println("request received");
 
-        if (preferencesRepository.findPreferenceByName(preferences.getPreference_name()) != null)
+        if (preferencesRepository.findPreferenceByName(preferences.getName()) != null)
             throw new CustomException("Preference exists in database.");
 
         preferencesRepository.save(preferences);
@@ -40,19 +39,21 @@ public class PreferencesController {
         return preferences;
     }
 
-    @PutMapping("api/projects/preferences/{id}")
+    @PutMapping("api/preferences/{id}")
     public Preferences updatePreferences(@RequestBody Preferences p, @PathVariable Long id) throws Exception {
 
         if (preferencesRepository.findPreferenceById(id) == null)
             throw new CustomException("Preference not exists in database.");
 
         return preferencesRepository.findById(id).map(preferences -> {
-            preferences.setPreference_name(p.getPreference_name());
-            preferences.setPreference_value(p.getPreference_value());
+            if(preferencesRepository.findPreferenceByName(p.getName()) != null)
+                throw new CustomException("Field name is duplicated.");
+            preferences.setName(p.getName());
+            preferences.setValue(p.getValue());
             preferences.setActive(p.getActive());
             return preferencesRepository.save(preferences);
         }).orElseThrow(() -> {
-            return new Exception("Invalid Parameters");
+            return new CustomException("Error.");
         });
 
     }

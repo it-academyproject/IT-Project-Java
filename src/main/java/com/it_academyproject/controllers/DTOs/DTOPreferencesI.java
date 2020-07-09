@@ -2,11 +2,11 @@ package com.it_academyproject.controllers.DTOs;
 
 public interface DTOPreferencesI {
 
-    String getPreference_id ();
+    String getId ();
 
-    String getPreference_name();
+    String getName();
 
-    String getPreference_value();
+    String getValue();
 
     String getActive();
 

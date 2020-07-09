@@ -10,46 +10,46 @@ public class Preferences {
 
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Id
-    private Long preference_id;
+    private Long id;
 
     @Column(unique = true)
-    private String preference_name;
+    private String name;
 
-    private String preference_value;
+    private String value;
 
     private Boolean active;
 
     public Preferences() {}
 
-    public Preferences(Long preference_id, String preference_name, String preference_value, Boolean active) {
-        this.preference_id = preference_id;
-        this.preference_name = preference_name;
-        this.preference_value = preference_value;
+    public Preferences(Long id, String name, String value, Boolean active) {
+        this.id = id;
+        this.name = name;
+        this.value = value;
         this.active = active;
     }
 
-    public Long getPreference_id() {
-        return preference_id;
+    public Long getId() {
+        return id;
     }
 
-    public void setPreference_id(Long preference_id) {
-        this.preference_id = preference_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getPreference_name() {
-        return preference_name;
+    public String getName() {
+        return name;
     }
 
-    public void setPreference_name(String preference_name) {
-        this.preference_name = preference_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPreference_value() {
-        return preference_value;
+    public String getValue() {
+        return value;
     }
 
-    public void setPreference_value(String preference_value) {
-        this.preference_value = preference_value;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public Boolean getActive() {
@@ -65,23 +65,23 @@ public class Preferences {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Preferences that = (Preferences) o;
-        return Objects.equals(preference_id, that.preference_id) &&
-                Objects.equals(preference_name, that.preference_name) &&
-                Objects.equals(preference_value, that.preference_value) &&
+        return Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(value, that.value) &&
                 Objects.equals(active, that.active);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(preference_id, preference_name, preference_value, active);
+        return Objects.hash(id, name, value, active);
     }
 
     @Override
     public String toString() {
         return "Preferences{" +
-                "preference_id=" + preference_id +
-                ", preference_name='" + preference_name + '\'' +
-                ", preference_value='" + preference_value + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", value='" + value + '\'' +
                 ", active=" + active +
                 '}';
     }
