@@ -4,6 +4,7 @@ package com.it_academyproject.controllers;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseFromStudentDTO;
 import com.it_academyproject.controllers.DTOs.exerciseListDTOs.ExerciseListDTO;
+import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsExerciseNotTurnedInI;
 import com.it_academyproject.domains.Exercise;
 import com.it_academyproject.domains.UserExercise;
 import com.it_academyproject.domains.Student;
@@ -91,6 +92,12 @@ public class UserExerciseController {
 	@ResponseBody
 	public UserExercise updateUserExerciseStatus(@RequestBody UserExercise userExercise) {
 		return userExerciseService.setUserExerciseStatusData(userExercise);
+	}
+
+	@GetMapping("/api/exercises/students/undelivered-last-days")
+	@ResponseBody
+	public List<DTOStudentsExerciseNotTurnedInI> getNotifyNotTurnedInExercises() {
+		return  userExerciseService.getNotifyNotTurnedInExercises();
 	}
 
 }
