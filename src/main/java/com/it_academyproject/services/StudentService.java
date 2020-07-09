@@ -1,16 +1,25 @@
 package com.it_academyproject.services;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentLastClass;
+import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentLastClassI;
 import com.it_academyproject.controllers.DTOs.statsDTOs.DTOStudentsLastDelivery;
 import com.it_academyproject.domains.MyAppUser;
 import com.it_academyproject.domains.Student;
 import com.it_academyproject.exceptions.UserNotFoundException;
 import com.it_academyproject.repositories.MyAppUserRepository;
+import org.apache.tomcat.jni.Local;
+import org.springframework.aop.AopInvocationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
+import java.util.*;
 
 @Service
 public class StudentService {
@@ -107,6 +116,79 @@ public class StudentService {
 
 	public List<DTOStudentsLastDelivery> students_deliveries(Integer statusId, LocalDateTime destDate){
 		return userRepository.students_deliveries(statusId,destDate);
+	}
+
+	public List<DTOStudentLastClass> getUsersLastClass() {
+
+		List<DTOStudentLastClassI> students = userRepository.getUsersLastClass();
+		List<DTOStudentLastClass> dtos = new ArrayList<>();
+
+		for(int i = 0; i < students.size(); i++) {
+			DTOStudentLastClass student = new DTOStudentLastClass();
+
+			try {
+				student.setFirst_name(initCap(students.get(i).getFirst_Name()));
+			} catch (StringIndexOutOfBoundsException e) {
+				e.printStackTrace();
+			} catch (AopInvocationException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					student.setLast_name(initCap(students.get(i).getLast_Name()));
+				} catch (StringIndexOutOfBoundsException e) {
+					e.printStackTrace();
+				} catch (AopInvocationException e) {
+					e.printStackTrace();
+				} finally {
+					try {
+						//student.setDaysLastClass(getDaysBeetwenDates()); // Use getDaysBeetwenDates function if T-SQL initCap function is not defined
+						student.setDays_last_class(students.get(i).getDays_Last_Class());
+					} catch (StringIndexOutOfBoundsException e) {
+						e.printStackTrace();
+					} catch (NullPointerException e) {
+						e.printStackTrace();
+					} finally {
+						if (students.get(i).getDays_Last_Class() == null)
+							student.setDays_last_class("N/D");
+						dtos.add(student);
+					}
+				}
+			}
+
+		}
+
+		return dtos;
+	}
+
+	public static String initCap(String stringValue) {
+
+		String[] words = stringValue.toLowerCase().split(" ");
+
+		StringBuilder strBuild = new StringBuilder();
+
+		for(int i = 0; i < words.length; i++) {
+			strBuild.append(Character.toUpperCase(words[i].charAt(0)));
+			strBuild.append(words[i].substring(1));
+			if(i < words.length - 1) {
+				strBuild.append(' ');
+			}
+		}
+
+		return strBuild.toString();
+
+	}
+
+	public static int getDaysBeetwenDates(CharSequence pDateIni) {
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate dateIni = LocalDate.parse(pDateIni, formatter);
+		LocalDate dateNow = LocalDate.now();
+
+		int daysLastClass;
+
+		daysLastClass = (int)ChronoUnit.DAYS.between(dateIni, dateNow);
+
+		return daysLastClass;
 	}
 
 /*

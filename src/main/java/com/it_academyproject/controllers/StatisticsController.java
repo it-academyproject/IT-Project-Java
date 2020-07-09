@@ -92,4 +92,9 @@ public class StatisticsController {
 		// LocalDateTime.now()
 	}
 
+	@GetMapping("/students-attendance")
+	public List<DTOStudentLastClass>  getUsersLastClass() {
+		return studentService.getUsersLastClass();
+	}
+
 }
